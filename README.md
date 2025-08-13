@@ -124,6 +124,12 @@ your-project/
 4. **Use Steering Wisely**: Update steering documents after major architectural changes
 5. **Track Progress**: Regularly check spec status to ensure alignment
 
+## Compatibility
+
+**Tested Environment**: This framework has been tested on WSL2 Ubuntu. While it should work on other Unix-like systems, we haven't verified compatibility across all platforms.
+
+If you encounter bugs or compatibility issues on other systems, please submit a pull request or open an issue.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
