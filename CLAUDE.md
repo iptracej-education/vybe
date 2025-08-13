@@ -35,17 +35,24 @@ Vybe-style Spec Driven Development implementation using claude code slash comman
 3. `/vybe:spec-design [feature]` - Interactive: "Have you reviewed requirements.md? [y/N]"
 4. `/vybe:spec-tasks [feature]` - Interactive: Confirms both requirements and design review
 
-### Phase 2: Progress Tracking
+### Phase 2: Implementation
+- `/vybe:task-delegate [agent-type] [feature-task-range] [description]` - Delegate to subagents
+- `/vybe:task-continue [agent-type] [feature-task] [session-id]` - Resume multi-session work
+- `/vybe:task-status [feature-task-range]` - Check progress and dependencies
+
+### Phase 3: Progress Tracking
 `/vybe:spec-status [feature]` - Check current progress and phases
 
 ## Development Rules
 1. **Consider steering**: Run `/vybe:steering` before major development (optional for new features)
-2. **Follow 3-phase approval workflow**: Requirements → Design → Tasks → Implementation
+2. **Follow 4-phase approval workflow**: Requirements → Design → Tasks → Delegation → Implementation
 3. **Approval required**: Each phase requires human review (interactive prompt or manual)
-4. **No skipping phases**: Design requires approved requirements; Tasks require approved design
-5. **Update task status**: Mark tasks as completed when working on them
-6. **Keep steering current**: Run `/vybe:steering` after significant changes
-7. **Check spec compliance**: Use `/vybe:spec-status` to verify alignment
+4. **No skipping phases**: Design requires approved requirements; Tasks require approved design; Delegation follows task creation
+5. **Use task delegation**: Delegate tasks to specialized subagents using `/vybe:task-delegate`
+6. **Monitor dependencies**: Check task dependencies with `/vybe:task-status` before delegation
+7. **Update task status**: Task status is automatically managed by the hook system
+8. **Keep steering current**: Run `/vybe:steering` after significant changes
+9. **Check spec compliance**: Use `/vybe:spec-status` to verify alignment
 
 ## Steering Configuration
 
@@ -69,3 +76,6 @@ Managed by `/vybe:steering` command. Updates here reflect command changes.
 - **Always**: Loaded in every interaction (default)
 - **Conditional**: Loaded for specific file patterns (e.g., `"*.test.js"`)
 - **Manual**: Reference with `@filename.md` syntax
+
+## Hook System
+Automatic context management via `.claude/hooks/` - See `.claude/hooks/README.md` for details.

@@ -13,6 +13,8 @@ Vybe is a systematic framework that brings structure and consistency to AI-assis
 The framework introduces a disciplined approach to AI-powered development through:
   - **Specification-first methodology** - Define what you're building before you build it
   - **Structured development phases** - Clear progression from requirements to implementation
+  - **Multi-agent task delegation** - Specialized agents for different domains with automatic context management (added)
+  - **Hook system for context preservation** - Automatic state saving prevents work loss during `/compact` events (added)
   - **Human oversight gates** - Strategic review points to ensure quality and alignment
   - **Project context management** - Persistent steering documents that guide AI behavior
   - **Progress visibility** - Clear tracking of specification completion and task status
@@ -34,10 +36,10 @@ cd vybe
 
 # Copy framework files to your project
 cp CLAUDE.md /path/to/your-project/
-cp -r .claude/commands/ /path/to/your-project/.claude/
+cp -r .claude/ /path/to/your-project/  # Includes commands and hooks
 
 # Initialize your project structure
-mkdir -p /path/to/your-project/.vybe/{specs,steering}
+mkdir -p /path/to/your-project/.vybe/{specs,steering,context}
 ```
 
 ## How to Use
@@ -69,9 +71,9 @@ mkdir -p /path/to/your-project/.vybe/{specs,steering}
 4. **Plan Tasks**: `/vybe:spec-tasks [feature]` - Break down into actionable tasks
 
 #### Phase 2: Implementation
-- Work through tasks systematically
-- Update task status as you progress
-- Use `/vybe:spec-status [feature]` to track completion
+- Use `/vybe:task-delegate [agent-type] [task-id] [description]` to delegate tasks to specialized agents
+- Use `/vybe:task-status` to check progress and dependencies
+- Continue multi-session work with `/vybe:task-continue`
 
 #### Phase 3: Maintenance
 - Keep steering documents updated with `/vybe:steering`
@@ -88,6 +90,10 @@ mkdir -p /path/to/your-project/.vybe/{specs,steering}
 | `/vybe:spec-design` | Create technical design document |
 | `/vybe:spec-tasks` | Generate task breakdown |
 | `/vybe:spec-status` | Check specification progress |
+| `/vybe:task-delegate` | Delegate tasks to specialized agents |
+| `/vybe:task-continue` | Resume multi-session work |
+| `/vybe:task-status` | Check task progress and dependencies |
+| `/vybe:validate-hooks` | Verify hook system configuration |
 
 ### Project Structure
 
