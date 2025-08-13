@@ -1,4 +1,6 @@
-# Vybe - Spec-Driven AI Development Framework for Claude Code
+# Vybe 
+
+ A spec-driven AI development framework for Claude Code.
 
 A structured approach to AI-assisted development using specification-driven workflows, inspired by Amazon's Working Backwards methodology and built on top of the claude-code-spec framework.
 
