@@ -44,6 +44,8 @@ mkdir -p /path/to/your-project/.vybe/{specs,steering,context}
 
 ## How to Use
 
+📖 **[Complete Tutorial & Examples](docs/tutorial.md)** - Comprehensive guide with real-world examples
+
 ### Quick Start
 
 1. **Initialize Your Project**
