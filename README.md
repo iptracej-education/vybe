@@ -4,7 +4,7 @@
 
 A spec-driven AI development framework for Claude Code.
 
-A structured approach to AI-assisted development using specification-driven workflows, inspired by Amazon's Working Backwards methodology and built on top of the claude-code-spec framework.
+A structured approach to AI-assisted development using specification-driven workflows, inspired by Amazon's Working Backwards methodology and built on top of the [claude-code-spec](https://github.com/gotalab/claude-code-spec) framework.
 
 ## Overview
 
@@ -13,8 +13,8 @@ Vybe is a systematic framework that brings structure and consistency to AI-assis
 The framework introduces a disciplined approach to AI-powered development through:
   - **Specification-first methodology** - Define what you're building before you build it
   - **Structured development phases** - Clear progression from requirements to implementation
-  - **Multi-agent task delegation** - Specialized agents for different domains with automatic context management (added)
-  - **Hook system for context preservation** - Automatic state saving prevents work loss during `/compact` events (added)
+  - **Multi-agent task delegation** - Specialized agents for different domains with automatic context management 
+  - **Hook system for context preservation** - Automatic state saving prevents work loss during `/compact` events
   - **Human oversight gates** - Strategic review points to ensure quality and alignment
   - **Project context management** - Persistent steering documents that guide AI behavior
   - **Progress visibility** - Clear tracking of specification completion and task status
