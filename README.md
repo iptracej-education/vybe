@@ -1,14 +1,16 @@
 # Vybe Framework
 
-**Note:** This is an experimental project under active development. Features and structure may change significantly.
+**Note:** *This is an experimental project under active development. Features and structure may change significantly.*
 
-Spec-driven agile-like development with incremental outcome-driven delivery for Claude Code with multi-session coordination
+**Spec-driven agile-like development for Claude Code**
+
+Vybe framework provides a spec structure to vibe coding with staged incremental outcomes and enables us to change scope in natural language.
 
 ## Overview
 
 Vybe brings structure to AI-assisted development through:
-- **Incremental outcome-driven development** - Break projects into stages that deliver working software in 1-3 days each
 - **Specification-first workflow with agile backlog management** - Every feature starts with clear requirements and design in organized backlog
+- **Incremental outcome-driven development** - Break projects into stages that deliver working software in 1-3 days each
 - **Multi-developer coordination** - Single session or multiple Claude Code sessions work together seamlessly  
 - **Quality assurance** - Built-in gap detection and fix automation
 - **Living documentation** - Specifications evolve with your code
@@ -18,13 +20,13 @@ Vybe brings structure to AI-assisted development through:
 - **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
 - **Baby steps approach** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Staged outcomes** - Each stage delivers working software with user value
-- **🔥 Code-reality analysis** - Compare actual code vs documented plans, detect scope drift, find orphan features
-- **🧠 Smart audit routing** - Natural language requests automatically route to specialized analysis modes
-- **📊 Business outcome alignment** - Ensure every feature ties to business value, eliminate orphan code
-- **⚡ MVP extraction** - Intelligent scope reduction for timeline constraints (2 weeks, 1 month, etc.)
-- **📋 Documentation sync** - Keep README/docs aligned with actual implemented features
+- **Code-reality analysis** - Compare actual code vs documented plans, detect scope drift, find orphan features
+- **Business outcome alignment** - Ensure every feature ties to business value, eliminate orphan code
+- **MVP extraction** - Intelligent scope reduction for timeline constraints (2 weeks, 1 month, etc.)
+- **Documentation sync** - Keep README/docs aligned with actual implemented features
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Learning-driven** - Each completed stage improves planning for next stage
+- **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
 
 ## Quick Setup
 
