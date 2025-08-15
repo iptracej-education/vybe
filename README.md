@@ -10,7 +10,7 @@ Vybe framework provides a spec structure to vibe coding with staged incremental 
 
 Vybe brings structure to AI-assisted development through:
 - **Specification-first workflow with agile backlog management** - Every feature starts with clear requirements and design in organized backlog
-- **Incremental outcome-driven development** - Break projects into stages that deliver working software in days each
+- **Incremental outcome approach** - Break projects into stages that deliver working units in days each
 - **Multi-developer coordination** - Single session or multiple Claude Code sessions work together seamlessly  
 - **Quality assurance** - Built-in gap detection and fix automation
 - **Living documentation** - Specifications evolve with your code
@@ -19,7 +19,6 @@ Vybe brings structure to AI-assisted development through:
 
 - **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
 - **Baby steps approach** - First minimal outcome in 1-2 days, then progressive enhancement stages
-- **Staged outcomes** - Each stage delivers working software with user value
 - **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis   
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Learning-driven** - Each completed stage improves planning for next stage
