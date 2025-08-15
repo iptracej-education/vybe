@@ -5,15 +5,15 @@
 ## Overview
 
 Vybe brings structure to AI-assisted development through:
-- **Specification-first workflow** - Every feature starts with clear requirements and design
+- **Specification-first workflow with agile backlog management** - Every feature starts with clear requirements and design in organized backlog
 - **Multi-developer coordination** - Single session or multiple Claude Code sessions work together seamlessly  
 - **Quality assurance** - Built-in gap detection and fix automation
 - **Living documentation** - Specifications evolve with your code
 
 ## Key Features
 
-- **7 core commands** - Complete development workflow from init, backlog, plan, execute, discuss, status to audit
-- Agile-like planning - Start with backlog and detail requirement, design, and tasks for features in backlog
+- **7 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `status` → `audit` → `discuss`
+- **Agile-like planning** - Start with backlog management and create detailed requirements, design, and tasks for each feature
 - **Member coordination** - Assign features to dev-1, dev-2, etc. with conflict detection
 - **Gap detection** - Audit finds missing specs, duplicates, and inconsistencies
 - **Natural language help** - Discuss command translates requests to specific commands
