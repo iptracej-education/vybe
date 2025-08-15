@@ -2,9 +2,10 @@
 
 **Detailed implementation specifications for all Vybe framework commands**
 
-Version: 1.0.0  
+Version: 2.0.0  
 Created: 2025-08-14  
-Status: Implementation Guide
+Updated: 2025-08-15  
+Status: Production Implementation Guide
 
 ## Overview
 
@@ -13,20 +14,23 @@ This document provides detailed specifications for implementing Vybe framework c
 ## Command Flow
 
 ```
-init → backlog → plan → execute → status → audit → discuss → (loop back)
+init → backlog → plan → execute → release → status → audit
+         ↑                           ↓
+         └── discuss (smart routing) ←┘
 ```
 
 ### Command Responsibilities
 
 | Command | Scope | Focus | Output |
 |---------|-------|-------|--------|
-| `init` | Project | Foundation setup | Project docs, structure |
-| `backlog` | Strategic | Cross-feature planning | Feature prioritization, releases |
-| `plan` | Tactical | Single feature specs | Requirements, design, tasks |
+| `init` | Project | Staged outcome setup | Project docs, outcome roadmap |
+| `backlog` | Strategic | Outcome-grouped planning | Tasks by stages, member assignments |
+| `plan` | Tactical | Feature specifications | Requirements, design, tasks |
 | `execute` | Implementation | Task execution | Working code, status updates |
-| `status` | Monitoring | Progress tracking | Progress reports, next steps |
-| `audit` | Quality | Health checking | Issue reports, fixes |
-| `discuss` | Discovery | Problem solving | Insights, plan updates |
+| `release` | **NEW** | Stage progression | Mark complete, advance, capture learnings |
+| `status` | Monitoring | Progress + outcomes | Progress reports, outcome timeline |
+| `audit` | **ENHANCED** | Quality + code-reality | Issue reports, specialized analysis |
+| `discuss` | **ENHANCED** | Natural language + routing | Insights, automated audit routing |
 
 ---
 
@@ -323,6 +327,39 @@ init → backlog → plan → execute → status → audit → discuss → (loop
 
 ---
 
+## /vybe:release
+
+**Purpose**: Mark outcome stage complete and advance to next stage
+
+### Usage
+```bash
+/vybe:release [stage-name] [--force]
+```
+
+### Parameters
+- `stage-name`: Optional. Specific stage to mark complete (defaults to current active stage)
+- `--force`: Skip validation checks and force stage completion
+
+### Tasks
+1. **Validate Stage Completion** - Check tasks done, deliverable working, tests passing
+2. **Capture Stage Learnings** - Document what worked, challenges, timeline accuracy
+3. **Mark Stage Complete** - Update backlog.md and outcomes.md status
+4. **Advance to Next Stage** - Mark next stage as IN PROGRESS
+5. **Update Progress Metrics** - Calculate completion percentages and timelines
+
+### Behavior Guidelines
+- **Validation First**: Never mark stage complete without verifying deliverable
+- **Learning Capture**: Always document insights for improving next stages
+- **UI Example Check**: Request UI examples if next stage requires them
+- **Coordination**: Update both backlog.md and outcomes.md consistently
+
+### Integration Points
+- **From execute**: Natural completion point for stage work
+- **To status**: Progress tracking after stage advancement
+- **To plan**: May trigger planning refinements for next stage
+
+---
+
 ## /vybe:discuss
 
 **Purpose**: Explore ideas, solve problems, and guide iterative improvements
@@ -494,21 +531,66 @@ init → backlog → plan → execute → status → audit → discuss → (loop
 
 ## /vybe:audit
 
-**Purpose**: Maintain project quality through systematic health checks
+**Purpose**: Quality assurance with specialized code-reality analysis modes
 
 ### Usage
 ```bash
-/vybe:audit [options]
+/vybe:audit [mode] [options]
 
-# Examples
+# Code-Reality Analysis Modes (NEW)
+/vybe:audit code-reality           # Compare docs vs actual implementation
+/vybe:audit scope-drift            # Detect feature creep beyond original vision
+/vybe:audit business-value         # Map features to business outcomes, find orphan code
+/vybe:audit documentation          # Sync README/docs with actual code
+/vybe:audit mvp-extraction         # Extract minimal viable scope for timeline constraints
+
+# Traditional Quality Assurance
 /vybe:audit                        # Full project audit
 /vybe:audit --scope=features       # Audit feature specifications
-/vybe:audit --scope=sprints        # Check sprint organization
 /vybe:audit --fix                  # Show and apply fixes
 /vybe:audit --fix --auto          # Auto-fix safe issues
 ```
 
+### Code-Reality Analysis Modes
+
+#### code-reality
+**Purpose**: Compare documented intentions vs actual implementation
+- Analyzes actual source code vs project documentation
+- Identifies gaps between planned and implemented features
+- Detects outdated specifications that don't match code
+- Provides specific alignment recommendations
+
+#### scope-drift
+**Purpose**: Detect feature creep beyond original project vision
+- Compares current implementation vs original outcomes.md vision
+- Identifies features added without business justification
+- Calculates scope expansion percentage
+- Suggests scope reduction strategies
+
+#### business-value
+**Purpose**: Map implemented features to business outcomes
+- Analyzes actual code to identify all implemented features
+- Maps features to business outcomes from outcomes.md
+- Identifies orphan features with no business justification
+- Provides cost/value analysis with maintenance burden estimates
+
+#### documentation
+**Purpose**: Synchronize documentation with actual implementation
+- Compares README.md claims vs actual source code features
+- Identifies missing, incorrect, or outdated documentation
+- Suggests specific updates to align docs with reality
+- Ensures API documentation matches actual endpoints
+
+#### mvp-extraction
+**Purpose**: Extract minimal viable scope for timeline constraints
+- Analyzes all implemented and planned features
+- Identifies core vs nice-to-have functionality
+- Provides scope reduction recommendations for time constraints
+- Suggests feature deferral strategies
+
 ### Parameters
+- `mode`: Specific analysis mode (code-reality, scope-drift, business-value, documentation, mvp-extraction)
+- `--timeline=Ndays`: For mvp-extraction, specify timeline constraint
 - `--scope=area`: Focus on specific area (features, sprints, docs, tasks)
 - `--fix`: Show proposed fixes and apply with approval
 - `--auto`: Automatically fix safe issues
@@ -518,65 +600,47 @@ init → backlog → plan → execute → status → audit → discuss → (loop
 
 #### Task 1: Load Complete State
 - Read all project and feature documents
-- Analyze task dependencies and status
+- Analyze actual source code and implementation
+- Load outcomes.md and business context
 - Check sprint organization and capacity
-- Validate document consistency
 
-#### Task 2: Identify Issues
-- **Gaps**: Missing requirements, design elements, tasks
-- **Duplicates**: Overlapping features, redundant tasks
-- **Inconsistencies**: Conflicting information, outdated docs
-- **Orphans**: Tasks without features, untracked work
+#### Task 2: Mode-Specific Analysis
+- **Code-Reality**: Compare docs vs implementation reality
+- **Scope-Drift**: Measure expansion beyond original vision
+- **Business-Value**: Map features to outcomes, find orphans
+- **Documentation**: Identify doc-code misalignment
+- **MVP-Extraction**: Identify minimal viable feature set
 
-#### Task 3: Quality Analysis
-- Check document freshness vs code changes
-- Validate sprint capacity and dependencies
-- Review cross-feature consistency
-- Identify technical debt accumulation
+#### Task 3: Project-Specific Insights
+- Analyze YOUR actual project (no hardcoded examples)
+- Generate insights based on YOUR source code
+- Provide recommendations specific to YOUR context
+- Calculate metrics from YOUR actual implementation
 
-#### Task 4: Generate Report
-- Categorize issues by severity
-- Provide specific recommendations
-- Estimate effort for fixes
-- Suggest consolidation opportunities
+#### Task 4: Generate Structured Report
+- Categorize issues by severity and type
+- Provide specific, actionable recommendations
+- Include quantitative analysis (LOC, files, complexity)
+- Suggest concrete next steps
 
-#### Task 5: Apply Fixes
-- Propose specific changes
+#### Task 5: Apply Fixes (Traditional Audit)
+- Propose specific changes for quality issues
 - Show before/after previews
 - Apply with user approval
 - Update affected documents
 
-### Audit Categories
-
-#### Critical Issues
-- Missing project initialization
-- Broken feature dependencies
-- Overloaded sprints (>6 tasks)
-- Inconsistent architecture decisions
-
-#### Moderate Issues
-- Duplicate functionality across features
-- Outdated documentation
-- Missing acceptance criteria
-- Unbalanced sprint loads
-
-#### Minor Issues
-- Formatting inconsistencies
-- Missing estimated effort
-- Outdated status information
-- Incomplete task descriptions
-
-### AI Behavior
-- **Comprehensive**: Check all aspects systematically
-- **Pattern recognition**: Identify subtle inconsistencies
-- **Safe automation**: Only auto-fix non-controversial issues
-- **Quality focused**: Maintain high standards consistently
+### AI Behavior Guidelines
+- **Project-Specific**: All analysis based on actual project, never generic examples
+- **Code-Aware**: Analyzes real source code, not assumptions
+- **Outcome-Focused**: Ties all recommendations to business value
+- **Quantitative**: Provides measurable insights (LOC, complexity, time estimates)
+- **Actionable**: Every recommendation includes specific next steps
 
 ### Integration Points
-- **From status**: Get current project state
-- **To discuss**: Address complex quality issues
+- **From discuss**: Smart routing from natural language to appropriate modes
+- **To plan**: Update specifications based on reality analysis
 - **To backlog**: Identify missing or redundant features
-- **To plan**: Update specifications for consistency
+- **From status**: Current project state feeds analysis
 
 ---
 

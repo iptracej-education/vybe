@@ -1,39 +1,70 @@
 # Vybe Framework Specification
-## Iterative Spec-Driven Development for AI
+## Spec-Driven Agile Development with Incremental Outcomes
 
-Version: 1.0.0  
+Version: 2.0.0  
 Created: 2025-08-14  
-Status: Foundation Document
+Updated: 2025-08-15  
+Status: Production Ready
 
 ## Executive Summary
 
-Vybe is a framework for AI-driven software development that combines structured specification planning with iterative refinement capabilities. Built specifically for Claude Code and similar AI development environments, it acknowledges that requirements emerge and evolve during implementation.
+Vybe is a framework for AI-driven software development that provides a spec structure to vibe coding with staged incremental outcomes and enables scope changes through natural language. Built specifically for Claude Code, it bridges the critical gap between documented intentions and code reality through intelligent analysis and automated routing.
 
 ## Core Philosophy
 
 ### Principles
-1. **AI-Automated Planning** - AI handles initial planning automatically with smart defaults
-2. **Discussion-Driven Iteration** - Use discussion to resolve implementation feedback and discoveries
-3. **Living Documentation** - Specs evolve alongside code, maintaining relevance
-4. **Discovery Integration** - Embrace that implementation reveals requirements and complexity
-5. **Reactive Problem Solving** - Address real issues that emerge during execution
-6. **Quality Assurance** - Regular auditing maintains project health and consistency
-7. **Minimal Complexity** - Seven intuitive commands handle all development phases
+1. **Incremental Outcome Delivery** - Each stage delivers working software in 1-3 days (baby steps approach)
+2. **Code-Reality Alignment** - Bridge gap between documented intentions and actual implementation
+3. **Natural Language Scope Control** - Change project scope through conversational interface
+4. **Smart Analysis Routing** - Automatically route requests to specialized audit modes
+5. **Business Outcome Focus** - Every feature must tie to business value, eliminate orphan code
+6. **Learning-Driven Iteration** - Each completed stage improves planning for next stage
+7. **Zero Hardcoded Assumptions** - All analysis based on YOUR actual project
+8. **Professional Workflow** - Natural language interface + structured analysis output
 
-### Key Innovation
-AI leads with **automated intelligent planning** for speed and good defaults, while `/vybe:discuss` serves as a **feedback mechanism** to resolve real implementation challenges and evolve plans based on execution discoveries.
+### Key Innovations
+
+#### 1. Incremental Staged Outcomes
+- **Stage 1**: Minimal functional outcome (Day 1-2)
+- **Stage 2+**: Progressive enhancements building on previous stages
+- **UI Examples**: Requested only when needed (not everything upfront)
+- **Learning Integration**: Each stage completion improves next stage planning
+
+#### 2. Code-Reality Analysis Engine
+Five specialized audit modes that analyze YOUR actual project:
+- **code-reality**: Compare docs vs actual implementation
+- **scope-drift**: Detect feature creep beyond original vision
+- **business-value**: Map features to business outcomes, find orphan code
+- **documentation**: Sync README/docs with actual code
+- **mvp-extraction**: Extract minimal viable scope for timeline constraints
+
+#### 3. Smart Audit Routing
+Natural language requests automatically route to appropriate analysis:
+```bash
+"reshape to fit 2 weeks" → mvp-extraction --timeline=14days + scope-drift
+"find orphan features" → business-value
+"sync docs with code" → documentation + code-reality
+```
 
 ## Framework Architecture
 
-### Command Structure
+### Command Structure (8 Core Commands)
 ```
-/vybe:init [project-description]      # Initialize project with AI-generated foundation
-/vybe:backlog [action]                # Strategic feature management and release planning
-/vybe:plan [feature-description]      # Create or modify feature specifications 
-/vybe:execute [feature-task]          # Execute implementation with AI guidance
-/vybe:discuss [topic/question]        # Explore ideas, risks, and trade-offs
-/vybe:status [feature]               # Track progress and identify next steps
-/vybe:audit [options]                # Scan for gaps, duplicates, and inconsistencies
+/vybe:init [project-description]      # Initialize with staged outcome roadmap
+/vybe:backlog [action]                # Outcome-grouped task management 
+/vybe:plan [feature-description]      # Create feature specifications 
+/vybe:execute [feature-task]          # Execute implementation with context
+/vybe:release [stage]                 # Mark stage complete, advance to next (NEW)
+/vybe:status [scope]                  # Progress tracking with outcome progression
+/vybe:audit [mode]                    # Quality assurance + code-reality analysis (ENHANCED)
+/vybe:discuss [request]               # Natural language + smart audit routing (ENHANCED)
+```
+
+### Enhanced Command Workflow
+```
+init → backlog → plan → execute → release → status → audit
+         ↑                           ↓
+         └── discuss (smart routing) ←┘
 ```
 
 ### Future Extensibility
@@ -51,9 +82,10 @@ project/
 ├── README.md                        # Project overview (generated by init)
 ├── .vybe/
 │   ├── project/                    # Project-level documents
-│   │   ├── overview.md            # Business context, goals, users (minimal)
-│   │   ├── architecture.md        # Tech stack, system design (minimal)
-│   │   ├── conventions.md         # Basic development standards (minimal)
+│   │   ├── overview.md            # Business context, goals, users
+│   │   ├── architecture.md        # Tech stack, system design  
+│   │   ├── conventions.md         # Development standards
+│   │   ├── outcomes.md            # Staged outcome roadmap (NEW)
 │   │   └── [custom].md            # Added as needed:
 │   │       ├── security.md        # Security standards and requirements
 │   │       ├── testing.md         # Testing strategy and standards
