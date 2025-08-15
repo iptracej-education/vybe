@@ -129,54 +129,29 @@ if [ ! -d ".vybe/project" ]; then
     exit 1
 fi
 
-# CRITICAL: Load ALL project documents - NEVER skip this step
-project_loaded=false
+# Load status-relevant documents for progress tracking
+echo "[STATUS] Loading current work and assignment documents..."
 
-echo "[LOADING] Loading project foundation documents..."
-
-# Load overview (business context, goals, constraints)
-if [ -f ".vybe/project/overview.md" ]; then
-    echo "[OK] Loaded: overview.md (business goals, users, constraints)"
-    # AI MUST read and understand project context
+# Load backlog for member assignments and priorities
+if [ -f ".vybe/backlog.md" ]; then
+    echo "[OK] Loading member assignments and feature priorities..."
+    echo "=== BACKLOG & ASSIGNMENTS ==="
+    cat .vybe/backlog.md
+    echo ""
 else
-    echo "[NO] CRITICAL ERROR: overview.md missing"
-    echo "   Run /vybe:init to create missing project documents"
-    exit 1
+    echo "[INFO] No backlog found - solo project mode"
 fi
 
-# Load architecture (technical decisions, patterns)
-if [ -f ".vybe/project/architecture.md" ]; then
-    echo "[OK] Loaded: architecture.md (tech stack, patterns, decisions)"
-    # AI MUST read and understand technical constraints
-else
-    echo "[NO] CRITICAL ERROR: architecture.md missing"
-    echo "   Run /vybe:init to create missing project documents"
-    exit 1
+# Load session context for multi-session coordination
+if [ -d ".vybe/context/sessions" ]; then
+    echo "[OK] Loading session coordination context..."
+    echo "=== SESSION COORDINATION ==="
+    ls -la .vybe/context/sessions/ 2>/dev/null || echo "No active sessions"
+    echo ""
 fi
 
-# Load conventions (coding standards, practices)
-if [ -f ".vybe/project/conventions.md" ]; then
-    echo "[OK] Loaded: conventions.md (standards, patterns, practices)"
-    # AI MUST read and understand coding standards
-else
-    echo "[NO] CRITICAL ERROR: conventions.md missing"
-    echo "   Run /vybe:init to create missing project documents"
-    exit 1
-fi
-
-# Load any custom project documents
-for doc in .vybe/project/*.md; do
-    if [ -f "$doc" ] && [[ ! "$doc" =~ (overview|architecture|conventions) ]]; then
-        echo "[OK] Loaded: $(basename "$doc") (custom project context)"
-    fi
-done
-
-project_loaded=true
-
-# Load basic project info
-project_name=$(grep "^# " .vybe/project/overview.md 2>/dev/null | head -1 | sed 's/^# //' || echo "Unnamed Project")
 echo ""
-echo "[PROJECT] $project_name"
+echo "[STATUS] Status-relevant context loaded - ready for progress tracking"
 echo ""
 
 # Load member configuration

@@ -269,19 +269,9 @@ check_feature_design() {
         return
     fi
     
-    # Check for architecture alignment
-    if ! grep -q "Database\|API\|Architecture" "$dir/design.md" 2>/dev/null; then
-        echo "  [GAP] Design lacks technical architecture details"
-        echo "  Fix: /vybe:audit fix-gaps $feature --add-architecture"
-        gaps_found=$((gaps_found + 1))
-    fi
-    
-    # Check for security considerations
-    if ! grep -q -i "security\|authentication\|authorization" "$dir/design.md" 2>/dev/null; then
-        echo "  [GAP] Missing security considerations"
-        echo "  Fix: /vybe:audit fix-gaps $feature --add-security"
-        gaps_found=$((gaps_found + 1))
-    fi
+    echo "[AI] Checking design alignment with project architecture and security requirements..."
+    echo "AI will analyze design.md against loaded project documents for completeness."
+    echo "This replaces hardcoded Database|API|security patterns with project-specific analysis."
     
     echo "  [OK] Design.md exists"
 }
@@ -463,11 +453,9 @@ audit_consistency() {
     echo ""
     echo "[CHECKING] Terminology consistency..."
     
-    # Common inconsistencies to check
-    check_terminology_conflict "JWT\|jwt" "token\|auth token" "Authentication tokens"
-    check_terminology_conflict "PostgreSQL\|postgres" "MySQL\|mysql" "Database technology"
-    check_terminology_conflict "REST\|rest" "GraphQL\|graphql" "API style"
-    check_terminology_conflict "React\|react" "Vue\|vue\|Angular\|angular" "Frontend framework"
+    echo "[AI] Analyzing terminology consistency using project architecture and conventions..."
+    echo "AI will identify inconsistencies based on technologies mentioned in project documents."
+    echo "This replaces hardcoded technology patterns with project-specific analysis."
     
     # Check naming conventions
     echo ""

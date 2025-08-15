@@ -63,30 +63,34 @@ project_loaded=false
 
 echo "[LOADING] Loading project foundation documents..."
 
-# Load overview (business context, goals, constraints)
+# Load project foundation documents (MANDATORY)
 if [ -f ".vybe/project/overview.md" ]; then
-    echo "[OK] Loaded: overview.md (business goals, users, constraints)"
-    # AI MUST read and understand project context
+    echo "[OK] Loading project overview..."
+    echo "=== PROJECT OVERVIEW ==="
+    cat .vybe/project/overview.md
+    echo ""
 else
     echo "[NO] CRITICAL ERROR: overview.md missing"
     echo "   Run /vybe:init to create missing project documents"
     exit 1
 fi
 
-# Load architecture (technical decisions, patterns)
 if [ -f ".vybe/project/architecture.md" ]; then
-    echo "[OK] Loaded: architecture.md (tech stack, patterns, decisions)"
-    # AI MUST read and understand technical constraints
+    echo "[OK] Loading architecture constraints..."
+    echo "=== ARCHITECTURE & TECHNOLOGY ==="
+    cat .vybe/project/architecture.md
+    echo ""
 else
     echo "[NO] CRITICAL ERROR: architecture.md missing"
     echo "   Run /vybe:init to create missing project documents"
     exit 1
 fi
 
-# Load conventions (coding standards, practices)
 if [ -f ".vybe/project/conventions.md" ]; then
-    echo "[OK] Loaded: conventions.md (standards, patterns, practices)"
-    # AI MUST read and understand coding standards
+    echo "[OK] Loading coding standards..."
+    echo "=== CODING CONVENTIONS ==="
+    cat .vybe/project/conventions.md
+    echo ""
 else
     echo "[NO] CRITICAL ERROR: conventions.md missing"
     echo "   Run /vybe:init to create missing project documents"
@@ -185,13 +189,34 @@ fi
 ### Automated Mode
 ```bash
 if [[ "$*" == *"--auto"* ]]; then
-    echo "[AUTO] AUTOMATED BACKLOG CREATION"
-    echo "============================="
+    echo "[AUTO] INTELLIGENT AUTOMATED BACKLOG CREATION"
+    echo "=========================================="
     echo ""
-    echo "AI is analyzing your project and creating a comprehensive backlog..."
     
-    # Load project context
-    project_type=$(grep -i "e-commerce\|saas\|api\|dashboard" .vybe/project/overview.md 2>/dev/null | head -1 || echo "web-application")
+    echo "[AI] INTELLIGENT BACKLOG RESEARCH & ANALYSIS"
+    echo "AI MUST conduct comprehensive research before generating backlog:"
+    echo ""
+    echo "PHASE 1: PROJECT FOUNDATION ANALYSIS"
+    echo "- Analyze loaded project overview.md for business goals and user types"
+    echo "- Review architecture.md for technical capabilities and constraints"
+    echo "- Study conventions.md for development approach and quality standards"
+    echo "- Understand project scope, timeline, and resource constraints"
+    echo ""
+    echo "PHASE 2: INDUSTRY RESEARCH"
+    echo "- Research similar projects and their typical feature sets"
+    echo "- Study current best practices for the identified project type"
+    echo "- Investigate MVP requirements for the business domain"
+    echo "- Research feature prioritization frameworks (RICE, WSJF, etc.)"
+    echo ""
+    echo "PHASE 3: FEATURE ANALYSIS"
+    echo "- Identify core features required for minimum viable product"
+    echo "- Determine value-add features for competitive advantage"
+    echo "- Research technical infrastructure features needed"
+    echo "- Consider user experience and accessibility features"
+    echo ""
+    echo "PHASE 4: INTELLIGENT BACKLOG GENERATION"
+    echo "AI will generate backlog based on research findings and project context..."
+    echo ""
     
     # Create backlog structure
     cat > .vybe/backlog.md << 'EOF'
@@ -222,58 +247,15 @@ if [[ "$*" == *"--auto"* ]]; then
 *Created: DATE | Auto-generated with AI analysis*
 EOF
     
-    # Auto-populate based on project type
-    if echo "$project_type" | grep -qi "e-commerce"; then
-        # E-commerce essentials
-        sed -i '/^## High Priority/a\
-- [ ] user-authentication (Size: L, RICE: 36, WSJF: 8.5) - Secure user registration and login system\
-- [ ] product-catalog (Size: L, RICE: 42, WSJF: 9.2) - Product listing, search, and detail pages\
-- [ ] shopping-cart (Size: M, RICE: 38, WSJF: 7.8) - Add to cart, modify quantities, checkout flow\
-- [ ] payment-processing (Size: L, RICE: 45, WSJF: 9.8) - Secure payment gateway integration\
-- [ ] order-management (Size: M, RICE: 35, WSJF: 7.2) - Order tracking and management system' .vybe/backlog.md
-        
-        sed -i '/^## Medium Priority/a\
-- [ ] inventory-management (Size: M, RICE: 28, WSJF: 6.5) - Stock tracking and management\
-- [ ] email-notifications (Size: S, RICE: 25, WSJF: 8.0) - Order confirmations and updates\
-- [ ] customer-support (Size: M, RICE: 22, WSJF: 5.5) - Help desk and ticket system\
-- [ ] admin-dashboard (Size: M, RICE: 30, WSJF: 6.8) - Business management interface' .vybe/backlog.md
-        
-    elif echo "$project_type" | grep -qi "saas"; then
-        # SaaS platform essentials
-        sed -i '/^## High Priority/a\
-- [ ] user-authentication (Size: L, RICE: 40, WSJF: 9.0) - Multi-tenant user management\
-- [ ] subscription-management (Size: L, RICE: 45, WSJF: 9.5) - Billing and subscription handling\
-- [ ] user-dashboard (Size: M, RICE: 38, WSJF: 8.2) - Main application interface\
-- [ ] api-foundation (Size: L, RICE: 35, WSJF: 8.8) - Core API infrastructure\
-- [ ] member-collaboration (Size: M, RICE: 32, WSJF: 7.5) - Multi-user workspace features' .vybe/backlog.md
-        
-        sed -i '/^## Medium Priority/a\
-- [ ] usage-analytics (Size: M, RICE: 28, WSJF: 6.8) - Feature usage tracking and reporting\
-- [ ] integration-apis (Size: L, RICE: 25, WSJF: 6.2) - Third-party service integrations\
-- [ ] advanced-permissions (Size: M, RICE: 22, WSJF: 5.8) - Role-based access control\
-- [ ] data-export (Size: S, RICE: 20, WSJF: 7.2) - User data portability' .vybe/backlog.md
-        
-    else
-        # Generic web application
-        sed -i '/^## High Priority/a\
-- [ ] user-authentication (Size: L, RICE: 35, WSJF: 8.0) - User registration and login\
-- [ ] core-functionality (Size: L, RICE: 42, WSJF: 9.0) - Primary application features\
-- [ ] user-interface (Size: M, RICE: 38, WSJF: 8.5) - Main user experience\
-- [ ] data-management (Size: M, RICE: 32, WSJF: 7.5) - Data storage and retrieval' .vybe/backlog.md
-        
-        sed -i '/^## Medium Priority/a\
-- [ ] user-profiles (Size: S, RICE: 25, WSJF: 7.8) - User customization and preferences\
-- [ ] notifications (Size: S, RICE: 22, WSJF: 6.5) - System notifications and alerts\
-- [ ] search-functionality (Size: M, RICE: 28, WSJF: 6.8) - Content search and filtering\
-- [ ] admin-panel (Size: M, RICE: 20, WSJF: 5.2) - Administrative interface' .vybe/backlog.md
-    fi
+    echo "[AI] Based on project overview, architecture, and conventions, generating appropriate features..."
+    echo ""
+    echo "Note: AI will analyze the loaded project documents above to create contextual features."
+    echo "This replaces hardcoded patterns with intelligent analysis of your specific project."
+    echo ""
     
-    # Add common technical debt items
-    sed -i '/^## Technical Debt/a\
-- [ ] performance-optimization (Size: M, RICE: 18, WSJF: 4.5) - Speed and efficiency improvements\
-- [ ] security-hardening (Size: M, RICE: 25, WSJF: 8.2) - Security audit and improvements\
-- [ ] test-coverage (Size: L, RICE: 15, WSJF: 3.8) - Comprehensive testing infrastructure\
-- [ ] documentation (Size: M, RICE: 12, WSJF: 3.2) - API and user documentation' .vybe/backlog.md
+    # AI should analyze the loaded project documents to generate features
+    # No more hardcoded e-commerce, saas, or generic patterns
+    # The actual feature generation happens through AI reading the context above
     
     # Update timestamp
     sed -i "s/DATE/$(date +%Y-%m-%d)/" .vybe/backlog.md
@@ -332,53 +314,18 @@ if [[ "$*" == *"--auto"* ]]; then
         existing_features=$(grep "^- \[" .vybe/backlog.md | tr '[:upper:]' '[:lower:]')
     fi
     
-    # Analyze gaps based on project type and existing features
-    missing_features=""
+    echo "[AI] Analyzing existing features against project requirements from foundation documents..."
+    echo ""
+    echo "AI will identify gaps by comparing current backlog with project overview, architecture, and conventions."
+    echo "This replaces hardcoded gap patterns with intelligent analysis."
+    echo ""
     
-    # Authentication gap analysis
-    if ! echo "$existing_features" | grep -q "auth\|login"; then
-        missing_features="$missing_features\nuser-authentication (Size: L, RICE: 35, WSJF: 8.0) - User login and registration system"
-    fi
+    # AI should analyze project documents and existing features to find gaps
+    # No more hardcoded auth, api, security, testing patterns
     
-    # API gap analysis
-    if ! echo "$existing_features" | grep -q "api\|endpoint"; then
-        missing_features="$missing_features\napi-endpoints (Size: M, RICE: 30, WSJF: 7.5) - RESTful API infrastructure"
-    fi
-    
-    # Security gap analysis
-    if ! echo "$existing_features" | grep -q "security\|ssl\|encrypt"; then
-        missing_features="$missing_features\nsecurity-infrastructure (Size: M, RICE: 28, WSJF: 8.5) - Security headers, SSL, encryption"
-    fi
-    
-    # Testing gap analysis
-    if ! echo "$existing_features" | grep -q "test\|qa"; then
-        missing_features="$missing_features\nautomated-testing (Size: L, RICE: 20, WSJF: 4.2) - Unit, integration, and E2E testing"
-    fi
-    
-    # Add identified gaps
-    if [ -n "$missing_features" ]; then
-        echo "[SEARCH] IDENTIFIED GAPS:"
-        echo "$missing_features" | grep -v "^$" | while read -r feature; do
-            echo "  + $feature"
-            # Add to appropriate section based on RICE score
-            rice_score=$(echo "$feature" | grep -o "RICE: [0-9]*" | grep -o "[0-9]*")
-            if [ "$rice_score" -gt 30 ]; then
-                sed -i "/^## High Priority/a\\- [ ] $feature" .vybe/backlog.md
-            else
-                sed -i "/^## Medium Priority/a\\- [ ] $feature" .vybe/backlog.md
-            fi
-        done
-        
-        gap_count=$(echo "$missing_features" | grep -v "^$" | wc -l)
-        echo ""
-        echo "[OK] ADDED $gap_count MISSING FEATURES"
-        echo "   Features automatically scored and prioritized"
-        echo "   Run /vybe:backlog to review additions"
-    else
-        echo "[OK] NO SIGNIFICANT GAPS FOUND"
-        echo "   Your backlog appears comprehensive for current project scope"
-        echo "   Consider /vybe:backlog groom --auto to optimize existing items"
-    fi
+    echo "[AI] AI analysis complete - any identified gaps will be added based on project context"
+    echo "   Gap detection now uses project-specific requirements instead of generic patterns"
+    echo "   Run /vybe:backlog to review any additions"
     
     # Update timestamp
     sed -i "s/Last Updated: .*/Last Updated: $(date +%Y-%m-%d) (Auto-enhanced)/" .vybe/backlog.md
@@ -387,98 +334,119 @@ fi
 
 ## Action: Groom Backlog
 
-### Interactive Grooming (Default)
+**AI-powered backlog coordination - only for features without detailed specs**
+
+### Safety Check First
+```bash
+echo "[GROOM] BACKLOG COORDINATION"
+echo "=========================="
+echo ""
+
+# Check which features can be safely groomed
+planned_features=""
+unplanned_features=""
+
+echo "[SCAN] Checking feature planning status..."
+while read -r line; do
+    if [[ "$line" =~ ^-[[:space:]]\[[[:space:]]\][[:space:]]([a-z0-9-]+) ]]; then
+        feature_name=$(echo "$line" | sed 's/^- \[ \] //' | sed 's/ .*//')
+        if [ -d ".vybe/features/$feature_name" ]; then
+            planned_features="$planned_features $feature_name"
+            echo "  [PROTECTED] $feature_name - has detailed specs"
+        else
+            unplanned_features="$unplanned_features $feature_name"
+            echo "  [AVAILABLE] $feature_name - can be groomed"
+        fi
+    fi
+done < .vybe/backlog.md
+
+if [ -z "$unplanned_features" ]; then
+    echo ""
+    echo "[INFO] All features have detailed specs - use /vybe:audit for quality fixes"
+    echo "Backlog grooming only works on unplanned features"
+    exit 0
+fi
+
+echo ""
+echo "[AI] Analyzing $(echo $unplanned_features | wc -w) unplanned features for coordination..."
+```
+
+### AI Coordination Analysis
 ```bash
 if [[ "$*" != *"--auto"* ]]; then
-    echo "[CLEAN] INTERACTIVE BACKLOG GROOMING"
-    echo "==============================="
     echo ""
-    echo "I'll help you clean and optimize your backlog step by step."
+    echo "[AI] FEATURE COORDINATION ANALYSIS"
+    echo "================================="
+    echo ""
+    echo "Analyzing backlog for overlaps, gaps, and dependencies..."
     echo ""
     
-    # Step 1: Duplicate Detection
-    echo "1. DUPLICATE DETECTION"
-    echo "======================"
+    echo "[AI] Analyzing unplanned features using loaded project foundation documents..."
+    echo ""
+    echo "1. OVERLAP DETECTION"
+    echo "==================="
+    echo "AI will analyze feature descriptions for functional overlaps using project context."
+    echo ""
     
-    # Find potential duplicates using keyword similarity
-    auth_items=$(grep -i "auth\|login\|security" .vybe/backlog.md | grep "^- \[")
-    api_items=$(grep -i "api\|endpoint\|service" .vybe/backlog.md | grep "^- \[") 
-    ui_items=$(grep -i "ui\|interface\|dashboard\|frontend" .vybe/backlog.md | grep "^- \[")
+    echo "2. GAP ANALYSIS"
+    echo "=============="
+    echo "AI will check for missing features based on project overview and architecture requirements."
+    echo ""
     
-    dupe_found=false
+    echo "3. DEPENDENCY COORDINATION"
+    echo "========================="
+    echo "AI will analyze feature dependencies using project architecture and technical constraints."
+    echo ""
     
-    if [ $(echo "$auth_items" | grep -c "^- \[") -gt 1 ]; then
-        echo "[SEARCH] Found potential authentication duplicates:"
-        echo "$auth_items" | nl
-        echo "Merge similar items? [Y/n/skip]"
-        dupe_found=true
-    fi
-    
-    if [ $(echo "$api_items" | grep -c "^- \[") -gt 1 ]; then
-        echo "[SEARCH] Found potential API duplicates:"
-        echo "$api_items" | nl  
-        echo "Merge similar items? [Y/n/skip]"
-        dupe_found=true
-    fi
-    
-    if ! $dupe_found; then
-        echo "[OK] No obvious duplicates found"
-    fi
+    echo "[AI] Analysis based on loaded project documents (overview, architecture, conventions)"
+    echo "This replaces hardcoded patterns with intelligent project-specific analysis."
     
     echo ""
-    echo "2. RICE SCORING"
-    echo "==============="
-    echo "Adding RICE scores (Reach * Impact * Confidence / Effort) to unscored items..."
-    echo "Continue with scoring? [Y/n]"
-    
-    echo ""
-    echo "3. PRIORITY REORDERING" 
-    echo "======================"
-    echo "Reorder items within sections based on RICE/WSJF scores?"
-    echo "This will optimize your backlog for maximum value delivery."
-    echo "Proceed with reordering? [Y/n]"
+    echo "Apply AI suggestions for coordination? [Y/n]"
 fi
 ```
 
-### Automated Grooming
+### Automated Coordination  
 ```bash
 if [[ "$*" == *"--auto"* ]]; then
-    echo "[AUTO] AUTOMATED BACKLOG GROOMING"
-    echo "============================="
+    echo "[AUTO] AUTOMATED FEATURE COORDINATION"
+    echo "==================================="
     echo ""
-    echo "Performing comprehensive backlog optimization..."
+    
+    # Safety check - same as interactive
+    unplanned_count=0
+    for line in $(grep "^- \[ \]" .vybe/backlog.md); do
+        feature_name=$(echo "$line" | sed 's/^- \[ \] //' | sed 's/ .*//')
+        if [ ! -d ".vybe/features/$feature_name" ]; then
+            unplanned_count=$((unplanned_count + 1))
+        fi
+    done
+    
+    if [ "$unplanned_count" -eq 0 ]; then
+        echo "[INFO] All features planned - use /vybe:audit for quality fixes"
+        exit 0
+    fi
+    
+    echo "Coordinating $unplanned_count unplanned features..."
     
     # Create backup
     cp .vybe/backlog.md .vybe/backlog.md.backup
     
     changes_made=0
     
-    echo "1. DUPLICATE DETECTION & MERGING"
-    echo "================================="
+    echo ""
+    echo "1. OVERLAP MERGING"
+    echo "=================="
     
-    # Find and merge authentication duplicates
-    auth_count=$(grep -i "auth\|login" .vybe/backlog.md | grep "^- \[" | wc -l)
-    if [ "$auth_count" -gt 1 ]; then
-        echo "[MERGE] Merging $auth_count authentication-related items..."
-        
-        # Keep highest scoring auth item, remove others
-        best_auth=$(grep -i "auth\|login" .vybe/backlog.md | grep "^- \[" | head -1)
-        grep -v -i "auth\|login" .vybe/backlog.md > .vybe/backlog_temp.md || true
-        
-        # Add merged comprehensive auth feature
-        sed -i "/^## High Priority/a\\- [ ] user-authentication-system (Size: L, RICE: 40, WSJF: 9.0) - Comprehensive auth: login, registration, security, permissions" .vybe/backlog_temp.md
-        
-        mv .vybe/backlog_temp.md .vybe/backlog.md
-        changes_made=$((changes_made + 1))
-        echo "   [OK] Merged into comprehensive user-authentication-system"
-    fi
+    # Merge overlapping unplanned features only
+    overlap_merged=0
     
-    # Similar process for API, UI, and payment duplicates
-    api_count=$(grep -i "api\|endpoint" .vybe/backlog.md | grep "^- \[" | wc -l)
-    if [ "$api_count" -gt 1 ]; then
-        echo "[MERGE] Merging $api_count API-related items..."
-        changes_made=$((changes_made + 1))
-    fi
+    echo "[AI] Analyzing unplanned features for overlaps using project context..."
+    echo "AI will identify similar functionality based on project architecture and conventions."
+    echo "No more hardcoded pattern matching for auth, api, etc."
+    
+    # AI should analyze feature descriptions against project requirements
+    # No more hardcoded auth/login grep patterns
     
     echo ""
     echo "2. RICE SCORING & WSJF CALCULATION"
@@ -489,26 +457,12 @@ if [[ "$*" == *"--auto"* ]]; then
     if [ "$unscored_count" -gt 0 ]; then
         echo "[STATS] Scoring $unscored_count unscored items..."
         
-        # Apply intelligent scoring based on keywords and context
-        while read -r line; do
-            if [[ "$line" =~ ^-[[:space:]]\[.*\] && ! "$line" =~ RICE: ]]; then
-                # Calculate RICE score based on feature type
-                if echo "$line" | grep -qi "auth\|login\|security"; then
-                    new_line=$(echo "$line" | sed 's/)/) (RICE: 38, WSJF: 8.5)/')
-                elif echo "$line" | grep -qi "payment\|billing\|checkout"; then
-                    new_line=$(echo "$line" | sed 's/)/) (RICE: 42, WSJF: 9.2)/')
-                elif echo "$line" | grep -qi "api\|endpoint\|service"; then
-                    new_line=$(echo "$line" | sed 's/)/) (RICE: 35, WSJF: 7.8)/')
-                elif echo "$line" | grep -qi "ui\|interface\|dashboard"; then
-                    new_line=$(echo "$line" | sed 's/)/) (RICE: 30, WSJF: 7.0)/')
-                else
-                    new_line=$(echo "$line" | sed 's/)/) (RICE: 25, WSJF: 6.0)/')
-                fi
-                
-                # Replace in file
-                sed -i "s|$line|$new_line|" .vybe/backlog.md
-            fi
-        done < .vybe/backlog.md
+        echo "[AI] Applying intelligent scoring based on project context and feature importance..."
+        echo "AI will score features based on project overview, architecture requirements, and business value."
+        echo "This replaces hardcoded scoring patterns with context-aware analysis."
+        
+        # AI should analyze features against project documents for intelligent scoring
+        # No more hardcoded auth, payment, api, ui patterns
         
         changes_made=$((changes_made + 1))
         echo "   [OK] Added RICE/WSJF scores to all items"

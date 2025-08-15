@@ -190,485 +190,195 @@ fi
 `-- features/           # Feature specifications (empty initially)
 ```
 
-## Task 3: Generate Project Overview
+## Task 2.5: Intelligent Project Analysis & Research
 
-### Template for overview.md
-```markdown
-# Project Overview
-
-## Executive Summary
-[One paragraph capturing the essence of the project]
-
-## Product Description
-[User-provided description or extracted from README]
-
-## Target Users
-### Primary Users
-- **User Persona**: [Who they are]
-- **Pain Points**: [Problems they face]
-- **Use Cases**: [How they'll use the product]
-
-### Secondary Users
-[If applicable]
-
-## Business Goals
-### Immediate Goals (MVP)
-- [Core feature 1]
-- [Core feature 2]
-- [Core feature 3]
-
-### Long-term Vision
-- [Future expansion]
-- [Market opportunities]
-
-## Success Metrics
-### Technical Metrics
-- **Performance**: [Response time, throughput]
-- **Reliability**: [Uptime targets]
-- **Scalability**: [User/data growth targets]
-
-### Business Metrics
-- **User Adoption**: [Target numbers]
-- **Engagement**: [Key activities to track]
-- **Retention**: [Churn rate goals]
-
-## Constraints & Risks
-### Technical Constraints
-- [Platform limitations]
-- [Performance requirements]
-- [Security requirements]
-
-### Business Constraints
-- [Timeline]
-- [Budget]
-- [Regulatory compliance]
-
-### Risk Mitigation
-- [Identified risks and mitigation strategies]
-
----
-*Generated: [date] | Updated: [date]*
-```
-
-## Task 4: Document Architecture
-
-### Analysis Commands
+### AI Research Phase (MANDATORY)
 ```bash
-# Detect frontend frameworks
-grep -E "react|vue|angular|svelte" package.json 2>/dev/null
-
-# Detect backend frameworks
-grep -E "express|fastify|django|flask|gin|echo" * -r 2>/dev/null | head -5
-
-# Check for Docker
-[ -f "Dockerfile" ] && echo "Docker configuration found"
-[ -f "docker-compose.yml" ] && echo "Docker Compose found"
-
-# Database detection
-grep -E "postgres|mysql|mongodb|redis" * -r 2>/dev/null | head -5
+echo "[AI] INTELLIGENT PROJECT ANALYSIS & RESEARCH"
+echo "=========================================="
+echo ""
+echo "Project Description: $project_description"
+echo ""
+echo "[AI] PHASE 1: PROJECT TYPE ANALYSIS"
+echo "AI MUST analyze the project description to understand:"
+echo "- What type of application this is (web app, mobile, API, desktop, etc.)"
+echo "- Primary use case and business domain"
+echo "- Target users and user interactions"
+echo "- Core functionality and features implied"
+echo "- Technical complexity and requirements"
+echo ""
+echo "[AI] PHASE 2: TECHNOLOGY RESEARCH"
+echo "AI MUST research current best practices for this project type:"
+echo "- Modern technology stacks appropriate for the use case"
+echo "- Architecture patterns commonly used for similar projects"
+echo "- Security considerations for the business domain"
+echo "- Performance requirements typical for the application type"
+echo "- Development tools and frameworks in current use"
+echo ""
+echo "[AI] PHASE 3: INDUSTRY STANDARDS RESEARCH"
+echo "AI MUST research industry standards and compliance:"
+echo "- Security standards relevant to the business domain"
+echo "- Performance benchmarks for similar applications"
+echo "- Accessibility requirements and best practices"
+echo "- Testing strategies and quality standards"
+echo "- Development workflow and deployment patterns"
+echo ""
+echo "[AI] PHASE 4: SYNTHESIS & RECOMMENDATIONS"
+echo "AI MUST synthesize research findings to determine:"
+echo "- Recommended technology stack for this specific project"
+echo "- Architecture patterns that fit the requirements"
+echo "- Security measures needed for the business domain"
+echo "- Performance targets appropriate for the use case"
+echo "- Development practices that ensure quality"
+echo ""
+echo "AI will use this analysis to generate intelligent, research-informed project documents"
+echo ""
 ```
 
-### Template for architecture.md
-```markdown
-# Technical Architecture
+## Task 3: Generate Intelligent Project Documentation
 
-## System Overview
-[Architecture pattern: Monolith/Microservices/Serverless/JAMstack]
-
-## Technology Stack
-
-### Frontend
-- **Framework**: [React/Vue/Angular/Next.js/None]
-- **State Management**: [Redux/Zustand/Context API/Pinia]
-- **Styling**: [CSS/SCSS/Tailwind/styled-components]
-- **Build Tool**: [Vite/Webpack/Parcel/esbuild]
-- **Testing**: [Jest/Vitest/Cypress/Playwright]
-
-### Backend
-- **Runtime**: [Node.js/Python/Go/Java/Rust]
-- **Framework**: [Express/FastAPI/Gin/Spring/Actix]
-- **API Type**: [REST/GraphQL/gRPC/WebSocket]
-- **Authentication**: [JWT/OAuth2/Session-based]
-- **Validation**: [Joi/Yup/Pydantic/go-playground]
-
-### Database
-- **Primary Database**: [PostgreSQL/MySQL/MongoDB/SQLite]
-- **ORM/ODM**: [Prisma/TypeORM/Mongoose/SQLAlchemy]
-- **Caching**: [Redis/Memcached/In-memory]
-- **Search**: [Elasticsearch/Algolia/PostgreSQL FTS]
-
-### Infrastructure
-- **Hosting**: [AWS/GCP/Azure/Vercel/Netlify/Self-hosted]
-- **Container**: [Docker/Podman]
-- **Orchestration**: [Kubernetes/Docker Swarm/ECS]
-- **CI/CD**: [GitHub Actions/GitLab CI/Jenkins/CircleCI]
-- **Monitoring**: [Prometheus/Grafana/DataDog/New Relic]
-- **Logging**: [ELK Stack/CloudWatch/Papertrail]
-
-## Architecture Decisions
-
-### Design Patterns
-- **API Design**: [RESTful/RPC/Event-driven]
-- **Data Flow**: [Unidirectional/Bidirectional]
-- **State Management**: [Centralized/Distributed]
-- **Error Handling**: [Try-catch/Result types/Error boundaries]
-
-### Security Architecture
-- **Authentication Flow**: [Description]
-- **Authorization Model**: [RBAC/ABAC/ACL]
-- **Data Encryption**: [At-rest/In-transit]
-- **Secret Management**: [Environment vars/Vault/KMS]
-
-## Directory Structure
-\`\`\`
-[Auto-generated from actual project structure]
-\`\`\`
-
-## Development Environment
-
-### Prerequisites
-- [Runtime and version]
-- [Package manager]
-- [Database]
-- [Other tools]
-
-### Setup Instructions
-\`\`\`bash
-# Clone repository
-git clone [repository-url]
-cd [project-name]
-
-# Install dependencies
-[npm install / pip install -r requirements.txt / go mod download]
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
-
-# Initialize database
-[npm run db:setup / python manage.py migrate]
-
-# Start development server
-[npm run dev / python manage.py runserver / go run .]
-\`\`\`
-
-### Common Commands
-\`\`\`bash
-# Development
-npm run dev          # Start dev server
-npm run build        # Build for production
-npm run test         # Run tests
-npm run lint         # Run linter
-
-# Database
-npm run db:migrate   # Run migrations
-npm run db:seed      # Seed database
-npm run db:reset     # Reset database
-\`\`\`
-
-### Ports & Services
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **Database**: localhost:5432
-- **Redis**: localhost:6379
-
----
-*Generated: [date] | Updated: [date]*
-```
-
-## Task 5: Extract Conventions
-
-### Analysis Commands
+### Generate overview.md Based on AI Analysis
 ```bash
-# Detect code style from configs
-ls .eslintrc* .prettierrc* .editorconfig tslint.json 2>/dev/null
+echo "[DOCS] GENERATING PROJECT OVERVIEW"
+echo "=========================="
+echo ""
+echo "[AI] OVERVIEW DOCUMENT CREATION INSTRUCTIONS:"
+echo "AI MUST create overview.md based on the analysis above:"
+echo ""
+echo "1. PROJECT CONTEXT UNDERSTANDING:"
+echo "   - Use project type analysis to create appropriate business context"
+echo "   - Define target users based on application type and use case"
+echo "   - Establish success metrics relevant to the business domain"
+echo "   - Set realistic scope based on project complexity analysis"
+echo ""
+echo "2. RESEARCH-INFORMED CONTENT:"
+echo "   - Apply industry standards research to define quality requirements"
+echo "   - Use technology research to inform technical constraints"
+echo "   - Include compliance requirements relevant to the business domain"
+echo "   - Set performance expectations appropriate for the application type"
+echo ""
+echo "3. TEMPLATE UTILIZATION:"
+echo "   - Use the comprehensive overview.md template from templates/overview.md"
+echo "   - Fill in template sections based on intelligent analysis"
+echo "   - Adapt template content to match the specific project type and requirements"
+echo "   - Ensure all template sections are completed with relevant information"
+echo ""
 
-# Analyze naming patterns
-find . -name "*.js" -o -name "*.ts" | head -20  # Check file naming
-grep -h "^function\|^const.*=.*function\|^class" **/*.js 2>/dev/null | head -10  # Function/class naming
+# Copy template and let AI customize it based on analysis
+cp templates/overview.md .vybe/project/overview.md
 
-# Git workflow analysis
-git log --oneline -30  # Commit message patterns
-git branch -r          # Branch naming patterns
+echo "[OK] Overview template copied - AI should customize based on project analysis"
+echo ""
 ```
 
-### Template for conventions.md
-```markdown
-# Development Conventions
-
-## Code Style
-
-### Language Standards
-- **Primary Language**: [JavaScript/TypeScript/Python/Go]
-- **Version**: [ES2022/Python 3.11/Go 1.21]
-- **Style Guide**: [Airbnb/Standard/PEP8/Effective Go]
-
-### Formatting Rules
-- **Indentation**: [2 spaces/4 spaces/tabs]
-- **Line Length**: [80/100/120 characters]
-- **Semicolons**: [Always/Never/ASI]
-- **Quotes**: [Single/Double/Backticks]
-- **Trailing Comma**: [Always/Never/Multiline]
-
-### Naming Conventions
-\`\`\`javascript
-// Variables & Functions
-const userName = "camelCase";          // Variables
-function calculateTotal() {}           // Functions
-const handleClick = () => {};         // Event handlers
-
-// Classes & Components
-class UserService {}                   // PascalCase classes
-function UserProfile() {}              // React components
-
-// Files & Directories
-user-service.js                       // kebab-case files
-UserProfile.jsx                       // PascalCase components
-__tests__/user.test.js               // Test files
-```
-
-## Git Workflow
-
-### Branch Strategy
-- **Main Branch**: `main` (production-ready)
-- **Feature Branches**: `feature/description`
-- **Bug Fixes**: `fix/issue-description`
-- **Hotfixes**: `hotfix/critical-issue`
-- **Releases**: `release/v1.2.3`
-
-### Commit Conventions
-Format: `type(scope): description`
-
-Types:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation
-- `style`: Formatting, no code change
-- `refactor`: Code restructuring
-- `test`: Adding tests
-- `chore`: Maintenance tasks
-
-Examples:
+### Generate architecture.md Based on AI Research
 ```bash
-feat(auth): implement JWT token refresh
-fix(api): resolve timeout in user endpoint
-docs(readme): update installation steps
-test(user): add unit tests for validation
+echo "[DOCS] GENERATING PROJECT ARCHITECTURE"
+echo "============================="
+echo ""
+echo "[AI] ARCHITECTURE DOCUMENT CREATION INSTRUCTIONS:"
+echo "AI MUST create architecture.md based on the technology research above:"
+echo ""
+echo "1. TECHNOLOGY STACK SELECTION:"
+echo "   - Use technology research to select appropriate frameworks and tools"
+echo "   - Choose database systems based on data requirements and scale"
+echo "   - Select authentication methods appropriate for the security needs"
+echo "   - Pick testing tools and deployment strategies for the project type"
+echo ""
+echo "2. ARCHITECTURE PATTERN DECISIONS:"
+echo "   - Apply researched architecture patterns to the specific use case"
+echo "   - Define system architecture based on scalability requirements"
+echo "   - Establish data flow patterns appropriate for the application type"
+echo "   - Set integration patterns for external services and APIs"
+echo ""
+echo "3. TEMPLATE COMPLETION:"
+echo "   - Use the comprehensive architecture.md template from templates/architecture.md"
+echo "   - Fill in specific technology choices based on research findings"
+echo "   - Customize architecture patterns for the project requirements"
+echo "   - Ensure all template sections reflect intelligent technology decisions"
+echo ""
+
+# Copy template and let AI customize it based on research
+cp templates/architecture.md .vybe/project/architecture.md
+
+echo "[OK] Architecture template copied - AI should customize based on technology research"
+echo ""
 ```
 
-### Pull Request Process
-1. Create feature branch from main
-2. Make atomic commits with clear messages
-3. Keep PR focused on single concern
-4. Update tests and documentation
-5. Request review from other members
-6. Address feedback promptly
-7. Squash and merge when approved
+### Generate conventions.md Based on AI Standards Research
+```bash
+echo "[DOCS] GENERATING DEVELOPMENT CONVENTIONS"
+echo "===================================="
+echo ""
+echo "[AI] CONVENTIONS DOCUMENT CREATION INSTRUCTIONS:"
+echo "AI MUST create conventions.md based on the standards research above:"
+echo ""
+echo "1. LANGUAGE-SPECIFIC STANDARDS:"
+echo "   - Apply development standards appropriate for the chosen technology stack"
+echo "   - Use code style guides that match the selected frameworks"
+echo "   - Set testing conventions that align with the chosen testing tools"
+echo "   - Define project structure that fits the architecture patterns"
+echo ""
+echo "2. INDUSTRY BEST PRACTICES:"
+echo "   - Apply security practices relevant to the business domain"
+echo "   - Use performance guidelines appropriate for the application type"
+echo "   - Include accessibility standards that match the target users"
+echo "   - Set quality standards that align with industry expectations"
+echo ""
+echo "3. TEMPLATE CUSTOMIZATION:"
+echo "   - Use the comprehensive conventions.md template from templates/conventions.md"
+echo "   - Adapt coding standards to the specific technology choices"
+echo "   - Customize development workflow for the project team and tools"
+echo "   - Ensure all conventions align with the chosen architecture and stack"
+echo ""
 
-## Testing Standards
+# Copy template and let AI customize it based on standards research
+cp templates/conventions.md .vybe/project/conventions.md
 
-### Test Organization
-```
-tests/
-|-- unit/           # Unit tests
-|-- integration/    # Integration tests
-|-- e2e/           # End-to-end tests
-`-- fixtures/      # Test data
-```
-
-### Test Patterns
-\`\`\`javascript
-// Test file naming
-userService.test.js    // Unit test
-user.e2e.test.js       // E2E test
-
-// Test structure
-describe('UserService', () => {
-  describe('createUser', () => {
-    it('should create user with valid data', () => {
-      // Arrange
-      const userData = { name: 'John', email: 'john@example.com' };
-      
-      // Act
-      const user = userService.createUser(userData);
-      
-      // Assert
-      expect(user).toHaveProperty('id');
-      expect(user.name).toBe('John');
-    });
-    
-    it('should throw error with invalid email', () => {
-      // Test error cases
-    });
-  });
-});
-\`\`\`
-
-### Coverage Requirements
-- **Overall Coverage**: Minimum 80%
-- **Critical Paths**: 100% coverage required
-- **New Code**: Must include tests
-- **Integration Tests**: For all API endpoints
-
-## Documentation Standards
-
-### Code Documentation
-\`\`\`javascript
-/**
- * Calculate order total with tax and shipping
- * @param {Object} order - Order object
- * @param {number} order.subtotal - Order subtotal
- * @param {string} order.state - Shipping state for tax
- * @param {Object} options - Calculation options
- * @param {boolean} options.includeTax - Include tax in total
- * @param {number} options.shippingRate - Shipping rate override
- * @returns {number} Total order amount
- * @throws {ValidationError} If order data is invalid
- */
-function calculateOrderTotal(order, options = {}) {
-  // Implementation
-}
-\`\`\`
-
-### API Documentation
-- Use OpenAPI/Swagger for REST APIs
-- Document all endpoints with examples
-- Include error responses
-- Maintain Postman collection
-
-### README Requirements
-- [ ] Project description and purpose
-- [ ] Prerequisites and system requirements
-- [ ] Installation instructions
-- [ ] Configuration guide
-- [ ] Usage examples
-- [ ] API documentation link
-- [ ] Contributing guidelines
-- [ ] License information
-
-## Security Practices
-
-### Code Security
-- **No secrets in code**: Use environment variables
-- **Input validation**: Validate all user inputs
-- **Output encoding**: Prevent XSS attacks
-- **SQL injection**: Use parameterized queries
-- **Authentication**: Implement proper auth checks
-- **Authorization**: Enforce access controls
-
-### Dependencies
-- **Regular updates**: Weekly dependency checks
-- **Security audits**: `npm audit` / `pip check`
-- **License compliance**: Track licenses
-- **Minimal dependencies**: Avoid unnecessary packages
-
-### Data Protection
-- **Encryption**: TLS for transit, AES for storage
-- **PII handling**: Minimize and protect
-- **Logging**: No sensitive data in logs
-- **Backups**: Regular encrypted backups
-
----
-*Generated: [date] | Updated: [date]*
+echo "[OK] Conventions template copied - AI should customize based on standards research"
+echo ""
 ```
 
-## Task 6: Create Backlog Template
+## Final Initialization Steps
 
-### Template for backlog.md
-```markdown
-# Project Backlog
-
-## Active Features (Current Sprint)
-<!-- Features being actively developed -->
-
-## Ready for Development
-<!-- Features fully specified and ready to start -->
-
-## High Priority (Next Quarter)
-<!-- Critical features for near-term -->
-
-## Medium Priority (6 Months)
-<!-- Important but not urgent -->
-
-## Low Priority (Future)
-<!-- Nice-to-have features -->
-
-## Technical Debt
-<!-- Refactoring and optimization needs -->
-
-## Research & Spikes
-<!-- Topics requiring investigation -->
-
-## Completed Features
-<!-- Moved here after deployment -->
-
----
-*Last Updated: [date]*
-```
-
-## Update Strategy for Existing Projects
-
-### When .vybe Already Exists
-1. **Read existing files first** - Preserve custom content
-2. **Update only factual information** - Dependencies, versions, commands
-3. **Add missing standard sections** - From templates above
-4. **Mark deprecated content** - Use [DEPRECATED] tags
-5. **Maintain existing style** - Match formatting preferences
-
-### Preservation Rules
-- **Custom sections**: Keep any non-standard sections
-- **User examples**: Preserve custom code examples
-- **Comments**: Maintain inline comments and notes
-- **Manual overrides**: Respect explicit configuration
-
-## Success Criteria
-
-### For New Projects
-- [OK] All directories created successfully
-- [OK] All template files generated with project-specific content
-- [OK] README.md created or updated
-- [OK] .gitignore updated with .vybe/
-- [OK] User receives clear next steps
-
-### For Existing Projects
-- [OK] Existing documentation analyzed and incorporated
-- [OK] Technology stack accurately detected
-- [OK] Conventions extracted from actual code
-- [OK] Custom content preserved during update
-- [OK] No data loss or overwrites
-
-## Next Steps Message
-
-After successful initialization:
-```
-[OK] Vybe initialization complete!
-
-Created/Updated:
-- .vybe/project/overview.md (business context)
-- .vybe/project/architecture.md (technical stack)
-- .vybe/project/conventions.md (development standards)
-- .vybe/backlog.md (feature planning)
-
-Next steps:
-1. Review generated documentation for accuracy
-2. Use `/vybe:discuss` to explore technical decisions
-3. Use `/vybe:plan [feature]` to create your first feature specification
-4. Use `/vybe:execute` to start implementing tasks
-
-For help: `/vybe:status` shows current progress
+### Complete Project Setup
+```bash
+echo "[INIT] FINALIZING INTELLIGENT PROJECT SETUP"
+echo "======================================="
+echo ""
+echo "[OK] Project foundation created with AI-driven approach:"
+echo "   - Project type analyzed and understood"
+echo "   - Technology research conducted for informed decisions"
+echo "   - Industry standards research applied"
+echo "   - Comprehensive templates customized for project needs"
+echo ""
+echo "[FILES] Generated project documents:"
+echo "   - .vybe/project/overview.md (business context and goals)"
+echo "   - .vybe/project/architecture.md (technology stack and patterns)"
+echo "   - .vybe/project/conventions.md (development standards)"
+echo ""
+echo "[APPROACH] Intelligent initialization complete:"
+echo "   - No hardcoded assumptions used"
+echo "   - Research-informed technology decisions"
+echo "   - Project-specific documentation generated"
+echo "   - Ready for intelligent feature planning"
+echo ""
+echo "[NEXT] Ready for feature development:"
+echo "   - /vybe:backlog init --auto - Generate intelligent backlog"
+echo "   - /vybe:plan [feature] - Plan features with AI analysis"
+echo "   - All commands will use intelligent project foundation"
 ```
 
 ## Error Handling
 
 ### Common Issues
-- **Not a git repository**: Warn but continue
-- **No code files found**: Prompt for project type
-- **Existing .vybe conflicts**: Offer update or abort
-- **Permission denied**: Check file permissions
-- **Missing project description**: Use README or prompt
+- **No project description provided**: Prompt for description or analyze existing files
+- **Templates not found**: Check templates/ directory exists
+- **Permission denied**: Check file system permissions
+- **Existing .vybe conflicts**: Offer update or abort with clear options
 
 ### Recovery Actions
-- Rollback on failure
-- Preserve any existing files
-- Clear error messages with solutions
-- Suggest manual fixes when needed
+- **Rollback on failure**: Preserve any existing files
+- **Clear error messages**: Provide specific solutions for each error type
+- **Template fallback**: Use basic templates if comprehensive ones unavailable
+- **Manual guidance**: Suggest manual steps when automated approach fails
