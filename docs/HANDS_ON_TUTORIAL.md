@@ -164,9 +164,35 @@ The framework will analyze each project description, research appropriate techno
 - [ ] Is the project context comprehensive enough for decision-making?
 - [ ] Does it work well for solo development?
 
+### Step 2: Create Initial Backlog
+```bash
+# Command to test:
+/vybe:backlog init --auto
+
+# Expected behavior:
+# PHASE 1 (Fast - 30 seconds):
+# - Analyzes loaded project foundation documents (overview, architecture, conventions)
+# - Extracts feature requirements from project context
+# - Infers core features from project type and business domain
+# - Applies standard feature patterns for task management application
+# - Generates intelligent backlog immediately with prioritized features
+# PHASE 2 (Background):
+# - Researches similar projects and their typical feature sets
+# - Studies current best practices for task management applications
+# - Investigates MVP requirements for productivity software
+# - Enhances backlog with research findings and RICE/WSJF scoring
+```
+
+**Test Points:**
+- [ ] Does backlog init create a comprehensive feature list?
+- [ ] Are features appropriate for the project type (task management)?
+- [ ] Is the backlog organized with clear priorities?
+- [ ] Are core MVP features identified correctly?
+- [ ] Does the backlog align with project foundation documents?
+
 ## Phase 2: Feature Planning
 
-### Step 2: Plan Authentication Feature
+### Step 3: Plan Authentication Feature
 ```bash
 # Command to test:
 /vybe:plan user-authentication "Secure user registration and login system with email verification, password reset, and JWT tokens"
@@ -191,7 +217,7 @@ The framework will analyze each project description, research appropriate techno
 - [ ] Are security considerations appropriate for authentication?
 - [ ] Are tasks granular enough for implementation?
 
-### Step 3: Plan API Integration Feature
+### Step 4: Plan API Integration Feature
 ```bash
 # Command to test:
 /vybe:plan api-integration "External API integrations for weather data and email notifications"
@@ -214,7 +240,7 @@ The framework will analyze each project description, research appropriate techno
 
 ## Phase 3: Implementation Workflow
 
-### Step 4: Check Project Status
+### Step 5: Check Project Status
 ```bash
 # Command to test:
 /vybe:status
@@ -232,7 +258,7 @@ The framework will analyze each project description, research appropriate techno
 - [ ] Is progress tracking meaningful at this stage?
 - [ ] Does it provide clear next steps?
 
-### Step 5: Start Implementation Work
+### Step 6: Start Implementation Work
 ```bash
 # Command to test:
 /vybe:execute user-authentication-task-1
@@ -252,7 +278,7 @@ The framework will analyze each project description, research appropriate techno
 
 ## Phase 4: Quality Assurance
 
-### Step 6: Project Quality Audit
+### Step 7: Project Quality Audit
 ```bash
 # Command to test:
 /vybe:audit
@@ -271,7 +297,7 @@ The framework will analyze each project description, research appropriate techno
 - [ ] Do fix commands make sense?
 - [ ] Is it clearly different from /vybe:status?
 
-### Step 7: Fix Automation Testing
+### Step 8: Fix Automation Testing
 ```bash
 # Commands to test:
 /vybe:audit features
@@ -290,7 +316,7 @@ The framework will analyze each project description, research appropriate techno
 
 ## Phase 5: Natural Language Help
 
-### Step 8: Get Command Guidance
+### Step 9: Get Command Guidance
 ```bash
 # Command to test:
 /vybe:discuss "I need to add OAuth integration to authentication, what's the best approach?"
@@ -308,7 +334,7 @@ The framework will analyze each project description, research appropriate techno
 - [ ] Does it reference existing project specifications?
 - [ ] Is the response helpful for solo developers?
 
-### Step 9: Final Project Review
+### Step 10: Final Project Review
 ```bash
 # Commands to test:
 /vybe:status                    # Final progress check
@@ -574,7 +600,7 @@ Look for these potential issues:
 
 This tutorial provides two comprehensive paths for testing the entire Vybe framework:
 
-**👤 Solo Tutorial** - 9 focused steps testing core functionality without team complexity
+**👤 Solo Tutorial** - 10 focused steps testing core functionality without team complexity
 **👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
 
 Both tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
