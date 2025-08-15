@@ -265,7 +265,7 @@ echo "   - Ensure all template sections are completed with relevant information"
 echo ""
 
 # Copy template and let AI customize it based on analysis
-cp templates/overview.md .vybe/project/overview.md
+cp .claude/templates/overview.md .vybe/project/overview.md
 
 echo "[OK] Overview template copied - AI should customize based on project analysis"
 echo ""
@@ -299,7 +299,7 @@ echo "   - Ensure all template sections reflect intelligent technology decisions
 echo ""
 
 # Copy template and let AI customize it based on research
-cp templates/architecture.md .vybe/project/architecture.md
+cp .claude/templates/architecture.md .vybe/project/architecture.md
 
 echo "[OK] Architecture template copied - AI should customize based on technology research"
 echo ""
@@ -333,7 +333,7 @@ echo "   - Ensure all conventions align with the chosen architecture and stack"
 echo ""
 
 # Copy template and let AI customize it based on standards research
-cp templates/conventions.md .vybe/project/conventions.md
+cp .claude/templates/conventions.md .vybe/project/conventions.md
 
 echo "[OK] Conventions template copied - AI should customize based on standards research"
 echo ""

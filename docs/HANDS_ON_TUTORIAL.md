@@ -24,7 +24,6 @@ git init
 git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 cp vybe-framework/CLAUDE.md .
-cp -r vybe-framework/templates .
 rm -rf vybe-framework
 
 # 3. Ready to start solo tutorial below
@@ -43,7 +42,6 @@ cd vybe-team-test
 git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 cp vybe-framework/CLAUDE.md .
-cp -r vybe-framework/templates .
 rm -rf vybe-framework
 
 # 4. Initial commit to shared repository
