@@ -19,8 +19,9 @@ Vybe brings structure to AI-assisted development through:
 
 ## Quick Setup
 
+### Solo Development Setup
 ```bash
-# 1. Create new project
+# 1. Create new project directory
 mkdir my-project && cd my-project
 git init
 
@@ -33,7 +34,49 @@ rm -rf vybe-framework
 /vybe:init "Your project description"
 ```
 
-**Repository**: [https://github.com/iptracej-education/vybe](https://github.com/iptracej-education/vybe)
+### Multi-Member Team Setup
+```bash
+# 1. Create GitHub repository first (required for team coordination)
+# Go to GitHub and create: https://github.com/yourusername/your-project
+
+# 2. Clone your empty repository
+git clone https://github.com/yourusername/your-project.git
+cd your-project
+
+# 3. Install Vybe Framework
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+rm -rf vybe-framework
+
+# 4. Initialize and push to shared repository
+/vybe:init "Your project description"
+git add .
+git commit -m "Initialize project with Vybe framework"
+git push origin main
+
+# 5. Team members clone and set their roles
+git clone https://github.com/yourusername/your-project.git
+export VYBE_MEMBER=dev-1  # Each member uses dev-1, dev-2, etc.
+```
+
+### Add to Existing Project
+```bash
+# In your existing project directory
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+rm -rf vybe-framework
+
+# Initialize Vybe in your existing project
+/vybe:init "Your existing project description"
+```
+
+**Framework Repository**: [https://github.com/iptracej-education/vybe](https://github.com/iptracej-education/vybe)
+
+**Repository Requirements**:
+- **Solo development**: Local git repo only (no GitHub needed)
+- **Multi-member teams**: **GitHub repository required** for coordination
+  - Vybe uses git-based coordination between team members
+  - Create your GitHub repository before setup for team projects
 
 ## Start Building
 
