@@ -11,7 +11,6 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 ### Framework Paths
 - **Commands**: `.claude/commands/vybe/`
 - **Hooks**: `.claude/hooks/`
-- **Session Handoff**: `.claude/SESSION_HANDOFF.md`
 
 ### Project Foundation Paths
 - **Project Documents**: `.vybe/project/`
