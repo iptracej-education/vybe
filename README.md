@@ -1,6 +1,7 @@
 # Vybe Framework
 
-**Spec-driven agile-like development for Claude Code with multi-session coordination**
+**Note: This is still experimental**
+Spec-driven agile-like development for Claude Code with multi-session coordination
 
 ## Overview
 
