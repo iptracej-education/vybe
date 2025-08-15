@@ -102,7 +102,47 @@ git push origin main
 - [ ] Is the project context comprehensive enough for decision-making?
 - [ ] Does it work well for solo development?
 
-### Step 2: Create Initial Backlog
+### Step 2: Review and Refine Foundation Documents
+```bash
+# Actions to take:
+# 1. Review the generated documents
+ls -la .vybe/project/
+cat .vybe/project/overview.md
+cat .vybe/project/architecture.md  
+cat .vybe/project/conventions.md
+
+# 2. Get external feedback (choose one or more):
+# - Upload all three documents to ChatGPT/Claude for review
+# - Share with team members for technical validation
+# - Get stakeholder input on business context and goals
+# - Have domain experts review technology choices
+
+# 3. Edit documents based on feedback
+# Use your editor to refine:
+# - Business goals and success metrics
+# - Technology stack choices
+# - Development standards and practices
+# - Project scope and constraints
+
+# 4. Validate foundation is ready
+/vybe:status  # Should show solid project foundation
+```
+
+**Expected behavior:**
+- **Document Review**: Foundation documents provide intelligent starting points
+- **External Validation**: Get perspective from humans/LLMs on business and technical aspects
+- **Iterative Refinement**: Documents improve through feedback cycles
+- **Stakeholder Alignment**: Ensure business context matches actual needs
+- **Technical Validation**: Verify technology choices are appropriate
+
+**Test Points:**
+- [ ] Are the generated documents comprehensive enough for review?
+- [ ] Do documents provide good starting points for refinement?
+- [ ] Is it easy to identify areas needing improvement?
+- [ ] Can external reviewers understand the project context?
+- [ ] Do refined documents better match actual project needs?
+
+### Step 3: Create Initial Backlog
 ```bash
 # Command to test:
 /vybe:backlog init --auto
@@ -130,7 +170,7 @@ git push origin main
 
 ## Phase 2: Feature Planning
 
-### Step 3: Plan Authentication Feature
+### Step 4: Plan Authentication Feature
 ```bash
 # Command to test:
 /vybe:plan user-authentication "Secure user registration and login system with email verification, password reset, and JWT tokens"
@@ -155,7 +195,7 @@ git push origin main
 - [ ] Are security considerations appropriate for authentication?
 - [ ] Are tasks granular enough for implementation?
 
-### Step 4: Plan API Integration Feature
+### Step 5: Plan API Integration Feature
 ```bash
 # Command to test:
 /vybe:plan api-integration "External API integrations for weather data and email notifications"
@@ -178,7 +218,7 @@ git push origin main
 
 ## Phase 3: Implementation Workflow
 
-### Step 5: Check Project Status
+### Step 6: Check Project Status
 ```bash
 # Command to test:
 /vybe:status
@@ -196,7 +236,7 @@ git push origin main
 - [ ] Is progress tracking meaningful at this stage?
 - [ ] Does it provide clear next steps?
 
-### Step 6: Start Implementation Work
+### Step 7: Start Implementation Work
 ```bash
 # Command to test:
 /vybe:execute user-authentication-task-1
@@ -216,7 +256,7 @@ git push origin main
 
 ## Phase 4: Quality Assurance
 
-### Step 7: Project Quality Audit
+### Step 8: Project Quality Audit
 ```bash
 # Command to test:
 /vybe:audit
@@ -235,7 +275,7 @@ git push origin main
 - [ ] Do fix commands make sense?
 - [ ] Is it clearly different from /vybe:status?
 
-### Step 8: Fix Automation Testing
+### Step 9: Fix Automation Testing
 ```bash
 # Commands to test:
 /vybe:audit features
@@ -254,7 +294,7 @@ git push origin main
 
 ## Phase 5: Natural Language Help
 
-### Step 9: Get Command Guidance
+### Step 10: Get Command Guidance
 ```bash
 # Command to test:
 /vybe:discuss "I need to add OAuth integration to authentication, what's the best approach?"
@@ -272,7 +312,7 @@ git push origin main
 - [ ] Does it reference existing project specifications?
 - [ ] Is the response helpful for solo developers?
 
-### Step 10: Final Project Review
+### Step 11: Final Project Review
 ```bash
 # Commands to test:
 /vybe:status                    # Final progress check
@@ -600,7 +640,7 @@ The framework will analyze each project description, research appropriate techno
 
 This tutorial provides two comprehensive paths for testing the entire Vybe framework:
 
-**👤 Solo Tutorial** - 10 focused steps testing core functionality without team complexity
+**👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
 **👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
 
 Both tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
