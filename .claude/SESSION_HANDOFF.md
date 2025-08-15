@@ -71,12 +71,39 @@ This is not an enhancement - this is fixing a fundamental architectural flaw. Th
 
 This reveals the framework doesn't communicate the connection between features and outcomes clearly enough.
 
+## ADDITIONAL CRITICAL INSIGHT: UI EXAMPLES
+
+**HUGE DIFFERENCE**: UI examples as input would dramatically improve outcome definition.
+
+### Why UI Examples Matter
+- **Visual Clarity**: Shows exactly what the end result should look like
+- **Concrete Outcomes**: Transforms abstract descriptions into specific deliverables
+- **User Experience Focus**: Ensures features serve actual user workflows
+- **Technical Requirements**: UI defines specific functionality needed
+- **Business Value Proof**: Visual outcomes demonstrate business impact
+
+### Implementation Ideas
+- Upload wireframes/mockups during init command
+- Reference existing UIs ("like Spotify but for podcasts")
+- Include UI sketches in project foundation
+- Connect backlog features to specific UI components
+- Generate technical requirements from UI analysis
+
+### Example Impact
+Instead of: "Task management app"
+With UI: "Task management app with Kanban board like Trello, but with time tracking like Toggl"
+- Clear visual outcome
+- Specific feature requirements
+- Comparable success metrics
+
 ## Next Session Tasks
 1. Design outcome capture mechanism for init command
-2. Redesign backlog generation to be outcome-driven
-3. Update all templates to include outcome focus
-4. Revise tutorial to demonstrate outcome-driven development
-5. Ensure features connect clearly to business/technical outcomes
+2. **ADD: Design UI example input mechanism**
+3. Redesign backlog generation to be outcome-driven
+4. Update all templates to include outcome focus
+5. Revise tutorial to demonstrate outcome-driven development
+6. Ensure features connect clearly to business/technical outcomes
+7. **ADD: Connect UI examples to feature generation**
 
 ## Technical Implementation Areas
 - `.claude/commands/vybe/init.md` - Add outcome capture
