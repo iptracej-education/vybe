@@ -19,9 +19,9 @@ Vybe brings structure to AI-assisted development through:
 
 - **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
 - **Staged planning and execution** - First minimal outcome in 1-2 days, then progressive enhancement stages
-- **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis   
+- **Natural language scope adjustment** - Intelligent scope reduction for timeline constraints, plus guided expansion planning
+- **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
-- **Stage completion** - Each stage completion improves next stage planning
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
 
 ## Quick Setup
