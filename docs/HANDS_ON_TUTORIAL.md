@@ -66,68 +66,6 @@ git push origin main
 
 ---
 
-## Example Project Descriptions
-
-You can test the framework with any project type. Here are diverse examples to explore:
-
-### Data & Analytics Projects
-```bash
-/vybe:init "COVID-19 data visualization platform showing global spread patterns with interactive maps, time-series analysis, and real-time data feeds from WHO and CDC APIs"
-
-/vybe:init "Financial analytics dashboard for cryptocurrency portfolios with real-time price tracking, portfolio rebalancing algorithms, and tax reporting features"
-
-/vybe:init "Sports performance analytics system processing athlete biometric data, video analysis, and providing ML-based training recommendations"
-```
-
-### AI & Machine Learning Projects
-```bash
-/vybe:init "Computer vision system for medical image analysis detecting anomalies in X-rays and MRI scans with FDA compliance requirements"
-
-/vybe:init "Natural language processing API for sentiment analysis of customer reviews across multiple languages with batch processing capabilities"
-
-/vybe:init "Recommendation engine for streaming service using collaborative filtering, content-based filtering, and real-time user behavior analysis"
-```
-
-### Mobile & IoT Projects
-```bash
-/vybe:init "Smart home automation mobile app controlling IoT devices via MQTT with voice commands, scheduling, and energy monitoring"
-
-/vybe:init "Fitness tracking mobile application with GPS route tracking, social challenges, wearable device integration, and nutrition logging"
-
-/vybe:init "Industrial IoT monitoring system for factory equipment with predictive maintenance, real-time alerts, and OPC UA protocol support"
-```
-
-### Enterprise & B2B Projects
-```bash
-/vybe:init "HR management system with employee onboarding, performance reviews, leave tracking, and integration with payroll systems"
-
-/vybe:init "Supply chain management platform with inventory tracking, vendor management, automated reordering, and blockchain verification"
-
-/vybe:init "Customer support ticketing system with AI-powered routing, knowledge base, live chat, and SLA tracking"
-```
-
-### Developer Tools & Infrastructure
-```bash
-/vybe:init "CI/CD pipeline orchestration tool supporting multiple cloud providers with GitOps, secret management, and compliance scanning"
-
-/vybe:init "API gateway with rate limiting, authentication, request transformation, and GraphQL federation support"
-
-/vybe:init "Distributed tracing system for microservices with performance monitoring, error tracking, and automated root cause analysis"
-```
-
-### Gaming & Entertainment
-```bash
-/vybe:init "Multiplayer online battle arena game backend with matchmaking, leaderboards, anti-cheat system, and replay storage"
-
-/vybe:init "Music streaming service with personalized playlists, offline sync, artist analytics, and high-quality audio codec support"
-
-/vybe:init "Virtual event platform with video streaming, interactive breakout rooms, networking features, and attendee analytics"
-```
-
-The framework will analyze each project description, research appropriate technologies and patterns, and generate relevant documentation specific to that domain.
-
----
-
 # Solo Developer Tutorial
 
 **Scenario**: Building a personal task management app with authentication and API integration.
@@ -593,6 +531,68 @@ Look for these potential issues:
 - Unclear command naming (`member-count` vs `set-members`)
 - Verbose syntax that could be simplified
 - Missing useful shortcuts or aliases
+
+---
+
+## Example Project Descriptions (Reference)
+
+You can test the framework with any project type. Here are diverse examples to explore:
+
+### Data & Analytics Projects
+```bash
+/vybe:init "COVID-19 data visualization platform showing global spread patterns with interactive maps, time-series analysis, and real-time data feeds from WHO and CDC APIs"
+
+/vybe:init "Financial analytics dashboard for cryptocurrency portfolios with real-time price tracking, portfolio rebalancing algorithms, and tax reporting features"
+
+/vybe:init "Sports performance analytics system processing athlete biometric data, video analysis, and providing ML-based training recommendations"
+```
+
+### AI & Machine Learning Projects
+```bash
+/vybe:init "Computer vision system for medical image analysis detecting anomalies in X-rays and MRI scans with FDA compliance requirements"
+
+/vybe:init "Natural language processing API for sentiment analysis of customer reviews across multiple languages with batch processing capabilities"
+
+/vybe:init "Recommendation engine for streaming service using collaborative filtering, content-based filtering, and real-time user behavior analysis"
+```
+
+### Mobile & IoT Projects
+```bash
+/vybe:init "Smart home automation mobile app controlling IoT devices via MQTT with voice commands, scheduling, and energy monitoring"
+
+/vybe:init "Fitness tracking mobile application with GPS route tracking, social challenges, wearable device integration, and nutrition logging"
+
+/vybe:init "Industrial IoT monitoring system for factory equipment with predictive maintenance, real-time alerts, and OPC UA protocol support"
+```
+
+### Enterprise & B2B Projects
+```bash
+/vybe:init "HR management system with employee onboarding, performance reviews, leave tracking, and integration with payroll systems"
+
+/vybe:init "Supply chain management platform with inventory tracking, vendor management, automated reordering, and blockchain verification"
+
+/vybe:init "Customer support ticketing system with AI-powered routing, knowledge base, live chat, and SLA tracking"
+```
+
+### Developer Tools & Infrastructure
+```bash
+/vybe:init "CI/CD pipeline orchestration tool supporting multiple cloud providers with GitOps, secret management, and compliance scanning"
+
+/vybe:init "API gateway with rate limiting, authentication, request transformation, and GraphQL federation support"
+
+/vybe:init "Distributed tracing system for microservices with performance monitoring, error tracking, and automated root cause analysis"
+```
+
+### Gaming & Entertainment
+```bash
+/vybe:init "Multiplayer online battle arena game backend with matchmaking, leaderboards, anti-cheat system, and replay storage"
+
+/vybe:init "Music streaming service with personalized playlists, offline sync, artist analytics, and high-quality audio codec support"
+
+/vybe:init "Virtual event platform with video streaming, interactive breakout rooms, networking features, and attendee analytics"
+```
+
+The framework will analyze each project description, research appropriate technologies and patterns, and generate relevant documentation specific to that domain.
 
 ---
 
