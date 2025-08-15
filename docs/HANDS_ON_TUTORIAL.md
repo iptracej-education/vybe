@@ -2,7 +2,7 @@
 
 A comprehensive table-top exercise walking through all Vybe commands from project initialization to completion. This tutorial simulates real development workflows to test command consistency and identify potential improvements.
 
-**Note**: Commands now include research and analysis phases before generating content. Expect to see project analysis, technology research, and pattern investigation during command execution.
+**Note**: Commands use performance-optimized intelligent analysis. Phase 1 provides immediate intelligent setup (~30 seconds), while Phase 2 enhances with comprehensive research in background (2-5 minutes). You get fast feedback with same final quality.
 
 ## Prerequisites & Setup
 
@@ -144,13 +144,17 @@ The framework will analyze each project description, research appropriate techno
 /vybe:init "Personal task management app with user authentication, API integrations, and data export features"
 
 # Expected behavior:
-# - Analyzes project description to understand requirements
-# - Researches current technologies and patterns for this project type
+# PHASE 1 (Fast - 30 seconds):
+# - Analyzes project description immediately for project type and requirements
+# - Infers appropriate technology stack from description
 # - Creates .vybe/ directory structure
-# - Generates overview.md with relevant business context
-# - Creates architecture.md with appropriate tech stack choices
-# - Generates conventions.md with suitable coding standards
-# - Sets up solo developer workflow
+# - Generates intelligent overview.md with business context
+# - Creates smart architecture.md with tech stack choices
+# - Generates appropriate conventions.md with development standards
+# - Sets up solo developer workflow with immediate intelligence
+# PHASE 2 (Background - 2-5 minutes):
+# - Enhances documents with comprehensive research
+# - Same final quality, faster initial feedback
 ```
 
 **Test Points:**
@@ -168,12 +172,16 @@ The framework will analyze each project description, research appropriate techno
 /vybe:plan user-authentication "Secure user registration and login system with email verification, password reset, and JWT tokens"
 
 # Expected behavior:
-# - Analyzes feature type and current best practices
-# - Researches security standards for authentication systems
+# PHASE 1 (Fast - 30 seconds):
+# - Analyzes feature type immediately from description
+# - Infers security requirements for authentication systems
 # - Creates .vybe/features/user-authentication/
-# - Generates requirements.md with EARS format
-# - Creates design.md with appropriate technical approach
-# - Produces tasks.md with specific implementation steps
+# - Generates intelligent requirements.md with EARS format
+# - Creates smart design.md with appropriate technical approach
+# - Produces specific tasks.md with implementation steps
+# PHASE 2 (Background):
+# - Enhances with comprehensive security research
+# - Same final quality, faster initial planning
 ```
 
 **Test Points:**
