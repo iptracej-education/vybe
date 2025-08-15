@@ -24,14 +24,16 @@ Vybe brings structure to AI-assisted development through:
 mkdir my-project && cd my-project
 git init
 
-# 2. Install Vybe
+# 2. Install Vybe Framework
 git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 rm -rf vybe-framework
 
-# 3. Initialize
+# 3. Initialize your project
 /vybe:init "Your project description"
 ```
+
+**Repository**: [https://github.com/iptracej-education/vybe](https://github.com/iptracej-education/vybe)
 
 ## Start Building
 
@@ -53,8 +55,9 @@ export VYBE_MEMBER=dev-1
 
 ## Learn More
 
-- **Complete tutorial**: [`docs/HANDS_ON_TUTORIAL.md`](docs/HANDS_ON_TUTORIAL.md) - 22-step walkthrough
-- **All commands**: 7 commands from init to audit with examples
+- **Complete tutorial**: [`docs/HANDS_ON_TUTORIAL.md`](https://github.com/iptracej-education/vybe/blob/main/docs/HANDS_ON_TUTORIAL.md) - 22-step walkthrough
+- **Command reference**: [`docs/COMMAND_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/COMMAND_SPEC.md) - All 7 commands with examples
+- **Framework specification**: [`docs/VYBE_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/VYBE_SPEC.md) - Complete technical documentation
 - **Multi-session testing**: Simulate multiple developers working together
 
 **Platform support**: Linux, macOS, WSL2, Git Bash (not Windows CMD)
