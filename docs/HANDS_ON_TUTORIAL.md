@@ -410,7 +410,27 @@ cat .vybe/project/conventions.md
 - [ ] Are results based on actual project analysis?
 - [ ] Would output work well in CI/CD pipelines?
 
-### Step 16: Integration Verification
+### Step 16: Scope Increase Planning
+```bash
+# Test guided scope expansion with timeline increase
+/vybe:discuss "we have 2 more months, what features should we add?"
+
+# Expected behavior:
+# - Analyzes current project state and architecture
+# - Provides intelligent feature recommendations based on existing features
+# - Suggests natural extensions and business opportunities
+# - Gives specific /vybe:plan commands to add recommended features
+# - Provides /vybe:backlog reorganization guidance
+```
+
+**Test Points:**
+- [ ] Are feature recommendations relevant to the project type?
+- [ ] Do suggestions build logically on existing features?
+- [ ] Are specific Vybe commands provided for implementation?
+- [ ] Does it consider technical architecture when suggesting features?
+- [ ] Are business value opportunities identified correctly?
+
+### Step 17: Integration Verification
 ```bash
 # Verify the integration works end-to-end
 /vybe:discuss "analyze project health and suggest improvements"
