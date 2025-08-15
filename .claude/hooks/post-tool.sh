@@ -67,7 +67,48 @@ if [ -f "$CONTEXT_DIR/dependencies/dependency-graph.json" ]; then
     .claude/hooks/context/update-dependencies.sh 2>/dev/null || true
 fi
 
-# Log to main session log
-echo "[$TIMESTAMP] POST-HOOK: Tool=${CLAUDE_TOOL_NAME:-unknown}, Session=$SESSION_ID, Exit=${CLAUDE_TOOL_EXIT_CODE:-0}" >> "$CONTEXT_DIR/session.log"
+# Get member info from session file
+MEMBER_ROLE="solo"
+MEMBER_STATUS="solo_mode"
+if [ -f "$SESSION_FILE" ]; then
+    MEMBER_ROLE=$(jq -r '.member_role // "solo"' "$SESSION_FILE" 2>/dev/null || echo "solo")
+    MEMBER_STATUS=$(jq -r '.member_status // "solo_mode"' "$SESSION_FILE" 2>/dev/null || echo "solo_mode")
+fi
+
+# Check for and display conflicts
+if [ "$MEMBER_STATUS" = "assigned" ]; then
+    CONFLICT_FILE="$CONTEXT_DIR/sessions/member-conflicts-$SESSION_ID.txt"
+    if [ -f "$CONFLICT_FILE" ] && [ -s "$CONFLICT_FILE" ]; then
+        echo ""
+        echo "WARNING: Member coordination conflicts detected:"
+        cat "$CONFLICT_FILE"
+        echo ""
+        echo "Consider coordinating with other team members or using:"
+        echo "  /vybe:status members  # Check current member assignments"
+        echo "  /vybe:audit members   # Analyze member coordination"
+        echo ""
+    fi
+    
+    # Update member-specific log
+    echo "[$TIMESTAMP] SESSION-END: Tool=${CLAUDE_TOOL_NAME:-unknown}, Session=$SESSION_ID, Exit=${CLAUDE_TOOL_EXIT_CODE:-0}" >> "$CONTEXT_DIR/members/$MEMBER_ROLE.log"
+fi
+
+# Display role warnings
+if [ "$MEMBER_STATUS" = "no_role_specified" ]; then
+    echo ""
+    echo "WARNING: Multiple members configured but no role specified"
+    echo "Set your developer role with: export VYBE_MEMBER=dev-1"
+    echo "Or use: /vybe:execute my-feature --role=dev-1"
+    echo ""
+elif [ "$MEMBER_STATUS" = "invalid_role" ]; then
+    echo ""
+    echo "ERROR: Invalid developer role: $MEMBER_ROLE"
+    echo "Valid roles: dev-1, dev-2, dev-3, dev-4, dev-5"
+    echo "Set valid role with: export VYBE_MEMBER=dev-1"
+    echo ""
+fi
+
+# Log to main session log with member info
+echo "[$TIMESTAMP] POST-HOOK: Tool=${CLAUDE_TOOL_NAME:-unknown}, Session=$SESSION_ID, Member=$MEMBER_ROLE, Exit=${CLAUDE_TOOL_EXIT_CODE:-0}" >> "$CONTEXT_DIR/session.log"
 
 exit 0

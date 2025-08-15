@@ -1,145 +1,60 @@
-# Vybe 
+# Vybe Framework
 
- **Note:** This is an experimental project under active development. Features and structure may change significantly.
-
-A spec-driven AI development framework for Claude Code.
-
-A structured approach to AI-assisted development using specification-driven workflows, inspired by Amazon's Working Backwards methodology and built on top of the [claude-code-spec](https://github.com/gotalab/claude-code-spec) framework.
+**Spec-driven development for Claude Code with multi-session coordination**
 
 ## Overview
 
-Vybe is a systematic framework that brings structure and consistency to AI-assisted development with Claude Code. By emphasizing clear specifications, comprehensive requirements documentation, and phased development cycles, Vybe helps developers maintain high code quality and project coherence when collaborating with AI coding assistants.
+Vybe brings structure to AI-assisted development through:
+- **Specification-first workflow** - Every feature starts with clear requirements and design
+- **Multi-developer coordination** - Multiple Claude Code sessions work together seamlessly  
+- **Quality assurance** - Built-in gap detection and fix automation
+- **Living documentation** - Specifications evolve with your code
 
-The framework introduces a disciplined approach to AI-powered development through:
-  - **Specification-first methodology** - Define what you're building before you build it
-  - **Structured development phases** - Clear progression from requirements to implementation
-  - **Multi-agent task delegation** - Specialized agents for different domains with automatic context management 
-  - **Hook system for context preservation** - Automatic state saving prevents work loss during `/compact` events
-  - **Human oversight gates** - Strategic review points to ensure quality and alignment
-  - **Project context management** - Persistent steering documents that guide AI behavior
-  - **Progress visibility** - Clear tracking of specification completion and task status
+## Key Features
 
+- **7 core commands** - Complete development workflow from init to audit
+- **Member coordination** - Assign features to dev-1, dev-2, etc. with conflict detection
+- **Gap detection** - Audit finds missing specs, duplicates, and inconsistencies
+- **Natural language help** - Discuss command translates requests to specific commands
 
-This implementation builds upon the claude-code-spec framework while optimizing specifically for Claude Code workflows. It offers greater flexibility for diverse application types but maintains more restricted AI assistance patterns.
-
-### Based On
-
-- [claude-code-spec](https://github.com/gotalab/claude-code-spec) - Original framework implementation
-- [kiro](https://kiro.dev/) - Amazon's Working Backwards methodology - Start with the end goal and work backwards
-
-## Setup
+## Quick Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/iptracej-education/vybe.git 
-cd vybe
+# 1. Create new project
+mkdir my-project && cd my-project
+git init
 
-# Copy framework files to your project
-cp CLAUDE.md /path/to/your-project/
-cp -r .claude/ /path/to/your-project/  # Includes commands and hooks
+# 2. Install Vybe
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+rm -rf vybe-framework
 
-# Initialize your project structure
-mkdir -p /path/to/your-project/.vybe/{specs,steering,context}
+# 3. Initialize
+/vybe:init "Your project description"
 ```
 
-## How to Use
+## Start Building
 
-📖 **[Complete Tutorial & Examples](docs/tutorial.md)** - Comprehensive guide with real-world examples
+```bash
+# Plan a feature
+/vybe:plan user-auth "JWT authentication with refresh tokens"
 
-### Quick Start
+# Set up team (optional)
+/vybe:backlog member-count 2
+export VYBE_MEMBER=dev-1
 
-1. **Initialize Your Project**
-   ```bash
-   mkdir my-project
-   cd my-project
-   # Copy the Vybe framework files (see Setup above)
-   ```
+# Check progress vs quality
+/vybe:status        # "How are we doing?"
+/vybe:audit         # "What needs fixing?"
 
-2. **Create Initial Documentation**
-   - Create a README.md with your project description
-   - Optionally run `/vybe:steering` to set up project context
-
-3. **Start Specification-Driven Development**
-   ```
-   /vybe:spec-init "Detailed description of your feature or project"
-   ```
-
-### Development Workflow
-
-#### Phase 1: Specification Creation
-1. **Initialize Spec**: `/vybe:spec-init [description]` - Creates initial specification
-2. **Define Requirements**: `/vybe:spec-requirements [feature]` - Generate requirements document
-3. **Create Design**: `/vybe:spec-design [feature]` - Design technical architecture
-4. **Plan Tasks**: `/vybe:spec-tasks [feature]` - Break down into actionable tasks
-
-#### Phase 2: Implementation
-- Use `/vybe:task-delegate [agent-type] [task-id] [description]` to delegate tasks to specialized agents
-- Use `/vybe:task-status` to check progress and dependencies
-- Continue multi-session work with `/vybe:task-continue`
-
-#### Phase 3: Maintenance
-- Keep steering documents updated with `/vybe:steering`
-- Review and update specifications as needed
-
-### Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `/vybe:steering` | Create/update project steering documents |
-| `/vybe:steering-custom` | Add custom steering for specific contexts |
-| `/vybe:spec-init` | Initialize a new specification |
-| `/vybe:spec-requirements` | Generate requirements document |
-| `/vybe:spec-design` | Create technical design document |
-| `/vybe:spec-tasks` | Generate task breakdown |
-| `/vybe:spec-status` | Check specification progress |
-| `/vybe:task-delegate` | Delegate tasks to specialized agents |
-| `/vybe:task-continue` | Resume multi-session work |
-| `/vybe:task-status` | Check task progress and dependencies |
-| `/vybe:validate-hooks` | Verify hook system configuration |
-
-### Project Structure
-
-```
-your-project/
-├── .vybe/
-│   ├── steering/          # Project-wide context and rules
-│   │   ├── product.md     # Product vision and objectives
-│   │   ├── tech.md        # Technology decisions
-│   │   └── structure.md   # Code organization patterns
-│   └── specs/             # Feature specifications
-│       └── [feature-name]/
-│           ├── requirements.md
-│           ├── design.md
-│           └── tasks.md
-├── .claude/
-│   └── commands/          # Vybe command implementations
-└── CLAUDE.md              # AI assistant instructions
+# Get help
+/vybe:discuss "How do I add OAuth to authentication?"
 ```
 
-## Best Practices
+## Learn More
 
-1. **Start with Clear Requirements**: Don't skip the requirements phase
-2. **Review at Each Gate**: Take time to review before approving each phase
-3. **Keep Specs Updated**: Update specifications as the project evolves
-4. **Use Steering Wisely**: Update steering documents after major architectural changes
-5. **Track Progress**: Regularly check spec status to ensure alignment
+- **Complete tutorial**: [`docs/HANDS_ON_TUTORIAL.md`](docs/HANDS_ON_TUTORIAL.md) - 22-step walkthrough
+- **All commands**: 7 commands from init to audit with examples
+- **Multi-session testing**: Simulate multiple developers working together
 
-## Compatibility
-
-**Tested Environment**: This framework has been tested on WSL2 Ubuntu. While it should work on other Unix-like systems, we haven't verified compatibility across all platforms.
-
-If you encounter bugs or compatibility issues on other systems, please submit a pull request or open an issue.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues and pull requests.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgments
-
-- [gotalab/claude-code-spec](https://github.com/gotalab/claude-code-spec) - Original framework
-- Amazon's Working Backwards methodology for inspiration
-- The Claude AI team for their excellent coding assistant
+**Platform support**: Linux, macOS, WSL2, Git Bash (not Windows CMD)

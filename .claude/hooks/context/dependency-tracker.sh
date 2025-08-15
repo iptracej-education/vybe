@@ -49,21 +49,24 @@ update_task_status() {
     local status="$2"
     local agent="${3:-unknown}"
     local session="${4:-}"
+    local member="${5:-${VYBE_MEMBER:-solo}}"
     
     jq --arg task "$task" \
        --arg status "$status" \
        --arg agent "$agent" \
        --arg session "$session" \
+       --arg member "$member" \
        --arg timestamp "$(date -Iseconds)" \
        '.tasks[$task] = {
          "status": $status,
          "agent": $agent,
          "session": $session,
+         "member": $member,
          "updated": $timestamp
        }' \
        "$DEPS_FILE" > "$DEPS_FILE.tmp" && mv "$DEPS_FILE.tmp" "$DEPS_FILE"
     
-    echo "Updated task status: $task = $status"
+    echo "Updated task status: $task = $status (member: $member)"
     
     # Check for dependency resolution
     resolve_dependencies "$task"
@@ -148,6 +151,40 @@ get_tasks_by_status() {
     jq -r --arg status "$status" '.tasks | to_entries[] | select(.value.status == $status) | .key' "$DEPS_FILE"
 }
 
+# Function to get tasks by member
+get_tasks_by_member() {
+    local member="$1"
+    
+    jq -r --arg member "$member" '.tasks | to_entries[] | select(.value.member == $member) | "\(.key): \(.value.status)"' "$DEPS_FILE"
+}
+
+# Function to check for member conflicts
+check_member_conflicts() {
+    local task="$1"
+    
+    # Get all sessions working on this task
+    jq -r --arg task "$task" '
+        .tasks | to_entries[] | select(.key | contains($task)) | 
+        "\(.key): \(.value.member) (\(.value.updated))"
+    ' "$DEPS_FILE"
+}
+
+# Function to get member workload
+get_member_workload() {
+    local member="$1"
+    
+    if [ -n "$member" ]; then
+        echo "Tasks for $member:"
+        jq -r --arg member "$member" '
+            .tasks | to_entries[] | select(.value.member == $member) | 
+            "  \(.key): \(.value.status) (updated: \(.value.updated))"
+        ' "$DEPS_FILE"
+    else
+        echo "Workload by member:"
+        jq -r '.tasks | group_by(.member) | .[] | "\(.[0].member): \(length) tasks"' "$DEPS_FILE"
+    fi
+}
+
 # Main command dispatcher
 case "${1:-}" in
     "add-dep")
@@ -157,7 +194,7 @@ case "${1:-}" in
         remove_dependency "$2" "$3"
         ;;
     "update-status")
-        update_task_status "$2" "$3" "$4" "$5"
+        update_task_status "$2" "$3" "$4" "$5" "$6"
         ;;
     "get-status")
         get_task_status "$2"
@@ -171,18 +208,30 @@ case "${1:-}" in
     "get-by-status")
         get_tasks_by_status "$2"
         ;;
+    "get-by-member")
+        get_tasks_by_member "$2"
+        ;;
+    "check-conflicts")
+        check_member_conflicts "$2"
+        ;;
+    "member-workload")
+        get_member_workload "$2"
+        ;;
     "resolve")
         resolve_dependencies "$2"
         ;;
     *)
-        echo "Usage: $0 {add-dep|remove-dep|update-status|get-status|list-deps|check-circular|get-by-status|resolve}"
+        echo "Usage: $0 {add-dep|remove-dep|update-status|get-status|list-deps|check-circular|get-by-status|get-by-member|check-conflicts|member-workload|resolve}"
         echo "  add-dep TASK DEPENDS_ON"
         echo "  remove-dep TASK DEPENDS_ON"
-        echo "  update-status TASK STATUS [AGENT] [SESSION]"
+        echo "  update-status TASK STATUS [AGENT] [SESSION] [MEMBER]"
         echo "  get-status TASK"
         echo "  list-deps [TASK]"
         echo "  check-circular"
         echo "  get-by-status STATUS"
+        echo "  get-by-member MEMBER"
+        echo "  check-conflicts TASK"
+        echo "  member-workload [MEMBER]"
         echo "  resolve TASK"
         exit 1
         ;;
