@@ -2,6 +2,8 @@
 
 A comprehensive table-top exercise walking through all Vybe commands from project initialization to completion. This tutorial simulates real development workflows to test command consistency and identify potential improvements.
 
+**Note**: Commands now include research and analysis phases before generating content. Expect to see project analysis, technology research, and pattern investigation during command execution.
+
 ## Prerequisites & Setup
 
 Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo or team features.
@@ -62,6 +64,68 @@ git push origin main
 
 ---
 
+## Example Project Descriptions
+
+You can test the framework with any project type. Here are diverse examples to explore:
+
+### Data & Analytics Projects
+```bash
+/vybe:init "COVID-19 data visualization platform showing global spread patterns with interactive maps, time-series analysis, and real-time data feeds from WHO and CDC APIs"
+
+/vybe:init "Financial analytics dashboard for cryptocurrency portfolios with real-time price tracking, portfolio rebalancing algorithms, and tax reporting features"
+
+/vybe:init "Sports performance analytics system processing athlete biometric data, video analysis, and providing ML-based training recommendations"
+```
+
+### AI & Machine Learning Projects
+```bash
+/vybe:init "Computer vision system for medical image analysis detecting anomalies in X-rays and MRI scans with FDA compliance requirements"
+
+/vybe:init "Natural language processing API for sentiment analysis of customer reviews across multiple languages with batch processing capabilities"
+
+/vybe:init "Recommendation engine for streaming service using collaborative filtering, content-based filtering, and real-time user behavior analysis"
+```
+
+### Mobile & IoT Projects
+```bash
+/vybe:init "Smart home automation mobile app controlling IoT devices via MQTT with voice commands, scheduling, and energy monitoring"
+
+/vybe:init "Fitness tracking mobile application with GPS route tracking, social challenges, wearable device integration, and nutrition logging"
+
+/vybe:init "Industrial IoT monitoring system for factory equipment with predictive maintenance, real-time alerts, and OPC UA protocol support"
+```
+
+### Enterprise & B2B Projects
+```bash
+/vybe:init "HR management system with employee onboarding, performance reviews, leave tracking, and integration with payroll systems"
+
+/vybe:init "Supply chain management platform with inventory tracking, vendor management, automated reordering, and blockchain verification"
+
+/vybe:init "Customer support ticketing system with AI-powered routing, knowledge base, live chat, and SLA tracking"
+```
+
+### Developer Tools & Infrastructure
+```bash
+/vybe:init "CI/CD pipeline orchestration tool supporting multiple cloud providers with GitOps, secret management, and compliance scanning"
+
+/vybe:init "API gateway with rate limiting, authentication, request transformation, and GraphQL federation support"
+
+/vybe:init "Distributed tracing system for microservices with performance monitoring, error tracking, and automated root cause analysis"
+```
+
+### Gaming & Entertainment
+```bash
+/vybe:init "Multiplayer online battle arena game backend with matchmaking, leaderboards, anti-cheat system, and replay storage"
+
+/vybe:init "Music streaming service with personalized playlists, offline sync, artist analytics, and high-quality audio codec support"
+
+/vybe:init "Virtual event platform with video streaming, interactive breakout rooms, networking features, and attendee analytics"
+```
+
+The framework will analyze each project description, research appropriate technologies and patterns, and generate relevant documentation specific to that domain.
+
+---
+
 # Solo Developer Tutorial
 
 **Scenario**: Building a personal task management app with authentication and API integration.
@@ -78,16 +142,19 @@ git push origin main
 /vybe:init "Personal task management app with user authentication, API integrations, and data export features"
 
 # Expected behavior:
+# - Analyzes project description to understand requirements
+# - Researches current technologies and patterns for this project type
 # - Creates .vybe/ directory structure
-# - Generates overview.md with business context
-# - Creates architecture.md with tech stack decisions
-# - Generates conventions.md with coding standards
+# - Generates overview.md with relevant business context
+# - Creates architecture.md with appropriate tech stack choices
+# - Generates conventions.md with suitable coding standards
 # - Sets up solo developer workflow
 ```
 
 **Test Points:**
 - [ ] Does init create all required foundation documents?
-- [ ] Are the generated documents relevant to the description?
+- [ ] Are the generated documents specific to the project description?
+- [ ] Do technology choices match the project requirements?
 - [ ] Is the project context comprehensive enough for decision-making?
 - [ ] Does it work well for solo development?
 
@@ -99,17 +166,19 @@ git push origin main
 /vybe:plan user-authentication "Secure user registration and login system with email verification, password reset, and JWT tokens"
 
 # Expected behavior:
+# - Analyzes feature type and current best practices
+# - Researches security standards for authentication systems
 # - Creates .vybe/features/user-authentication/
 # - Generates requirements.md with EARS format
-# - Creates design.md with technical approach
-# - Produces tasks.md with implementation steps
-# - Includes web research for best practices
+# - Creates design.md with appropriate technical approach
+# - Produces tasks.md with specific implementation steps
 ```
 
 **Test Points:**
 - [ ] Is the plan command syntax intuitive (feature-name first)?
 - [ ] Are generated requirements comprehensive and actionable?
-- [ ] Does design consider architecture.md constraints?
+- [ ] Does design consider project architecture and constraints?
+- [ ] Are security considerations appropriate for authentication?
 - [ ] Are tasks granular enough for implementation?
 
 ### Step 3: Plan API Integration Feature
@@ -118,16 +187,18 @@ git push origin main
 /vybe:plan api-integration "External API integrations for weather data and email notifications"
 
 # Expected behavior:
+# - Analyzes API integration patterns and requirements
 # - Creates second feature specification  
 # - Maps dependencies with user-authentication
-# - Provides API integration guidance
+# - Provides appropriate integration guidance
 # - Considers error handling and rate limiting
 ```
 
 **Test Points:**
 - [ ] Does planning detect dependencies between features?
-- [ ] Are API integration patterns helpful?
+- [ ] Are API integration patterns appropriate for the use case?
 - [ ] Is error handling adequately planned?
+- [ ] Do specifications align with project architecture?
 
 ---
 
@@ -272,7 +343,9 @@ This path tests core Vybe functionality perfect for individual developers.
 /vybe:init "E-commerce platform with user authentication, payment processing, product catalog, and order management. Focus on scalability and security."
 
 # Expected behavior:
+# - Analyzes project requirements and patterns
 # - Creates complete project foundation
+# - Selects appropriate technologies for scalability requirements
 # - Supports team-based development
 # - Sets up coordination infrastructure
 ```
@@ -280,6 +353,7 @@ This path tests core Vybe functionality perfect for individual developers.
 **Test Points:**
 - [ ] Does init work well for team projects?
 - [ ] Are foundation documents suitable for multiple developers?
+- [ ] Are technology choices appropriate for the project requirements?
 - [ ] Is the project scope appropriate for team division?
 
 ### Step 2: Configure Team Structure
@@ -310,14 +384,17 @@ This path tests core Vybe functionality perfect for individual developers.
 /vybe:plan product-catalog "Product listing with search and inventory management"
 
 # Expected behavior:
+# - Analyzes each feature type and requirements
 # - Creates comprehensive specifications for each feature
 # - Considers team specializations in design
 # - Plans for feature interdependencies
+# - Uses appropriate technical patterns for each feature
 ```
 
 **Test Points:**
 - [ ] Are features planned with team coordination in mind?
 - [ ] Do specifications consider skill specializations?
+- [ ] Are technical patterns appropriate for each feature?
 - [ ] Are dependencies between features clear?
 
 ### Step 4: Assign Features to Team Members
