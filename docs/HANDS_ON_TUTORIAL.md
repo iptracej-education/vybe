@@ -2,6 +2,52 @@
 
 A comprehensive table-top exercise walking through all Vybe commands from project initialization to completion. This tutorial simulates real development workflows to test command consistency and identify potential improvements.
 
+## Prerequisites & Setup
+
+Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo or team features.
+
+### Repository Requirements
+- **Solo Tutorial**: Local git repository only (no GitHub needed)
+- **Multi-Member Tutorial**: **GitHub repository required** for team coordination
+  - Vybe uses git-based coordination between team members
+  - Create your GitHub repository before starting team tutorial
+
+### Solo Tutorial Setup
+```bash
+# 1. Create test environment
+mkdir vybe-solo-test && cd vybe-solo-test
+git init
+
+# 2. Install Vybe Framework
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+rm -rf vybe-framework
+
+# 3. Ready to start solo tutorial below
+```
+
+### Multi-Member Tutorial Setup
+```bash
+# 1. Create GitHub repository first (required!)
+# Go to GitHub and create: https://github.com/yourusername/vybe-team-test
+
+# 2. Clone your empty repository
+git clone https://github.com/yourusername/vybe-team-test.git
+cd vybe-team-test
+
+# 3. Install Vybe Framework
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+rm -rf vybe-framework
+
+# 4. Initial commit to shared repository
+git add .
+git commit -m "Set up Vybe framework for team testing"
+git push origin main
+
+# 5. Ready to start multi-member tutorial below
+```
+
 ## Choose Your Tutorial Path
 
 **👤 [Solo Developer Tutorial](#solo-developer-tutorial)** - Complete workflow for individual developers
@@ -295,6 +341,8 @@ This path tests core Vybe functionality perfect for individual developers.
 ## Phase 3: Multi-Session Development
 
 ### Step 5: Simulate Multiple Developers
+**Note**: This requires the GitHub repository setup from [Multi-Member Tutorial Setup](#multi-member-tutorial-setup) above.
+
 ```bash
 # Terminal 1 (Backend Developer):
 export VYBE_MEMBER=dev-1
