@@ -20,10 +20,7 @@ Vybe brings structure to AI-assisted development through:
 - **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
 - **Baby steps approach** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Staged outcomes** - Each stage delivers working software with user value
-- **Code-reality analysis** - Compare actual code vs documented plans, detect scope drift, find orphan features
-- **Business outcome alignment** - Ensure every feature ties to business value, eliminate orphan code
-- **MVP extraction** - Intelligent scope reduction for timeline constraints (2 weeks, 1 month, etc.)
-- **Documentation sync** - Keep README/docs aligned with actual implemented features
+ - **Code-reality analysis** - Compare actual code vs documented plans, detect scope drift, find orphan features, ensure business value alignment, extract MVP scope, and sync documentation + ensure business value alignment, extract MVP scope, and sync documentation  
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Learning-driven** - Each completed stage improves planning for next stage
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
