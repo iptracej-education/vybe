@@ -14,13 +14,25 @@ Comprehensive project quality assurance focused on detecting gaps, duplicates, a
 ```bash
 /vybe:audit [scope] [--fix] [--auto-fix] [--verify]
 
-# Gap detection and fixing:
+# Traditional gap detection:
 /vybe:audit                          # Complete project audit
 /vybe:audit features                 # Feature specification gaps
 /vybe:audit tasks                    # Missing/duplicate tasks 
 /vybe:audit dependencies             # Circular deps, conflicts
 /vybe:audit consistency              # Terminology, standards
 /vybe:audit members                  # Assignment conflicts, imbalance
+
+# 🔥 NEW: Code-Reality Analysis Modes (Fixed, Predictable Output):
+/vybe:audit code-reality             # Compare actual code vs documented plans
+/vybe:audit scope-drift              # Detect feature creep beyond original vision
+/vybe:audit business-value           # Find features not tied to business outcomes
+/vybe:audit documentation            # Find README/docs out of sync with code
+/vybe:audit mvp-extraction           # Suggest minimal viable scope for timeboxes
+
+# Timeline-focused modes:
+/vybe:audit mvp-extraction --timeline=14days    # Extract 2-week MVP
+/vybe:audit mvp-extraction --timeline=30days    # Extract 1-month scope
+/vybe:audit scope-drift --baseline=init         # Compare vs original init
 
 # Fix automation:
 /vybe:audit fix-gaps [scope]         # Add missing sections
@@ -741,6 +753,334 @@ echo "[TOOLS] Related commands:"
 echo "- /vybe:status - Check progress (different from quality)"
 echo "- /vybe:plan [feature] - Improve specifications"
 echo "- /vybe:discuss \"[question]\" - Get guidance on fixes"
+```
+
+## Code-Reality Analysis Tasks
+
+### Task: Code-Reality Audit
+```bash
+if [ "$1" = "code-reality" ]; then
+    echo ""
+    echo "### CODE-REALITY AUDIT"
+    echo "====================="
+    echo ""
+    
+    echo "[ANALYSIS] Comparing documented plans vs implemented reality..."
+    echo ""
+    
+    # Load source code files
+    echo "[SCANNING] Source code files:"
+    source_files=$(find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.java" -o -name "*.go" -o -name "*.rs" \) -not -path "./node_modules/*" -not -path "./.git/*" -not -path "./venv/*" 2>/dev/null | head -20)
+    if [ -n "$source_files" ]; then
+        echo "$source_files" | wc -l | xargs -I {} echo "   Found {} source files"
+    else
+        echo "   [WARN] No source code files detected"
+    fi
+    echo ""
+    
+    echo "[AI] SYSTEMATIC ANALYSIS REQUIRED:"
+    echo "================================"
+    echo ""
+    echo "1. FEATURES IN CODE vs FEATURES IN DOCS:"
+    echo "   - Scan source code for implemented features"
+    echo "   - Compare with backlog.md planned features"  
+    echo "   - Compare with README.md claimed features"
+    echo "   - Compare with outcomes.md staged features"
+    echo "   OUTPUT: Feature gap matrix"
+    echo ""
+    
+    echo "2. ARCHITECTURE REALITY CHECK:"
+    echo "   - Analyze actual code structure/patterns"
+    echo "   - Compare with architecture.md designs"
+    echo "   - Check database/API implementations vs docs"
+    echo "   - Verify tech stack matches documentation"
+    echo "   OUTPUT: Architecture deviation report"
+    echo ""
+    
+    echo "3. ORPHAN CODE DETECTION:"
+    echo "   - Find implemented features not in any Vybe document"
+    echo "   - Identify utility functions/classes without documentation"
+    echo "   - Detect experimental code that became permanent"
+    echo "   OUTPUT: Orphan feature list with LOC counts"
+    echo ""
+    
+    echo "4. MISSING IMPLEMENTATIONS:"
+    echo "   - Find backlog items with no corresponding code"
+    echo "   - Check outcomes.md deliverables vs actual implementations"
+    echo "   - Identify promised features not yet built"
+    echo "   OUTPUT: Implementation gap list"
+    echo ""
+    
+    echo "[FORMAT] Expected Output:"
+    echo "========================"
+    echo "AI will analyze YOUR actual project and produce:"
+    echo "IMPLEMENTED ✅ | DOCUMENTED ✅ | STATUS"
+    echo "[feature found in code] | [feature in docs] | [alignment status]"
+    echo ""
+    echo "Output will be based on YOUR source code and YOUR documentation."
+    echo ""
+    
+    exit 0
+fi
+```
+
+### Task: Scope Drift Detection
+```bash
+if [ "$1" = "scope-drift" ]; then
+    echo ""
+    echo "### SCOPE DRIFT AUDIT"
+    echo "==================="
+    echo ""
+    
+    baseline="init"
+    if [[ "$*" == *"--baseline="* ]]; then
+        baseline=$(echo "$*" | sed 's/.*--baseline=//' | cut -d' ' -f1)
+    fi
+    
+    echo "[ANALYSIS] Detecting scope drift vs $baseline baseline..."
+    echo ""
+    
+    echo "[AI] SYSTEMATIC DRIFT ANALYSIS:"
+    echo "==============================="
+    echo ""
+    echo "1. ORIGINAL VISION vs CURRENT REALITY:"
+    echo "   - Extract original project description from init"
+    echo "   - Analyze current codebase complexity/size"
+    echo "   - Count actual features vs planned features"
+    echo "   - Measure codebase size growth"
+    echo "   OUTPUT: Scope expansion metrics"
+    echo ""
+    
+    echo "2. FEATURE CREEP DETECTION:"
+    echo "   - Identify features not in original outcomes.md"
+    echo "   - Find tech stack additions not in architecture.md"
+    echo "   - Detect dependencies not originally planned"
+    echo "   OUTPUT: Feature creep list with complexity scores"
+    echo ""
+    
+    echo "3. COMPLEXITY GROWTH ANALYSIS:"
+    echo "   - Compare current LOC vs estimated project size"
+    echo "   - Analyze dependency graph complexity"
+    echo "   - Check if project became multi-service vs single app"
+    echo "   OUTPUT: Complexity drift score (1-10 scale)"
+    echo ""
+    
+    echo "4. TIMELINE IMPACT ASSESSMENT:"
+    echo "   - Estimate time cost of scope additions"
+    echo "   - Identify which additions block core outcomes"
+    echo "   - Calculate delay impact on original timeline"
+    echo "   OUTPUT: Timeline impact in days/weeks"
+    echo ""
+    
+    echo "[FORMAT] Expected Output:"
+    echo "========================"
+    echo "AI will analyze YOUR project's actual scope drift:"
+    echo "SCOPE DRIFT SCORE: [calculated from your project]"
+    echo "ORIGINAL FEATURES: [from your init/outcomes]"
+    echo "CURRENT FEATURES: [from your actual code]"
+    echo "COMPLEXITY: [based on your codebase analysis]"
+    echo "TIMELINE IMPACT: [calculated from your specific additions]"
+    echo ""
+    
+    exit 0
+fi
+```
+
+### Task: Business Value Mapping
+```bash  
+if [ "$1" = "business-value" ]; then
+    echo ""
+    echo "### BUSINESS VALUE AUDIT"
+    echo "======================"
+    echo ""
+    
+    echo "[ANALYSIS] Mapping features to business outcomes..."
+    echo ""
+    
+    echo "[AI] SYSTEMATIC VALUE ANALYSIS:"
+    echo "==============================="
+    echo ""
+    echo "1. FEATURE-TO-OUTCOME MAPPING:"
+    echo "   - List all implemented features from source code"
+    echo "   - Map each feature to outcomes.md business values"
+    echo "   - Map each feature to overview.md user stories"
+    echo "   - Identify features with no business justification"
+    echo "   OUTPUT: Feature value matrix"
+    echo ""
+    
+    echo "2. ORPHAN FEATURE ANALYSIS:"
+    echo "   - Find code features not mentioned in any outcome"
+    echo "   - Calculate LOC investment in orphan features"
+    echo "   - Estimate maintenance cost of orphan features"
+    echo "   - Suggest: Keep, Document, or Remove"
+    echo "   OUTPUT: Orphan feature cost analysis"
+    echo ""
+    
+    echo "3. VALUE GAP DETECTION:"
+    echo "   - Find outcome stages without implementations"
+    echo "   - Check user stories without supporting code"
+    echo "   - Identify promised business value not delivered"
+    echo "   OUTPUT: Business promise gap list"
+    echo ""
+    
+    echo "4. ROI PRIORITY SCORING:"
+    echo "   - Score features by business value vs implementation cost"
+    echo "   - Identify high-value, low-cost wins"
+    echo "   - Flag high-cost, low-value features for review"
+    echo "   OUTPUT: Feature ROI priority ranking"
+    echo ""
+    
+    echo "[FORMAT] Expected Output:"
+    echo "========================"
+    echo "AI will analyze YOUR project's actual features vs business value:"
+    echo "HIGH VALUE ✅ | Feature Name          | Business Outcome"
+    echo "[analysis]    | [your actual features] | [your defined outcomes]"
+    echo ""
+    echo "Results based on YOUR source code and YOUR outcomes.md file."
+    echo ""
+    
+    exit 0
+fi
+```
+
+### Task: Documentation Synchronization Audit
+```bash
+if [ "$1" = "documentation" ]; then
+    echo ""
+    echo "### DOCUMENTATION SYNC AUDIT"  
+    echo "==========================="
+    echo ""
+    
+    echo "[ANALYSIS] Checking docs alignment with reality..."
+    echo ""
+    
+    echo "[AI] SYSTEMATIC SYNC ANALYSIS:"
+    echo "=============================="
+    echo ""
+    echo "1. README.md vs ACTUAL CODE:"
+    echo "   - Compare claimed features with implemented features"
+    echo "   - Check tech stack description vs actual dependencies"
+    echo "   - Verify installation steps vs current setup"
+    echo "   - Validate API examples vs actual endpoints"
+    echo "   OUTPUT: README accuracy report"
+    echo ""
+    
+    echo "2. ARCHITECTURE.md vs CODE STRUCTURE:"
+    echo "   - Compare documented patterns vs actual patterns"
+    echo "   - Check database design vs actual schema"
+    echo "   - Verify security measures vs implementation"
+    echo "   - Compare performance claims vs reality"
+    echo "   OUTPUT: Architecture alignment report"
+    echo ""
+    
+    echo "3. API/USER DOCS vs IMPLEMENTATION:"
+    echo "   - Check endpoint documentation vs actual API"
+    echo "   - Verify examples work with current code"
+    echo "   - Compare feature descriptions vs UX"
+    echo "   - Check screenshots vs current UI"
+    echo "   OUTPUT: User documentation gap list"
+    echo ""
+    
+    echo "4. PACKAGE/DEPENDENCY DOCS vs REALITY:"
+    echo "   - Compare package.json vs README installation"
+    echo "   - Check requirements.txt vs documented setup"
+    echo "   - Verify environment variables vs docs"
+    echo "   - Compare versions vs compatibility claims"
+    echo "   OUTPUT: Setup documentation accuracy"
+    echo ""
+    
+    echo "[FORMAT] Expected Output:"
+    echo "========================"
+    echo "AI will compare YOUR documentation with YOUR actual code:"
+    echo "DOC CLAIM              | CODE REALITY           | STATUS"
+    echo "[from your README.md]  | [from your source code] | [alignment]"
+    echo ""
+    echo "Analysis based on YOUR actual project files."
+    echo ""
+    
+    exit 0
+fi
+```
+
+### Task: MVP Extraction Analysis
+```bash
+if [ "$1" = "mvp-extraction" ]; then
+    echo ""
+    echo "### MVP EXTRACTION AUDIT"
+    echo "======================"
+    echo ""
+    
+    timeline=""
+    if [[ "$*" == *"--timeline="* ]]; then
+        timeline=$(echo "$*" | sed 's/.*--timeline=//' | cut -d' ' -f1)
+        echo "[CONSTRAINT] Timeline: $timeline"
+    else
+        echo "[DEFAULT] No timeline specified - analyzing for minimal viable scope"
+    fi
+    echo ""
+    
+    echo "[AI] SYSTEMATIC MVP ANALYSIS:"
+    echo "============================="
+    echo ""
+    echo "1. CORE VALUE IDENTIFICATION:"
+    echo "   - Extract primary user value from overview.md"
+    echo "   - Identify minimal feature set for core value"
+    echo "   - Map essential user journeys"
+    echo "   - Define MVP success criteria"
+    echo "   OUTPUT: Core value feature list"
+    echo ""
+    
+    echo "2. FEATURE CLASSIFICATION:"
+    echo "   - MUST HAVE: Essential for core value"
+    echo "   - SHOULD HAVE: Important but not blocking"
+    echo "   - COULD HAVE: Nice additions"
+    echo "   - WON'T HAVE: Out of scope for MVP"
+    echo "   OUTPUT: MoSCoW prioritized feature matrix"
+    echo ""
+    
+    echo "3. EFFORT vs VALUE SCORING:"
+    echo "   - Estimate implementation effort (hours/days)"
+    echo "   - Score user value impact (1-10)"
+    echo "   - Calculate value-to-effort ratio"
+    echo "   - Identify quick wins and effort sinks"
+    echo "   OUTPUT: Effort-value optimization matrix"
+    echo ""
+    
+    if [ -n "$timeline" ]; then
+        echo "4. TIMELINE FEASIBILITY:"
+        echo "   - Map features to timeline constraint: $timeline"
+        echo "   - Identify features that fit within timeline"
+        echo "   - Suggest features to postpone"
+        echo "   - Create staged delivery plan"
+        echo "   OUTPUT: Timeline-fit recommendation"
+        echo ""
+    fi
+    
+    echo "5. TECHNICAL DEPENDENCY ANALYSIS:"
+    echo "   - Map feature dependencies"
+    echo "   - Identify blocking features vs independent features"
+    echo "   - Find critical path for MVP delivery"
+    echo "   - Suggest parallel development streams"
+    echo "   OUTPUT: MVP delivery sequence"
+    echo ""
+    
+    echo "[FORMAT] Expected Output:"
+    echo "========================"
+    if [ -n "$timeline" ]; then
+        echo "AI will analyze YOUR project for MVP fitting $timeline:"
+    else
+        echo "AI will analyze YOUR project for RECOMMENDED MVP:"
+    fi
+    echo "MUST HAVE:"
+    echo "  ✅ [your core features based on outcomes.md analysis]"
+    echo "POSTPONE:"
+    echo "  📅 [your non-essential features] → Later phases"
+    echo ""
+    echo "Analysis based on YOUR actual features and YOUR business outcomes."
+    echo ""
+    
+    exit 0
+fi
 ```
 
 ## Documentation

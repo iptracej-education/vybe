@@ -331,8 +331,107 @@ cat .vybe/project/conventions.md
 
 ---
 
+## Phase 6: Code-Reality Analysis (🔥 NEW FEATURES)
+
+### Step 12: Smart Audit Routing
+```bash
+# Test natural language requests that route to audit commands
+/vybe:discuss "reshape this project to fit 2 weeks, prefer MVP, keep security"
+
+# Expected behavior:
+# - Detects this as analysis request
+# - Routes to: /vybe:audit mvp-extraction --timeline=14days + scope-drift  
+# - Runs audit commands automatically
+# - Provides structured analysis based on YOUR project
+# - Suggests specific features to cut/keep
+```
+
+**Test Points:**
+- [ ] Does discuss detect analysis requests correctly?
+- [ ] Does it route to appropriate audit modes?
+- [ ] Are audit results based on actual project (not hardcoded examples)?
+- [ ] Are recommendations actionable and project-specific?
+
+### Step 13: Business Value Alignment
+```bash
+# Test business outcome analysis
+/vybe:discuss "find features not tied to business outcomes and suggest what to do"
+
+# Expected behavior:
+# - Routes to: /vybe:audit business-value
+# - Analyzes actual implemented features vs outcomes.md
+# - Identifies orphan features with no business justification
+# - Provides cost/value analysis with LOC counts
+```
+
+**Test Points:**
+- [ ] Does it find actual orphan features in your project?
+- [ ] Are business outcome mappings accurate?
+- [ ] Does it provide actionable suggestions (keep/document/remove)?
+- [ ] Are LOC and maintenance cost estimates realistic?
+
+### Step 14: Documentation Synchronization  
+```bash
+# Test documentation analysis
+/vybe:discuss "our README is outdated, sync it with actual features"
+
+# Expected behavior:
+# - Routes to: /vybe:audit documentation + code-reality
+# - Compares README.md claims vs actual source code
+# - Finds missing/incorrect/outdated documentation
+# - Suggests specific updates to align docs with reality
+```
+
+**Test Points:**
+- [ ] Does it compare actual files (not generic examples)?
+- [ ] Are documentation gaps accurately identified?
+- [ ] Are suggested updates specific and actionable?
+- [ ] Does it handle different project types correctly?
+
+### Step 15: Direct Audit Commands (CI/Automation Ready)
+```bash
+# Test direct audit modes for automation
+/vybe:audit code-reality              # Compare docs vs implementation
+/vybe:audit scope-drift               # Detect feature creep
+/vybe:audit mvp-extraction           # Extract minimal scope
+/vybe:audit business-value           # Map features to outcomes
+/vybe:audit documentation            # Sync docs with code
+
+# Expected behavior:
+# - Each command provides structured, predictable output
+# - Results are based on YOUR actual project analysis
+# - Output format is consistent (suitable for CI/automation)
+# - No hardcoded examples or assumptions
+```
+
+**Test Points:**
+- [ ] Do audit commands run independently (not requiring discuss)?
+- [ ] Is output format consistent and structured?
+- [ ] Are results based on actual project analysis?
+- [ ] Would output work well in CI/CD pipelines?
+
+### Step 16: Integration Verification
+```bash
+# Verify the integration works end-to-end
+/vybe:discuss "analyze project health and suggest improvements"
+
+# Expected behavior:
+# - Routes to multiple audit modes automatically
+# - Provides comprehensive project analysis
+# - Suggests follow-up commands
+# - Results are actionable and project-specific
+```
+
+**Test Points:**
+- [ ] Can discuss handle complex multi-analysis requests?
+- [ ] Do multiple audit modes work together coherently?
+- [ ] Are follow-up suggestions helpful?
+- [ ] Does the full pipeline provide real value?
+
+---
+
 **Solo Tutorial Complete!** 
-This path tests core Vybe functionality perfect for individual developers.
+This path tests core Vybe functionality with powerful code-reality analysis perfect for individual developers.
 
 ---
 

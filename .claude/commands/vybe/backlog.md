@@ -214,33 +214,86 @@ if [[ "$*" == *"--auto"* ]]; then
     echo "AI will generate intelligent backlog immediately, then enhance with research..."
     echo ""
     
-    # Create backlog structure
+    # Create outcome-driven backlog structure
     cat > .vybe/backlog.md << 'EOF'
-# Project Backlog
+# Project Backlog - Outcome-Driven Development
 
-## Release Planning
-<!-- Features organized by releases during planning -->
+## Current Outcome Stage
+**Active Stage**: Stage 1 - [First Minimal Outcome]
+**Status**: IN PROGRESS
+**Target Completion**: [1-2 days]
 
-## High Priority (P0 - Must Have)
-<!-- Core features essential for MVP -->
+## Outcome Stages
 
-## Medium Priority (P1 - Should Have)  
-<!-- Important value-add features -->
+### Stage 1: [First Minimal Outcome] 🔄 IN PROGRESS
+**Deliverable**: [Working software that provides immediate value]
+**Timeline**: 1-2 days
+**Business Value**: [User can accomplish basic goal]
 
-## Low Priority (P2 - Could Have)
-<!-- Nice-to-have enhancements -->
+#### Tasks
+- [ ] Task 1 for minimal outcome
+- [ ] Task 2 for minimal outcome
+- [ ] Task 3 for minimal outcome
 
-## Technical Debt & Infrastructure
-<!-- System improvements and foundational work -->
-
-## Ideas & Research
-<!-- Future concepts and experimental features -->
-
-## Completed Features
-<!-- Archive for completed work -->
+**UI Examples Needed**: No - Backend/data focus
+**Assigned To**: Unassigned
 
 ---
-*Created: DATE | Auto-generated with AI analysis*
+
+### Stage 2: [Enhanced Foundation] ⏳ NEXT
+**Deliverable**: [Builds on Stage 1 with structure]
+**Timeline**: 2-3 days after Stage 1
+**Business Value**: [Better user experience]
+**Dependencies**: Requires Stage 1 completion
+
+#### Tasks
+- [ ] Enhancement task 1
+- [ ] Enhancement task 2
+- [ ] Enhancement task 3
+
+**UI Examples Needed**: No - Structure focus
+**Assigned To**: Unassigned
+
+---
+
+### Stage 3: [Visual/Interactive Layer] 📅 PLANNED
+**Deliverable**: [Visual enhancements and interactions]
+**Timeline**: 2-3 days after Stage 2
+**Business Value**: [Engaging user interface]
+**Dependencies**: Requires Stage 2 completion
+
+#### Tasks
+- [ ] Visual task 1
+- [ ] Visual task 2
+- [ ] Visual task 3
+
+**UI Examples Needed**: YES - Request before starting
+**Assigned To**: Unassigned
+
+---
+
+### Future Stages (Flexible Roadmap)
+- Stage 4: [Advanced Features]
+- Stage 5: [Performance & Scale]
+- Stage 6: [Polish & Optimization]
+
+## Members
+<!-- Team member assignments - use member-count to configure -->
+
+## Learning Log
+### Stage Completions & Insights
+<!-- Document learnings from each completed stage -->
+
+## Outcome Dependencies
+```mermaid
+graph TD
+    S1[Stage 1: Minimal] --> S2[Stage 2: Foundation]
+    S2 --> S3[Stage 3: Visual]
+    S3 --> S4[Stage 4: Advanced]
+```
+
+---
+*Created: DATE | Outcome-driven incremental development*
 EOF
     
     echo "[AI] Based on project overview, architecture, and conventions, generating appropriate features..."

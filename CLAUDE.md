@@ -1,10 +1,10 @@
 # Vybe Framework - Spec-driven Agile Development
 
-**Specification-first workflow with agile backlog management for Claude Code with multi-session coordination**
+**Specification-first workflow with incremental outcome-driven development for Claude Code with multi-session coordination**
 
 ## Project Context
 
-The Vybe Framework provides a complete agile-like development workflow through 7 core commands that support both solo development and multi-member team coordination.
+The Vybe Framework provides a complete agile-like development workflow through 7 core commands that support both solo development and multi-member team coordination, with a key focus on incremental outcome delivery through staged development.
 
 ## Paths & File Locations
 
@@ -17,6 +17,7 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 - **Overview**: `.vybe/project/overview.md`
 - **Architecture**: `.vybe/project/architecture.md`  
 - **Conventions**: `.vybe/project/conventions.md`
+- **Outcomes**: `.vybe/project/outcomes.md` - Staged outcome roadmap
 
 ### Development Paths
 - **Backlog**: `.vybe/backlog.md`
@@ -33,7 +34,7 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 - **Dependency Tracker**: `.claude/hooks/context/dependency-tracker.sh`
 
 ### File Reading Priority for Claude Code
-1. **ALWAYS READ FIRST**: `.vybe/project/overview.md`, `.vybe/project/architecture.md`, `.vybe/project/conventions.md`
+1. **ALWAYS READ FIRST**: `.vybe/project/overview.md`, `.vybe/project/architecture.md`, `.vybe/project/conventions.md`, `.vybe/project/outcomes.md`
 2. **BACKLOG MANAGEMENT**: `.vybe/backlog.md` 
 3. **FEATURE SPECS**: `.vybe/features/[feature-name]/requirements.md`, `.vybe/features/[feature-name]/design.md`, `.vybe/features/[feature-name]/tasks.md`
 4. **SESSION COORDINATION**: `.vybe/context/sessions/` files
@@ -54,26 +55,35 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 - Comprehensive task breakdown before implementation
 - Living documentation that evolves with code
 
+### Incremental Outcome-Driven Development
+- Projects broken into staged outcomes (baby steps approach)
+- First minimal outcome deliverable in 1-2 days
+- Each stage builds on previous, delivers working software
+- UI examples requested only when needed
+- Learning between stages improves next stage
+
 ### Agile-Like Methodology
-- Backlog-driven development with prioritization (RICE/WSJF scoring)
+- Outcome-grouped backlog management with prioritization
 - Member assignment and workload balancing
-- Iterative feature development
+- Iterative stage development with continuous delivery
 - Quality assurance with gap detection
 
 ## Core Workflow - 7 Commands
 
 ### 1. Project Initialization
-**`/vybe:init [description]`** - Initialize project with foundation documents
-- Creates `.vybe/project/` with overview.md, architecture.md, conventions.md
-- Establishes project context for all future decisions
+**`/vybe:init [description]`** - Initialize project with staged outcome roadmap
+- Captures first minimal outcome, final vision, and initial stages
+- Creates `.vybe/project/` with overview.md, architecture.md, conventions.md, outcomes.md
+- Establishes incremental delivery context for all future decisions
 - Sets up git-based coordination infrastructure
 
 ### 2. Backlog Management
-**`/vybe:backlog [action]`** - Agile backlog management with member coordination
+**`/vybe:backlog [action]`** - Outcome-grouped backlog with member coordination
+- Groups tasks by outcome stages (not random features)
 - `member-count [N]` - Configure team with 1-5 developers (dev-1, dev-2, etc.)
-- `assign [feature] [dev-N]` - Assign features to specific members
-- `init` - Create comprehensive backlog with RICE/WSJF scoring
-- `groom` - Clean duplicates, optimize priorities
+- `assign [stage] [dev-N]` - Assign outcome stages to specific members
+- `init` - Create outcome-driven backlog structure
+- `groom` - Clean duplicates, optimize stage priorities
 
 ### 3. Feature Planning
 **`/vybe:plan [feature-name] [description]`** - Create detailed feature specifications
@@ -91,23 +101,35 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 
 ### 5. Progress Tracking
 **`/vybe:status [scope]`** - "How are we doing?" - Progress and assignments
-- Default: Overall project progress
+- Default: Overall project progress with outcome progression
+- `outcomes` - Staged outcome timeline and completion status
 - `members` - Team workload distribution
 - `dev-N` - Individual developer progress
 - Shows next actions and blockers
 
-### 6. Quality Assurance  
-**`/vybe:audit [scope]`** - "What needs fixing?" - Gap detection and fixes
-- Detects missing specifications, requirements, tasks
-- Finds duplicates and inconsistencies
-- Provides automated fix commands
-- Quality scoring and recommendations
+### 6. Quality Assurance & Code-Reality Analysis
+**`/vybe:audit [scope]`** - "What needs fixing?" - Gap detection and code-reality analysis
+- Traditional: Detects missing specifications, requirements, tasks, duplicates
+- **NEW**: Code-reality analysis modes (`code-reality`, `scope-drift`, `business-value`, `documentation`, `mvp-extraction`)
+- Compares actual source code vs documented plans and business outcomes
+- Provides automated fix commands and structured analysis reports
+- Quality scoring and actionable recommendations
 
-### 7. Natural Language Help
-**`/vybe:discuss [question]`** - Natural language command assistance
+### 7. Stage Release & Progression
+**`/vybe:release [stage]`** - Mark outcome stage complete and advance
+- Validates stage completion (tasks done, deliverable working)
+- Captures learnings from completed stage
+- Updates backlog and outcomes status
+- Advances to next stage automatically
+- Requests UI examples when needed for upcoming stages
+
+### 8. Natural Language Help with Smart Audit Routing
+**`/vybe:discuss [question]`** - Natural language assistant with automatic code-reality analysis
 - Translates user requests into specific Vybe commands
-- Provides guidance on workflow and best practices
+- Automatically routes analysis requests to specialized audit modes
+- Runs `/vybe:audit` commands and provides structured results
 - Context-aware suggestions based on project state
+- Provides both command sequences AND automated project analysis
 
 ## Multi-Member Coordination
 
@@ -130,23 +152,26 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 ## Development Rules
 
 ### Core Principles
-1. **Specification-first**: Always start with `/vybe:init` and `/vybe:plan`
-2. **Backlog-driven**: Use `/vybe:backlog` for feature management and assignments
-3. **Quality focus**: Regular `/vybe:audit` to catch issues early
-4. **Member coordination**: Use `VYBE_MEMBER` for team development
-5. **Progress visibility**: Regular `/vybe:status` for tracking
+1. **Staged outcomes first**: Always start with `/vybe:init` to define incremental stages
+2. **Outcome-driven**: Use `/vybe:backlog` for stage-grouped task management
+3. **Baby steps delivery**: Each stage delivers working software in 1-3 days
+4. **Continuous progression**: Use `/vybe:release` to advance through stages
+5. **Member coordination**: Use `VYBE_MEMBER` for team development
+6. **Progress visibility**: Regular `/vybe:status` for tracking outcomes
 
 ### Command Flow
 ```
-/vybe:init → /vybe:backlog → /vybe:plan → /vybe:execute → /vybe:status → /vybe:audit
-                  ↑                                          ↓
-                  └── /vybe:discuss (for guidance) ←--------┘
+/vybe:init → /vybe:backlog → /vybe:plan → /vybe:execute → /vybe:release → /vybe:status → /vybe:audit
+                  ↑                                              ↓
+                  └── /vybe:discuss (for guidance) ←-----------┘
 ```
 
-### Team Workflow
-1. **Setup**: Create GitHub repository, configure members
-2. **Planning**: Initialize backlog, plan features, assign to members  
-3. **Development**: Members execute assigned tasks with `VYBE_MEMBER` set
+### Outcome-Driven Team Workflow
+1. **Setup**: Create GitHub repository, configure members, define staged outcomes
+2. **Stage Planning**: Initialize outcome-grouped backlog, assign stages to members  
+3. **Development**: Members execute current stage tasks with `VYBE_MEMBER` set
+4. **Stage Completion**: Use `/vybe:release` to mark stages complete and advance
+5. **Continuous Delivery**: Each stage ships working software with user value
 4. **Coordination**: Regular status checks and quality audits
 5. **Quality**: Continuous gap detection and fix automation
 

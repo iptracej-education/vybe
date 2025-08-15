@@ -1,29 +1,75 @@
 ---
-description: Natural language assistant that translates requests into specific Vybe command sequences
+description: Natural language assistant with smart audit routing that translates requests into specific Vybe command sequences and automatically runs specialized analysis modes
 allowed-tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, LS, WebSearch, WebFetch
 ---
 
-# /vybe:discuss - Natural Language Command Assistant
+# /vybe:discuss - Natural Language Assistant with Smart Audit Routing
 
-Transform natural language requests into specific Vybe command sequences. Describe what you want to accomplish in plain English, and get step-by-step Vybe commands to achieve it.
+Transform natural language requests into specific Vybe command sequences with intelligent routing to specialized audit analysis modes. Describe what you want to accomplish in plain English, and get both command sequences AND automated code-reality analysis.
 
 ## Usage
 ```bash
 /vybe:discuss "[your request in natural language]"
+```
 
-# Examples:
+## Core Capabilities
+
+### 1. Command Translation
+```bash
 /vybe:discuss "We need to add mobile support to our web app"
 /vybe:discuss "Switch from REST to GraphQL for better performance"  
 /vybe:discuss "Add analytics dashboard and email notifications"
 /vybe:discuss "We're behind schedule, need to redistribute work"
-/vybe:discuss "Need to do security audit and hardening"
+```
+
+### 2. Code-Reality Analysis (🔥 POWERFUL)
+```bash
+# Project reshaping and scope analysis
+/vybe:discuss "reshape this project to fit 2 weeks, prefer MVP, keep security, limit WIP to 2"
+/vybe:discuss "analyze if we can ship this in 1 month with current team"
+/vybe:discuss "what features can we cut to hit our deadline?"
+
+# Documentation synchronization
+/vybe:discuss "read discussion.md and add requirements to README.md, then adjust project scope"
+/vybe:discuss "our README.md is outdated, sync it with actual implemented features"
+/vybe:discuss "compare what we promise in docs vs what code actually does"
+
+# Business outcome alignment
+/vybe:discuss "find features not tied to business outcomes and suggest what to do"
+/vybe:discuss "which implemented features don't match our original vision?"
+/vybe:discuss "audit if our code supports the user stories in README.md"
+```
+
+### 3. Scope & Architecture Evolution
+```bash
+/vybe:discuss "analyze current code and suggest how to split into microservices"
+/vybe:discuss "we added too many features, help us extract MVP"
+/vybe:discuss "recommend what to refactor before adding [new feature]"
+/vybe:discuss "evaluate if current architecture can handle 10x user growth"
+```
+
+### 4. Project Health Analysis
+```bash
+/vybe:discuss "find inconsistencies between backlog, README, and actual code"
+/vybe:discuss "detect scope creep - what did we build beyond original plan?"
+/vybe:discuss "which features have no tests and pose biggest risk?"
+/vybe:discuss "analyze technical debt and suggest prioritization"
 ```
 
 ## How It Works
+
+### Standard Command Translation
 1. **Load complete project context** - Understanding current state
 2. **Parse your natural language request** - What you want to accomplish
 3. **Generate specific Vybe command sequence** - Step-by-step instructions
 4. **Provide context and explanations** - Why each command is needed
+
+### Code-Reality Analysis Process
+1. **Multi-source analysis** - Read Vybe docs + actual source code + README/docs
+2. **Gap detection** - Compare documented intentions vs implemented reality
+3. **Business alignment check** - Verify features serve documented business outcomes
+4. **Scope analysis** - Detect feature creep, missing features, orphaned code
+5. **Actionable recommendations** - Specific fixes, updates, and scope adjustments
 
 ## Platform Compatibility
 - [OK] Linux, macOS, WSL2, Git Bash
@@ -174,7 +220,45 @@ if [ "$project_loaded" = false ]; then
 fi
 ```
 
-## Task 1: Natural Language Request Analysis
+## Task 1: Multi-Source Context Analysis
+
+### Load Complete Project Reality
+```bash
+echo "[REALITY] COMPREHENSIVE PROJECT ANALYSIS"
+echo "======================================"
+echo ""
+
+# Load Vybe documentation context (existing)
+# ... existing project context loading ...
+
+# NEW: Load actual source code reality
+echo "[SOURCE] Analyzing actual implemented features..."
+echo ""
+
+# Detect implemented features from source code
+echo "[CODE] Scanning source code for implemented features:"
+find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.java" -o -name "*.go" \) -not -path "./node_modules/*" -not -path "./.git/*" 2>/dev/null | head -20
+
+# Load project documentation files
+echo ""
+echo "[DOCS] Loading project documentation:"
+for doc in README.md CHANGELOG.md package.json requirements.txt docs/*.md; do
+    if [ -f "$doc" ]; then
+        echo "   Found: $doc"
+    fi
+done
+
+echo ""
+echo "[ANALYSIS] AI MUST perform multi-source comparison:"
+echo "1. Compare Vybe outcomes.md vs actual source code features"
+echo "2. Compare README.md promises vs implemented functionality" 
+echo "3. Compare backlog.md planned features vs existing code"
+echo "4. Identify gaps, inconsistencies, and scope drift"
+echo "5. Detect features without business outcome alignment"
+echo ""
+```
+
+## Task 2: Natural Language Request Analysis
 
 ### Parse and Categorize Request
 ```bash
@@ -571,7 +655,87 @@ echo "---"
 echo ""
 ```
 
-## Task 3: Contextual Recommendations and Next Steps
+## Task 3: Smart Audit Routing
+
+### Intelligent Analysis Mode Detection
+```bash
+echo "[ROUTING] INTELLIGENT AUDIT ROUTING" 
+echo "==================================="
+echo ""
+
+# Detect if this is an analysis request that should use audit commands
+analysis_requested=false
+audit_commands=()
+
+if echo "$request" | grep -qi "analyze\|compare\|audit\|inconsisten\|gap\|sync\|reshape\|fit\|scope\|mvp\|drift\|business.value\|documentation"; then
+    analysis_requested=true
+    echo "[DETECTED] Analysis request - routing to specialized audit commands"
+    echo ""
+    
+    # Route to specific audit modes based on request content
+    echo "[ROUTING] Determining required audit modes..."
+    
+    # MVP/Timeline analysis
+    if echo "$request" | grep -qi "mvp\|minimal\|2.week\|month\|deadline\|timeline\|fit.*week\|fit.*day\|reshape.*week"; then
+        echo "  → MVP extraction analysis needed"
+        if echo "$request" | grep -qi "2.week\|14.day"; then
+            audit_commands+=("/vybe:audit mvp-extraction --timeline=14days")
+        elif echo "$request" | grep -qi "1.month\|30.day"; then
+            audit_commands+=("/vybe:audit mvp-extraction --timeline=30days")
+        else
+            audit_commands+=("/vybe:audit mvp-extraction")
+        fi
+    fi
+    
+    # Scope drift analysis  
+    if echo "$request" | grep -qi "scope\|drift\|creep\|original\|vision\|grew\|larger\|smaller\|feature.*add"; then
+        echo "  → Scope drift analysis needed"
+        audit_commands+=("/vybe:audit scope-drift")
+    fi
+    
+    # Business value analysis
+    if echo "$request" | grep -qi "business\|value\|outcome\|align\|justif\|purpose\|why.*feature\|orphan"; then
+        echo "  → Business value analysis needed"
+        audit_commands+=("/vybe:audit business-value")
+    fi
+    
+    # Documentation sync analysis
+    if echo "$request" | grep -qi "documentation\|readme\|sync\|outdated\|accurate\|match.*doc\|doc.*match"; then
+        echo "  → Documentation sync analysis needed"
+        audit_commands+=("/vybe:audit documentation")
+    fi
+    
+    # General code-reality analysis (fallback for complex requests)
+    if echo "$request" | grep -qi "inconsisten\|gap\|compare.*code\|reality\|implement.*vs.*doc\|code.*vs.*doc"; then
+        echo "  → General code-reality analysis needed"
+        audit_commands+=("/vybe:audit code-reality")
+    fi
+    
+    # If no specific routing matched but analysis was requested, default to code-reality
+    if [ ${#audit_commands[@]} -eq 0 ]; then
+        echo "  → General analysis - defaulting to code-reality audit"
+        audit_commands+=("/vybe:audit code-reality")
+    fi
+    
+    echo ""
+    echo "[COMMANDS] Will execute the following audit commands:"
+    for cmd in "${audit_commands[@]}"; do
+        echo "  $cmd"
+    done
+    echo ""
+    
+    echo "[AI] EXECUTE AUDIT COMMANDS NOW:"
+    echo "==============================="
+    echo "AI MUST run the audit commands listed above and provide their results."
+    echo "Then provide follow-up recommendations and next steps."
+    echo ""
+    
+else
+    echo "[SKIP] Standard command translation (not analysis request)"
+fi
+```
+
+## Task 4: Contextual Recommendations and Next Steps
 
 ### Provide Additional Context and Warnings
 ```bash
@@ -684,6 +848,83 @@ echo "   Start with the first command from the sequence above"
 echo "   Use /vybe:discuss for follow-up questions"
 echo ""
 echo "[INFO] **Pro Tip**: Copy and paste the commands above, then modify as needed for your specific situation"
+```
+
+## Advanced Examples: Code-Reality Analysis
+
+### 1. Project Scope Adjustment with Smart Routing
+```bash
+/vybe:discuss "reshape this project to fit 2 weeks, prefer MVP, keep security, limit WIP to 2"
+
+# Smart Routing Output:
+[DETECTED] Analysis request - routing to specialized audit commands
+[ROUTING] Determining required audit modes...
+  → MVP extraction analysis needed
+  → Scope drift analysis needed
+
+[COMMANDS] Will execute the following audit commands:
+  /vybe:audit mvp-extraction --timeline=14days
+  /vybe:audit scope-drift
+
+[AI] EXECUTE AUDIT COMMANDS NOW:
+# AI then runs the specific audit commands and provides structured results
+# Based on YOUR actual project analysis, not hardcoded examples
+
+[FOLLOW-UP] Recommended next steps:
+1. Review audit results above
+2. /vybe:backlog groom --mvp-focus  
+3. Update outcomes.md with revised stages
+4. /vybe:status outcomes - track progress
+```
+
+### 2. Documentation Synchronization with Smart Routing
+```bash
+/vybe:discuss "our README.md is outdated, sync it with actual implemented features"
+
+# Smart Routing Output:
+[DETECTED] Analysis request - routing to specialized audit commands
+[ROUTING] Determining required audit modes...
+  → Documentation sync analysis needed
+  → General code-reality analysis needed
+
+[COMMANDS] Will execute the following audit commands:
+  /vybe:audit documentation
+  /vybe:audit code-reality
+
+[AI] EXECUTE AUDIT COMMANDS NOW:
+# AI runs specialized audit commands on YOUR actual files
+# Compares YOUR README.md with YOUR source code
+# No hardcoded assumptions about your tech stack
+
+[FOLLOW-UP] Based on audit results:
+1. Update documentation files as recommended
+2. /vybe:audit --verify - confirm fixes work
+3. /vybe:status - check overall project health
+```
+
+### 3. Business Outcome Alignment with Smart Routing
+```bash
+/vybe:discuss "find features not tied to business outcomes and suggest what to do"
+
+# Smart Routing Output:
+[DETECTED] Analysis request - routing to specialized audit commands
+[ROUTING] Determining required audit modes...
+  → Business value analysis needed
+
+[COMMANDS] Will execute the following audit commands:
+  /vybe:audit business-value
+
+[AI] EXECUTE AUDIT COMMANDS NOW:
+# AI analyzes YOUR actual source code features
+# Maps against YOUR outcomes.md business values  
+# Identifies YOUR specific orphan features with real LOC counts
+# Based on YOUR project, not generic examples
+
+[FOLLOW-UP] Recommended actions:
+1. Review business value audit results
+2. Update outcomes.md to justify orphan features OR remove them
+3. /vybe:plan [missing-features] for unimplemented outcomes
+4. /vybe:status outcomes - track business alignment
 ```
 
 ## Error Handling

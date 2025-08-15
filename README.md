@@ -2,11 +2,12 @@
 
 **Note:** This is an experimental project under active development. Features and structure may change significantly.
 
-Spec-driven agile-like development for Claude Code with multi-session coordination
+Spec-driven agile-like development with incremental outcome-driven delivery for Claude Code with multi-session coordination
 
 ## Overview
 
 Vybe brings structure to AI-assisted development through:
+- **Incremental outcome-driven development** - Break projects into stages that deliver working software in 1-3 days each
 - **Specification-first workflow with agile backlog management** - Every feature starts with clear requirements and design in organized backlog
 - **Multi-developer coordination** - Single session or multiple Claude Code sessions work together seamlessly  
 - **Quality assurance** - Built-in gap detection and fix automation
@@ -14,11 +15,16 @@ Vybe brings structure to AI-assisted development through:
 
 ## Key Features
 
-- **7 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `status` → `audit` → `discuss`
-- **Agile-like planning** - Start with backlog management and create detailed requirements, design, and tasks for each feature
-- **Member coordination** - Assign features to dev-1, dev-2, etc. with conflict detection
-- **Gap detection** - Audit finds missing specs, duplicates, and inconsistencies
-- **Natural language help** - Discuss command translates requests to specific commands
+- **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
+- **Baby steps approach** - First minimal outcome in 1-2 days, then progressive enhancement stages
+- **Staged outcomes** - Each stage delivers working software with user value
+- **🔥 Code-reality analysis** - Compare actual code vs documented plans, detect scope drift, find orphan features
+- **🧠 Smart audit routing** - Natural language requests automatically route to specialized analysis modes
+- **📊 Business outcome alignment** - Ensure every feature ties to business value, eliminate orphan code
+- **⚡ MVP extraction** - Intelligent scope reduction for timeline constraints (2 weeks, 1 month, etc.)
+- **📋 Documentation sync** - Keep README/docs aligned with actual implemented features
+- **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
+- **Learning-driven** - Each completed stage improves planning for next stage
 
 ## Quick Setup
 
@@ -33,8 +39,9 @@ git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 rm -rf vybe-framework
 
-# 3. Initialize your project
+# 3. Initialize your project with staged outcomes
 /vybe:init "Your project description"
+# This will interactively capture your first minimal outcome and final vision
 ```
 
 ### Multi-Member Team Setup
@@ -51,7 +58,7 @@ git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 rm -rf vybe-framework
 
-# 4. Initialize and push to shared repository
+# 4. Initialize with staged outcomes and push to shared repository
 /vybe:init "Your project description"
 git add .
 git commit -m "Initialize project with Vybe framework"
@@ -84,19 +91,49 @@ rm -rf vybe-framework
 ## Start Building
 
 ```bash
-# Plan a feature
-/vybe:plan user-auth "JWT authentication with refresh tokens"
+# 1. Initialize with staged outcomes (done during setup)
+/vybe:init "COVID data visualization dashboard"
+# Captures: 
+# - First minimal outcome: "Show COVID numbers on webpage"
+# - Final vision: "Real-time dashboard with visualizations"
+# - Initial stages: Show data → Add layout → Add charts → Make real-time
 
-# Set up team (optional)
+# 2. Create outcome-grouped backlog
+/vybe:backlog init --auto
+
+# 3. Work on current stage
+/vybe:execute fetch-api-data    # Stage 1 tasks
+/vybe:execute display-numbers
+
+# 4. Complete stage and advance
+/vybe:release                   # Marks Stage 1 complete, advances to Stage 2
+
+# 5. Check progress and outcomes
+/vybe:status outcomes          # See stage progression
+/vybe:status                   # Overall progress
+
+# 6. Code-Reality Analysis (🔥 POWERFUL NEW FEATURES)
+/vybe:discuss "reshape this project to fit 2 weeks, prefer MVP, keep security"
+# → Automatically runs: /vybe:audit mvp-extraction --timeline=14days + scope-drift
+# → Provides specific recommendations based on YOUR actual code
+
+/vybe:discuss "find features not tied to business outcomes"  
+# → Automatically runs: /vybe:audit business-value
+# → Maps YOUR implemented features to YOUR business outcomes
+
+/vybe:discuss "our README is outdated, sync with actual features"
+# → Automatically runs: /vybe:audit documentation + code-reality
+# → Compares YOUR README with YOUR actual source code
+
+# 7. Direct audit commands (for CI/automation)
+/vybe:audit code-reality           # Compare docs vs actual implementation
+/vybe:audit scope-drift            # Detect feature creep beyond original vision
+/vybe:audit mvp-extraction         # Extract minimal viable scope
+
+# 8. Team coordination (optional)
 /vybe:backlog member-count 2
 export VYBE_MEMBER=dev-1
-
-# Check progress vs quality
-/vybe:status        # "How are we doing?"
-/vybe:audit         # "What needs fixing?"
-
-# Get help
-/vybe:discuss "How do I add OAuth to authentication?"
+/vybe:backlog assign stage-2 dev-2
 ```
 
 ## Learn More

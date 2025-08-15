@@ -20,7 +20,8 @@ Track progress and provide visibility into project health with member assignment
 ```
 
 ## Scope Options
-- **Default**: Overall project health and progress
+- **Default**: Overall project health and outcome progression
+- **outcomes**: Staged outcome progression and timeline
 - **members**: Member assignments, workload distribution, and coordination
 - **dev-1, dev-2, dev-3, dev-4, dev-5**: Specific member's assignments and progress (fixed member names)
 - **[feature-name]**: Detailed progress for specific feature
@@ -248,6 +249,38 @@ if [ "$scope" = "overall" ]; then
     echo "[PROGRESS] Overall Progress: $progress_bar $progress_percent%"
     echo ""
     
+    # Outcome progression
+    echo "[OUTCOMES] Staged Outcome Progress:"
+    if [ -f ".vybe/project/outcomes.md" ] && [ -f ".vybe/backlog.md" ]; then
+        current_stage=$(grep "Active Stage:" .vybe/backlog.md 2>/dev/null | sed 's/.*Stage \([0-9]*\).*/\1/')
+        total_stages=$(grep "^### Stage" .vybe/project/outcomes.md 2>/dev/null | wc -l)
+        completed_stages=$(grep "COMPLETED" .vybe/backlog.md 2>/dev/null | grep "^### Stage" | wc -l)
+        
+        if [ -n "$current_stage" ]; then
+            echo "   Current: Stage $current_stage (IN PROGRESS)"
+            echo "   Completed: $completed_stages of $total_stages stages"
+            
+            # Show current stage tasks
+            current_tasks=$(grep -A 20 "IN PROGRESS" .vybe/backlog.md 2>/dev/null | grep "^\- \[.\]" | wc -l)
+            completed_tasks=$(grep -A 20 "IN PROGRESS" .vybe/backlog.md 2>/dev/null | grep "^\- \[x\]" | wc -l)
+            incomplete_tasks=$(grep -A 20 "IN PROGRESS" .vybe/backlog.md 2>/dev/null | grep "^\- \[ \]" | wc -l)
+            
+            if [ $current_tasks -gt 0 ]; then
+                echo "   Stage Tasks: $completed_tasks/$current_tasks completed"
+            fi
+            
+            # Show timeline
+            echo "   Timeline: Each stage targets 1-3 days delivery"
+        else
+            echo "   [INFO] No staged outcomes configured"
+            echo "   Run /vybe:init with outcome stages for incremental delivery"
+        fi
+    else
+        echo "   [NONE] Outcome-driven development not configured"
+        echo "   Next: /vybe:init to set up staged outcomes"
+    fi
+    echo ""
+    
     # Feature summary
     echo "[FEATURES] Features Summary:"
     if [ $total_features -gt 0 ]; then
@@ -329,7 +362,130 @@ if [ "$scope" = "overall" ]; then
 fi
 ```
 
-## Task 2: Member Status and Coordination
+## Task 2: Outcome Progression Status
+
+### Display Outcome Dashboard
+```bash
+if [ "$scope" = "outcomes" ]; then
+    echo "[OUTCOMES] STAGED OUTCOME DASHBOARD"
+    echo "================================="
+    echo ""
+    
+    if [ ! -f ".vybe/project/outcomes.md" ]; then
+        echo "[NO] Outcome roadmap not configured"
+        echo ""
+        echo "To enable outcome-driven development:"
+        echo "   /vybe:init [project] - Set up staged outcomes"
+        echo ""
+        exit 0
+    fi
+    
+    # Load outcome data
+    current_stage=$(grep "Active Stage:" .vybe/backlog.md 2>/dev/null | sed 's/.*: Stage //' | sed 's/ -.*//')
+    total_stages=$(grep "^### Stage" .vybe/project/outcomes.md | wc -l)
+    completed_stages=$(grep "COMPLETED" .vybe/backlog.md | grep "^### Stage" | wc -l)
+    
+    echo "[ROADMAP] Outcome Progression:"
+    echo ""
+    
+    # Visual progress indicator
+    echo "Progress: "
+    for i in $(seq 1 $total_stages); do
+        if [ $i -le $completed_stages ]; then
+            echo -n "[✅] "
+        elif [ $i -eq $((completed_stages + 1)) ]; then
+            echo -n "[🔄] "
+        else
+            echo -n "[⏳] "
+        fi
+    done
+    echo ""
+    echo ""
+    
+    # Stage details
+    echo "[STAGES] Detailed Status:"
+    echo ""
+    
+    # Show each stage with status
+    stage_num=1
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^###\ Stage ]]; then
+            stage_name=$(echo "$line" | sed 's/### Stage [0-9]*: //' | sed 's/ .*//')
+            
+            if [ $stage_num -le $completed_stages ]; then
+                status="✅ COMPLETED"
+                echo "Stage $stage_num: $stage_name - $status"
+                
+                # Show completion details from learning log
+                completion_date=$(grep -A 2 "Stage $stage_num Completion" .vybe/project/outcomes.md | grep "Date:" | sed 's/.*: //')
+                if [ -n "$completion_date" ]; then
+                    echo "   Completed: $completion_date"
+                fi
+            elif [ $stage_num -eq $((completed_stages + 1)) ]; then
+                status="🔄 IN PROGRESS"
+                echo "Stage $stage_num: $stage_name - $status"
+                
+                # Show current progress
+                tasks_done=$(grep -A 20 "Stage $stage_num" .vybe/backlog.md | grep "^\- \[x\]" | wc -l)
+                tasks_total=$(grep -A 20 "Stage $stage_num" .vybe/backlog.md | grep "^\- \[.\]" | wc -l)
+                if [ $tasks_total -gt 0 ]; then
+                    echo "   Tasks: $tasks_done/$tasks_total completed"
+                fi
+                
+                # Show timeline
+                timeline=$(grep -A 5 "Stage $stage_num" .vybe/project/outcomes.md | grep "Timeline:" | sed 's/.*: //')
+                if [ -n "$timeline" ]; then
+                    echo "   Timeline: $timeline"
+                fi
+            else
+                status="⏳ PLANNED"
+                echo "Stage $stage_num: $stage_name - $status"
+                
+                # Show dependencies
+                deps=$(grep -A 10 "Stage $stage_num" .vybe/project/outcomes.md | grep "Dependencies:" | sed 's/.*: //')
+                if [ -n "$deps" ]; then
+                    echo "   Depends on: $deps"
+                fi
+            fi
+            
+            # Show deliverable
+            deliverable=$(grep -A 3 "Stage $stage_num" .vybe/project/outcomes.md | grep "Deliverable:" | sed 's/.*: //')
+            if [ -n "$deliverable" ]; then
+                echo "   Deliverable: $deliverable"
+            fi
+            
+            echo ""
+            stage_num=$((stage_num + 1))
+        fi
+    done < .vybe/project/outcomes.md
+    
+    # Value delivered summary
+    echo "[VALUE] Delivered So Far:"
+    if [ $completed_stages -gt 0 ]; then
+        echo "   ✅ $completed_stages stages completed"
+        echo "   📦 $completed_stages working deliverables shipped"
+        echo "   🎯 Incremental value delivered at each stage"
+    else
+        echo "   Starting Stage 1 - First minimal outcome"
+    fi
+    echo ""
+    
+    # Next actions
+    echo "[NEXT] Recommended Actions:"
+    if [ $completed_stages -lt $total_stages ]; then
+        current_stage_name=$(grep -A 1 "IN PROGRESS" .vybe/backlog.md | head -1 | sed 's/.*: //' | sed 's/ .*//')
+        echo "   Continue Stage $((completed_stages + 1)): $current_stage_name"
+        echo "   /vybe:execute [task] - Work on current stage"
+        echo "   /vybe:release - Mark stage complete when done"
+    else
+        echo "   All planned stages completed!"
+        echo "   Consider adding new stages to outcomes.md"
+    fi
+    echo ""
+fi
+```
+
+## Task 3: Member Status and Coordination
 
 ### Display Member Dashboard
 ```bash
