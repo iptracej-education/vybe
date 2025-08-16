@@ -1,10 +1,10 @@
 # Vybe Framework
 
-**Note:** *This is an experimental project under active development. Features and structure may change significantly.*
-
 **Spec-driven agile-like development for Claude Code**
 
-Vybe framework provides a spec structure to vibe coding with staged incremental outcomes and enables us to change scope in natural language.
+Vybe is a spec-driven framework for Claude Code that lets you plan and develop software in clear stages. It blends natural-language commands with a structured spec (backlog, features, tasks, releases) so AI remains flexible without causing drift between docs and code. Each stage produces a concrete outcome that strengthens the next plan—keeping scope, priorities, and artifacts aligned.
+
+**Note:** *This is an experimental project under active development. Features and structure may change significantly.*
 
 ## Overview
 
@@ -17,10 +17,11 @@ Vybe brings structure to AI-assisted development through:
 
 ## Key Features
 
-- **8 core commands** - Complete development workflow: `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
+- **9 core commands** - Complete development workflow: `template` (optional) → `init` → `backlog` → `plan` → `execute` → `release` → `status` → `audit` → `discuss`
 - **Staged planning and execution** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Natural language scope adjustment** - Intelligent scope reduction for timeline constraints, plus guided expansion planning
 - **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis
+- **Template integration (optional)** - Import production-ready templates as permanent project foundation with AI-guided pattern consistency
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
 
@@ -137,7 +138,7 @@ export VYBE_MEMBER=dev-1
 ## Learn More
 
 - **Complete tutorial**: [`docs/HANDS_ON_TUTORIAL.md`](https://github.com/iptracej-education/vybe/blob/main/docs/HANDS_ON_TUTORIAL.md) - 22-step walkthrough
-- **Command reference**: [`docs/COMMAND_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/COMMAND_SPEC.md) - All 7 commands with examples
+- **Command reference**: [`docs/COMMAND_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/COMMAND_SPEC.md) - All 9 commands with examples
 - **Framework specification**: [`docs/VYBE_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/VYBE_SPEC.md) - Complete technical documentation
 - **Multi-session testing**: Simulate multiple developers working together
 
