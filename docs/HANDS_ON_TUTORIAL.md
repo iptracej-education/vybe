@@ -8,8 +8,8 @@ A comprehensive table-top exercise walking through all Vybe commands from projec
 
 Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo, team features, or template-based development.
 
-### Template-Based Tutorial Setup (NEW)
-For advanced users who want to test template-driven development, see the [**Template System Tutorial**](#phase-1-template-discovery-and-import) at the bottom of this document.
+### Template Tutorial Setup (NEW)
+For advanced users who want to test template-driven development, see the [**Template Tutorial**](#template-tutorial) at the bottom of this document.
 
 ### Repository Requirements
 - **Solo Tutorial**: Local git repository only (no GitHub needed)
@@ -63,11 +63,6 @@ claude
 
 ## Choose Your Tutorial Path
 
-**🏗️ [Template-Based Tutorial](#template-based-tutorial)** - Using external templates as architectural DNA (NEW)
-- Import and analyze external templates
-- Generate template-driven project foundations
-- Follow template patterns throughout development
-
 **👤 [Solo Developer Tutorial](#solo-developer-tutorial)** - Complete workflow for individual developers
 - Perfect for testing core functionality
 - Simpler commands and workflows
@@ -77,6 +72,11 @@ claude
 - Advanced member assignment features  
 - Multi-session coordination testing
 - Assignment conflicts and workload balancing
+
+**🏗️ [Template Tutorial](#template-tutorial)** - Using external templates as architectural DNA (NEW)
+- Import and analyze external templates
+- Generate template-driven project foundations
+- Follow template patterns throughout development
 
 ---
 
@@ -799,7 +799,7 @@ The framework will analyze each project description, research appropriate techno
 
 ---
 
-# Template-Based Tutorial
+# Template Tutorial
 
 **Scenario**: Building an AI workflow platform using the GenAI Launchpad template as architectural DNA.
 
