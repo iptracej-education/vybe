@@ -9,22 +9,7 @@ A comprehensive table-top exercise walking through all Vybe commands from projec
 Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo, team features, or template-based development.
 
 ### Template-Based Tutorial Setup (NEW)
-```bash
-# 1. Create test environment
-mkdir vybe-template-test && cd vybe-template-test
-git init
-
-# 2. Install Vybe Framework
-git clone https://github.com/iptracej-education/vybe.git vybe-framework
-cp -r vybe-framework/.claude .
-cp vybe-framework/CLAUDE.md .
-rm -rf vybe-framework
-
-# 3. Start Claude Code
-claude
-
-# 4. Ready for template tutorial below
-```
+For advanced users who want to test template-driven development, see the [**Template System Tutorial**](#phase-1-template-discovery-and-import) at the bottom of this document.
 
 ### Repository Requirements
 - **Solo Tutorial**: Local git repository only (no GitHub needed)
