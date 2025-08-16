@@ -297,7 +297,7 @@ echo "1. /vybe:plan $next_stage - Refine next stage plan"
 echo "2. /vybe:execute [first-task] - Start implementation"
 echo "3. /vybe:status - Check overall progress"
 echo ""
-echo "Remember: Ship working software early and often!"
+echo "Remember: Ship working units early and often!"
 ```
 
 ## Error Handling

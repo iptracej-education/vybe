@@ -6,7 +6,25 @@ A comprehensive table-top exercise walking through all Vybe commands from projec
 
 ## Prerequisites & Setup
 
-Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo or team features.
+Before starting any tutorial, you need to set up your environment properly based on whether you're testing solo, team features, or template-based development.
+
+### Template-Based Tutorial Setup (NEW)
+```bash
+# 1. Create test environment
+mkdir vybe-template-test && cd vybe-template-test
+git init
+
+# 2. Install Vybe Framework
+git clone https://github.com/iptracej-education/vybe.git vybe-framework
+cp -r vybe-framework/.claude .
+cp vybe-framework/CLAUDE.md .
+rm -rf vybe-framework
+
+# 3. Start Claude Code
+claude
+
+# 4. Ready for template tutorial below
+```
 
 ### Repository Requirements
 - **Solo Tutorial**: Local git repository only (no GitHub needed)
@@ -26,7 +44,10 @@ cp -r vybe-framework/.claude .
 cp vybe-framework/CLAUDE.md .
 rm -rf vybe-framework
 
-# 3. Ready to start solo tutorial below
+# 3. Start Claude Code
+claude
+
+# 4. Ready to start solo tutorial below
 ```
 
 ### Multi-Member Tutorial Setup
@@ -49,10 +70,18 @@ git add .
 git commit -m "Set up Vybe framework for team testing"
 git push origin main
 
-# 5. Ready to start multi-member tutorial below
+# 5. Start Claude Code
+claude
+
+# 6. Ready to start multi-member tutorial below
 ```
 
 ## Choose Your Tutorial Path
+
+**🏗️ [Template-Based Tutorial](#template-based-tutorial)** - Using external templates as architectural DNA (NEW)
+- Import and analyze external templates
+- Generate template-driven project foundations
+- Follow template patterns throughout development
 
 **👤 [Solo Developer Tutorial](#solo-developer-tutorial)** - Complete workflow for individual developers
 - Perfect for testing core functionality
@@ -82,17 +111,10 @@ git push origin main
 /vybe:init "Personal task management app with user authentication, API integrations, and data export features"
 
 # Expected behavior:
-# PHASE 1 (Fast - 30 seconds):
-# - Analyzes project description immediately for project type and requirements
-# - Infers appropriate technology stack from description
 # - Creates .vybe/ directory structure
-# - Generates intelligent overview.md with business context
-# - Creates smart architecture.md with tech stack choices
-# - Generates appropriate conventions.md with development standards
-# - Sets up solo developer workflow with immediate intelligence
-# PHASE 2 (Background - 2-5 minutes):
-# - Enhances documents with comprehensive research
-# - Same final quality, faster initial feedback
+# - Generates foundation documents based on your description
+# - Sets up staged outcome roadmap
+# - Creates living documents you can edit freely
 ```
 
 **Test Points:**
@@ -100,119 +122,120 @@ git push origin main
 - [ ] Are the generated documents specific to the project description?
 - [ ] Do technology choices match the project requirements?
 - [ ] Is the project context comprehensive enough for decision-making?
-- [ ] Does it work well for solo development?
 
-### Step 2: Review and Refine Foundation Documents
+### Step 2: Review Foundation Documents
 ```bash
-# Actions to take:
 # 1. Review the generated documents
-ls -la .vybe/project/
-cat .vybe/project/overview.md
-cat .vybe/project/architecture.md  
-cat .vybe/project/conventions.md
+cat .vybe/project/overview.md        # Business context and goals
+cat .vybe/project/architecture.md    # Technology stack and design  
+cat .vybe/project/conventions.md     # Development standards
+cat .vybe/project/outcomes.md        # Staged outcome roadmap
 
-# 2. Get external feedback (choose one or more):
-# - Upload all three documents to ChatGPT/Claude for review
-# - Share with team members for technical validation
-# - Get stakeholder input on business context and goals
-# - Have domain experts review technology choices
+# 2. Edit documents if needed (optional)
+# Use any editor to refine the generated content:
+# nano .vybe/project/overview.md
+# code .vybe/project/architecture.md
 
-# 3. Edit documents based on feedback
-# Use your editor to refine:
-# - Business goals and success metrics
-# - Technology stack choices
-# - Development standards and practices
-# - Project scope and constraints
-
-# 4. Validate foundation is ready
-/vybe:status  # Should show solid project foundation
+# Documents are living - edit freely, no approval needed!
 ```
 
-**Expected behavior:**
-- **Document Review**: Foundation documents provide intelligent starting points
-- **External Validation**: Get perspective from humans/LLMs on business and technical aspects
-- **Iterative Refinement**: Documents improve through feedback cycles
-- **Stakeholder Alignment**: Ensure business context matches actual needs
-- **Technical Validation**: Verify technology choices are appropriate
-
 **Test Points:**
-- [ ] Are the generated documents comprehensive enough for review?
-- [ ] Do documents provide good starting points for refinement?
-- [ ] Is it easy to identify areas needing improvement?
-- [ ] Can external reviewers understand the project context?
-- [ ] Do refined documents better match actual project needs?
+- [ ] Are the generated documents comprehensive and specific to your project?
+- [ ] Does the outcomes.md show a realistic staged roadmap?
+- [ ] Do technology choices in architecture.md make sense?
+- [ ] Can you easily identify the Stage 1 minimal outcome?
 
-### Step 3: Create Initial Backlog
+### Step 3: Generate Strategic Backlog
 ```bash
 # Command to test:
-/vybe:backlog init --auto
+/vybe:backlog init
 
-# Expected behavior:
-# PHASE 1 (Fast - 30 seconds):
-# - Analyzes loaded project foundation documents (overview, architecture, conventions)
-# - Extracts feature requirements from project context
-# - Infers core features from project type and business domain
-# - Applies standard feature patterns for task management application
-# - Generates intelligent backlog immediately with prioritized features
-# PHASE 2 (Background):
-# - Researches similar projects and their typical feature sets
-# - Studies current best practices for task management applications
-# - Investigates MVP requirements for productivity software
-# - Enhances backlog with research findings and RICE/WSJF scoring
+# Generate outcome-grouped backlog with stage roadmap
+# This creates strategic level "Task Overview" for each stage
+
+# Review what was created:
+cat .vybe/backlog.md
+
+# Look for structure like:
+# ## Stage 1: Basic Task Operations (1-2 days)
+# #### Task Overview
+# - [ ] Core task CRUD functionality
+# - [ ] Simple local storage
+# - [ ] Basic HTML interface
+#
+# ## Stage 2: User Authentication (2-3 days)  
+# #### Task Overview
+# - [ ] User registration/login
+# - [ ] Personal task lists
+# - [ ] Session management
+
+# Note: These are HIGH-LEVEL overviews, not detailed implementation tasks
 ```
 
 **Test Points:**
-- [ ] Does backlog init create a comprehensive feature list?
-- [ ] Are features appropriate for the project type (task management)?
-- [ ] Is the backlog organized with clear priorities?
-- [ ] Are core MVP features identified correctly?
-- [ ] Does the backlog align with project foundation documents?
+- [ ] Does backlog show stages with "Task Overview" sections?
+- [ ] Are stages organized from Stage 1 (minimal) to later stages?
+- [ ] Do the Task Overview items match the outcomes.md roadmap?
+- [ ] Is Stage 1 clearly the minimal viable functionality?
+- [ ] Are later stages logical progressions from earlier ones?
 
 ## Phase 2: Feature Planning
 
-### Step 4: Plan Authentication Feature
+### Step 4: Plan Stage 1 Implementation
 ```bash
-# Command to test:
-/vybe:plan user-authentication "Secure user registration and login system with email verification, password reset, and JWT tokens"
+# Create detailed specifications for Stage 1
+/vybe:plan stage-1
 
-# Expected behavior:
-# PHASE 1 (Fast - 30 seconds):
-# - Analyzes feature type immediately from description
-# - Infers security requirements for authentication systems
-# - Creates .vybe/features/user-authentication/
-# - Generates intelligent requirements.md with EARS format
-# - Creates smart design.md with appropriate technical approach
-# - Produces specific tasks.md with implementation steps
-# PHASE 2 (Background):
-# - Enhances with comprehensive security research
-# - Same final quality, faster initial planning
+# This takes the high-level "Task Overview" from backlog.md
+# and creates detailed implementation specifications
+
+# Review what was created:
+ls .vybe/features/stage-1/
+cat .vybe/features/stage-1/requirements.md    # Detailed EARS requirements
+cat .vybe/features/stage-1/design.md         # Technical architecture
+cat .vybe/features/stage-1/tasks.md          # Granular implementation tasks
+
+# Example of what you might see in tasks.md:
+# ## Sprint 1 (Days 1-2)  
+# - [ ] Create HTML task list structure
+# - [ ] Implement add task function
+# - [ ] Add task completion toggle
+# - [ ] Build local storage persistence
+# - [ ] Style basic CSS layout
 ```
 
 **Test Points:**
-- [ ] Is the plan command syntax intuitive (feature-name first)?
-- [ ] Are generated requirements comprehensive and actionable?
-- [ ] Does design consider project architecture and constraints?
-- [ ] Are security considerations appropriate for authentication?
-- [ ] Are tasks granular enough for implementation?
+- [ ] Does /vybe:plan stage-1 create detailed specs in .vybe/features/stage-1/?
+- [ ] Are the tasks.md items much more detailed than backlog "Task Overview"?
+- [ ] Do requirements.md capture specific acceptance criteria?
+- [ ] Does design.md show technical approach for implementation?
+- [ ] Are tasks granular enough for 1-2 day implementation?
 
-### Step 5: Plan API Integration Feature
+### Step 5: Modify Stage 1 with AI Assistance (Optional)
 ```bash
-# Command to test:
-/vybe:plan api-integration "External API integrations for weather data and email notifications"
+# Test the --modify feature for AI-assisted changes
+/vybe:plan stage-1 --modify "Change: Use TypeScript instead of JavaScript"
 
-# Expected behavior:
-# - Analyzes API integration patterns and requirements
-# - Creates second feature specification  
-# - Maps dependencies with user-authentication
-# - Provides appropriate integration guidance
-# - Considers error handling and rate limiting
+# This modifies the existing Stage 1 specifications:
+# - Updates design.md with TypeScript considerations
+# - Adjusts tasks.md for TypeScript setup and compilation
+# - Modifies requirements as needed
+
+# Review the changes:
+cat .vybe/features/stage-1/design.md         # Should show TypeScript approach
+cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup tasks
+
+# Other examples of modifications:
+# /vybe:plan stage-1 --modify "Add: Drag and drop for task reordering"
+# /vybe:plan stage-1 --modify "Change: Use IndexedDB instead of localStorage"
+# /vybe:plan stage-1 --modify "Remove: Advanced filtering features"
 ```
 
 **Test Points:**
-- [ ] Does planning detect dependencies between features?
-- [ ] Are API integration patterns appropriate for the use case?
-- [ ] Is error handling adequately planned?
-- [ ] Do specifications align with project architecture?
+- [ ] Does --modify successfully update existing Stage 1 specs?
+- [ ] Are changes reflected across requirements, design, and tasks?
+- [ ] Do modifications maintain consistency with project architecture?
+- [ ] Can you make multiple types of changes (add, change, remove)?
 
 ---
 
@@ -224,35 +247,46 @@ cat .vybe/project/conventions.md
 /vybe:status
 
 # Expected behavior:
-# - Shows overall project health
-# - Displays planned features
-# - Indicates progress on features
-# - Shows next steps for solo developer
+# - Shows overall project progress and stage status
+# - Displays planned stages and their completion status
+# - Indicates current active stage (should be Stage 1)
+# - Shows next recommended actions
+
+# Example output might show:
+# 🎯 Project: Personal Task Management
+# 📊 Stage Progress: Stage 1 IN PROGRESS (0/5 tasks completed)
+# 🔄 Active Stage: Stage 1 - Basic Task Operations
+# 📋 Next Action: /vybe:execute stage-1-task-1
 ```
 
 **Test Points:**
-- [ ] Is the default status view informative for solo work?
-- [ ] Are planned features clearly visible?
-- [ ] Is progress tracking meaningful at this stage?
-- [ ] Does it provide clear next steps?
+- [ ] Does status show staged outcome progression?
+- [ ] Are planned stages clearly visible with status?
+- [ ] Does it indicate which stage is currently active?
+- [ ] Does it provide clear next steps for Stage 1?
 
-### Step 7: Start Implementation Work
+### Step 7: Execute Stage 1 Implementation
 ```bash
 # Command to test:
-/vybe:execute user-authentication-task-1
+/vybe:execute stage-1
 
+# This starts implementing the detailed tasks from stage-1/tasks.md
 # Expected behavior:
-# - Loads complete project context
-# - Shows specific task guidance
-# - Provides implementation steps
-# - Updates task status appropriately
+# - Loads complete project context (all foundation docs)
+# - Shows Stage 1 task list with current status
+# - Guides implementation of specific tasks
+# - Updates progress as tasks are completed
+
+# Alternative: Execute specific tasks
+# /vybe:execute stage-1-task-1    # Execute first task
+# /vybe:execute stage-1-task-2    # Execute second task
 ```
 
 **Test Points:**
-- [ ] Does specific task execution work smoothly?
-- [ ] Is project context properly loaded?
-- [ ] Are implementation steps clear?
-- [ ] Does progress tracking work for solo developer?
+- [ ] Does execute load all project context before starting?
+- [ ] Are Stage 1 tasks shown with clear guidance?
+- [ ] Does the execution follow the detailed task breakdown?
+- [ ] Is progress tracked and updated appropriately?
 
 ## Phase 4: Quality Assurance
 
@@ -262,72 +296,95 @@ cat .vybe/project/conventions.md
 /vybe:audit
 
 # Expected behavior:
-# - Detects gaps in feature specifications
-# - Identifies any duplicate content
-# - Finds consistency issues
-# - Provides specific fix commands
-# - Works well for solo developer
+# - Checks alignment between foundation docs and stage specs
+# - Identifies gaps in specifications or consistency issues
+# - Validates stage progression makes sense
+# - Shows project health and suggests improvements
+
+# Example output might show:
+# ✅ Foundation documents complete and consistent
+# ⚠️  Stage 1 tasks missing acceptance criteria
+# ✅ Stage progression logical (1→2→3)
+# 💡 Suggestion: Add TypeScript configuration to conventions.md
 ```
 
 **Test Points:**
-- [ ] Does audit find actual quality problems for solo projects?
-- [ ] Are identified gaps actionable?
-- [ ] Do fix commands make sense?
-- [ ] Is it clearly different from /vybe:status?
+- [ ] Does audit check consistency between different document types?
+- [ ] Are identified gaps specific and actionable?
+- [ ] Does it validate the staged outcome approach is working?
+- [ ] Is it clearly different from /vybe:status (quality vs progress)?
 
-### Step 9: Fix Automation Testing
+### Step 9: Code-Reality Analysis Testing
 ```bash
-# Commands to test:
-/vybe:audit features
-/vybe:audit fix-gaps features
+# Test the new code-reality analysis modes:
+/vybe:audit code-reality           # Compare docs vs actual implementation
+/vybe:audit scope-drift            # Check if scope expanded beyond Stage 1
+/vybe:audit documentation          # Sync project docs with actual progress
 
 # Expected behavior:
-# - Identifies missing sections in features
-# - Provides specific fix commands
-# - Actually resolves identified issues
+# - Analyzes YOUR actual project files (not hardcoded examples)
+# - Provides specific recommendations based on current state
+# - Shows concrete gaps between documentation and reality
 ```
 
 **Test Points:**
-- [ ] Does gap detection work for solo projects?
-- [ ] Do fix commands actually resolve issues?
-- [ ] Can you verify fixes with follow-up audit?
+- [ ] Do audit modes analyze your actual project files?
+- [ ] Are results specific to your project (no generic examples)?
+- [ ] Do recommendations help align docs with reality?
+- [ ] Would the output work well for CI/automation?
 
-## Phase 5: Natural Language Help
+## Phase 5: Natural Language Help & Smart Routing
 
-### Step 10: Get Command Guidance
+### Step 10: Test Natural Language Assistance
 ```bash
-# Command to test:
-/vybe:discuss "I need to add OAuth integration to authentication, what's the best approach?"
+# Test various natural language requests:
+
+# 1. Scope adjustment
+/vybe:discuss "I only have 1 week instead of 2, what should I cut from Stage 1?"
+# Expected: Routes to mvp-extraction + scope-drift analysis
+
+# 2. Technical changes  
+/vybe:discuss "Should I use React instead of vanilla JavaScript for this project?"
+# Expected: Analyzes project context and provides architectural guidance
+
+# 3. Business alignment
+/vybe:discuss "Which features provide the most business value for an MVP?"
+# Expected: Routes to business-value analysis
+
+# 4. Documentation sync
+/vybe:discuss "My README is outdated compared to what I've built"
+# Expected: Routes to documentation + code-reality analysis
+```
+
+**Test Points:**
+- [ ] Does discuss understand different types of requests?
+- [ ] Does it route to appropriate audit modes automatically?
+- [ ] Are suggestions based on YOUR project context?
+- [ ] Do responses provide actionable next steps?
+
+### Step 11: Integration Verification
+```bash
+# Test the complete workflow integration:
+/vybe:discuss "Analyze overall project health and suggest next steps"
 
 # Expected behavior:
-# - Understands the technical request
-# - Analyzes current authentication specification
-# - Suggests specific Vybe commands to modify specs
-# - Provides implementation guidance
+# - Routes to multiple audit modes
+# - Provides comprehensive project analysis  
+# - Suggests specific command sequences
+# - Results are actionable and project-specific
+
+# Also test:
+/vybe:status                    # Progress tracking
+/vybe:audit                     # Quality assurance
+
+# Verify the three commands provide different but complementary information
 ```
 
 **Test Points:**
-- [ ] Does discuss understand natural language requests?
-- [ ] Are suggestions practical and actionable?
-- [ ] Does it reference existing project specifications?
-- [ ] Is the response helpful for solo developers?
-
-### Step 11: Final Project Review
-```bash
-# Commands to test:
-/vybe:status                    # Final progress check
-/vybe:audit                     # Final quality check
-
-# Expected behavior:
-# - Shows near-complete project state
-# - Minimal or zero quality issues
-# - Clear next steps for completion
-```
-
-**Test Points:**
-- [ ] Does final status provide clear completion picture?
-- [ ] Are remaining quality issues minimal?
-- [ ] Is the project ready for development/deployment?
+- [ ] Do the three commands (status/audit/discuss) have distinct purposes?
+- [ ] Does discuss provide comprehensive project analysis?
+- [ ] Are suggested next steps practical and achievable?
+- [ ] Does the full pipeline provide real developmental value?
 
 ---
 
@@ -755,11 +812,298 @@ The framework will analyze each project description, research appropriate techno
 
 ---
 
+---
+
+# Template-Based Tutorial
+
+**Scenario**: Building an AI workflow platform using the GenAI Launchpad template as architectural DNA.
+
+**Focus**: Template import, analysis, and template-driven development patterns.
+
+**Prerequisites**: Complete template-based setup above.
+
+---
+
+## Phase 1: Template Discovery and Import
+
+### Step 1: Import External Template
+```bash
+# Import a production template (using GenAI Launchpad example)
+/vybe:template import ./temp/genai-launchpad genai-stack
+
+# Expected behavior:
+# - Creates .vybe/templates/genai-stack/ directory
+# - Copies template source to source/ subdirectory
+# - Creates initial metadata.yml
+# - Template status: imported but not analyzed
+
+# Test alternative: GitHub import
+# /vybe:template import github.com/user/template-repo template-name
+```
+
+### Step 2: View Available Templates
+```bash
+/vybe:template list
+
+# Expected output:
+# - Shows genai-stack with "imported" status
+# - Shows source location and import date
+# - Indicates template needs generation
+# - Provides next steps
+```
+
+### Step 3: Validate Template Before Analysis
+```bash
+/vybe:template validate genai-stack
+
+# Expected output:
+# - ✅ Template directory exists
+# - ✅ Source directory exists with files
+# - ✅ Metadata file exists
+# - ⚠️ Template not yet analyzed
+# - Suggests running generate command
+```
+
+## Phase 2: AI Template Analysis and Generation
+
+### Step 4: Generate Template Structures
+```bash
+/vybe:template generate genai-stack
+
+# Expected AI behavior:
+# - Deep analysis of ALL template files
+# - Pattern extraction from actual code
+# - Architecture understanding from template structure
+# - Generate enforcement structures based on analysis
+# - Create Vybe-compatible documents from template
+# - No hardcoded assumptions - everything from template analysis
+
+# Expected output structures:
+# - .vybe/enforcement/ (structure rules, component patterns)
+# - .vybe/patterns/ (reusable code templates)
+# - .vybe/validation/ (compliance checking rules)
+# - .vybe/templates/genai-stack/mapping.yml (Vybe integration)
+# - .vybe/templates/genai-stack/generated/ (Vybe documents)
+```
+
+### Step 5: Validate Generated Template
+```bash
+/vybe:template validate genai-stack
+
+# Expected output:
+# - ✅ All validation checks pass
+# - ✅ Template analyzed and generated
+# - ✅ Enforcement structures exist
+# - ✅ Pattern templates exist
+# - ✅ Validation rules exist
+# - Template ready for project use
+```
+
+### Step 6: Review Template Analysis
+```bash
+/vybe:template list
+
+# Expected enhanced output:
+# - Shows genai-stack with "✅ Ready" status
+# - AI Analysis: ✓ Complete
+# - Shows detected languages, frameworks
+# - Shows complexity and template type
+# - Indicates template is ready for --template usage
+```
+
+## Phase 3: Template-Driven Project Initialization
+
+### Step 7: Initialize Project with Template DNA
+```bash
+/vybe:init "AI workflow orchestration platform for document processing and analysis" --template=genai-stack
+
+# Expected behavior:
+# - Template validation before proceeding
+# - Load template context (metadata, mapping, generated docs)
+# - Generate project docs using template as foundation
+# - Activate template enforcement structures
+# - Mark template as permanent project DNA
+# - Create .vybe/project/.template file with template info
+
+# Expected project structure:
+# - Standard .vybe/project/ documents enhanced with template patterns
+# - .vybe/enforcement/ rules active
+# - .vybe/patterns/ templates ready for use
+# - .vybe/validation/ rules enforcing template compliance
+```
+
+### Step 8: Verify Template Integration
+```bash
+# Check that template DNA is active
+ls -la .vybe/
+
+# Expected structure:
+# - enforcement/ (template rules)
+# - patterns/ (template code templates)
+# - validation/ (template compliance rules)
+# - project/.template (template DNA marker)
+# - templates/genai-stack/ (template storage)
+
+# Review project foundation
+cat .vybe/project/.template
+
+# Expected content:
+# - template: genai-stack
+# - template_set: [timestamp]
+# - template_immutable: true
+```
+
+## Phase 4: Template-Guided Development
+
+### Step 9: Template-Aware Feature Planning
+```bash
+/vybe:plan document-processing "Create workflow for processing and analyzing uploaded documents"
+
+# Expected AI behavior:
+# - Load template enforcement rules
+# - Use template patterns for feature structure
+# - Follow template's workflow/component organization
+# - Generate specs that align with template architecture
+# - Create tasks using template-specific patterns
+
+# Test that planning follows template structure:
+# - Should create features following template directory patterns
+# - Should use template's component/service organization
+# - Should reference template's workflow patterns
+```
+
+### Step 10: Template-Enforced Code Generation
+```bash
+/vybe:execute document-processing-task-1
+
+# Expected AI behavior:
+# - Load template patterns from .vybe/patterns/
+# - Use template code templates for generation
+# - Follow template enforcement rules for file placement
+# - Generate code matching template conventions
+# - Maintain template architectural consistency
+
+# Verify code follows template:
+# - Check file locations match template structure
+# - Check naming follows template conventions
+# - Check code patterns match template style
+```
+
+### Step 11: Template Compliance Validation
+```bash
+/vybe:audit
+
+# Expected AI behavior:
+# - Load template validation rules
+# - Check project structure against template requirements
+# - Validate naming conventions from template
+# - Verify import patterns match template
+# - Report any deviations from template standards
+
+# Expected output:
+# - Template compliance checking
+# - Structure validation against template rules
+# - Code pattern verification
+# - Any violations of template DNA reported
+```
+
+## Phase 5: Template DNA Immutability Testing
+
+### Step 12: Test Template Immutability
+```bash
+# Try to change template (should fail)
+/vybe:init "Same project" --template=different-template
+
+# Expected behavior:
+# - Detect existing project with template DNA
+# - Refuse to change template
+# - Explain template immutability
+# - Suggest migration approach if template change needed
+```
+
+### Step 13: Template-Guided Discussion
+```bash
+/vybe:discuss "How can I add real-time features to this workflow platform?"
+
+# Expected AI behavior:
+# - Consider template constraints and patterns
+# - Suggest solutions that work within template architecture
+# - Reference template's real-time capabilities if any
+# - Propose implementation following template patterns
+# - Maintain consistency with template DNA
+```
+
+## Phase 6: Template System Verification
+
+### Step 14: Complete Template Workflow Test
+```bash
+# Test complete development cycle with template
+/vybe:status          # Should show template-guided progress
+/vybe:plan stage-2    # Should follow template patterns
+/vybe:execute task-X  # Should use template code patterns
+/vybe:audit          # Should validate template compliance
+/vybe:release        # Should advance using template structure
+
+# Verify template DNA maintained throughout:
+# - All commands respect template patterns
+# - Generated code follows template standards
+# - Project structure remains template-compliant
+# - Template cannot be changed mid-project
+```
+
+### Step 15: Template Migration Scenario
+```bash
+# Test template migration guidance
+/vybe:discuss "This GenAI template is too complex, I want to switch to a simpler FastAPI template"
+
+# Expected AI behavior:
+# - Explain template immutability
+# - Suggest creating new project with different template
+# - Offer migration assistance strategy
+# - Explain trade-offs and considerations
+# - Provide step-by-step migration approach
+```
+
+---
+
+## Template Tutorial Success Criteria
+
+### Core Functionality ✅
+- [ ] Template import works from both local and GitHub sources
+- [ ] AI analysis generates intelligent enforcement structures
+- [ ] Generated structures are template-specific, not generic
+- [ ] Template integration with init works seamlessly
+- [ ] Template DNA becomes permanent project foundation
+
+### AI Intelligence ✅
+- [ ] AI reads and understands actual template architecture
+- [ ] Generated patterns match template's real code style
+- [ ] Enforcement rules reflect template's actual organization
+- [ ] No hardcoded assumptions - everything from template analysis
+- [ ] Template mapping connects to Vybe workflow logically
+
+### Enforcement Integration ✅  
+- [ ] All commands respect template patterns after init
+- [ ] Code generation uses template patterns
+- [ ] Validation checks template compliance
+- [ ] Template DNA maintained throughout development
+- [ ] Template immutability properly enforced
+
+### User Experience ✅
+- [ ] Template workflow is intuitive and clear
+- [ ] Error messages are helpful and specific
+- [ ] Template status and progress visible
+- [ ] Migration guidance provided when needed
+- [ ] Template benefits are obvious and valuable
+
+---
+
 **Ready to begin tutorial execution!**
 
-This tutorial provides two comprehensive paths for testing the entire Vybe framework:
+This tutorial provides three comprehensive paths for testing the entire Vybe framework:
 
+**🏗️ Template Tutorial** - 15 steps testing template import, AI analysis, and template-driven development
 **👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
 **👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
 
-Both tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
+All tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. The template tutorial adds comprehensive testing of AI-driven template analysis and architectural DNA enforcement. Any inconsistencies, unclear commands, or workflow issues should surface during execution.

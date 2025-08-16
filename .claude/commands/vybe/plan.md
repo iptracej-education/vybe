@@ -9,11 +9,18 @@ Create comprehensive specifications for individual features with mandatory proje
 
 ## Usage
 ```
-/vybe:plan [feature-name] [description] [--auto]
+/vybe:plan [stage-name] [options]
+/vybe:plan [feature-name] [description] [--auto]  # Legacy support
 ```
 
 ## Parameters
-- `feature-name`: Name of the feature (kebab-case required)
+
+### Stage-Based Planning (Recommended)
+- `stage-name`: Stage identifier (e.g., stage-1, stage-2, etc.)
+- `--modify "changes"`: Modify stage requirements (e.g., "Change: JavaScript to TypeScript")
+
+### Feature-Based Planning (Legacy)
+- `feature-name`: Name of the feature (kebab-case required)  
 - `description`: Natural language description of what to build or modify
 - `--auto`: Automated mode - Generate complete spec without approval gates
 

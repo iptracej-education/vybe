@@ -211,6 +211,12 @@ if [[ "$*" == *"--auto"* ]]; then
     echo "- Enhance backlog with research findings and industry insights"
     echo ""
     echo "RESULT: Same comprehensive quality, faster initial setup"
+    echo ""
+    echo "CRITICAL: Generate CLEAN MARKDOWN without any control characters or ANSI escape codes!"
+    echo "   - NO color codes, NO bold/italic terminal formatting"
+    echo "   - NO special characters like ^D, <F3>, ESC sequences"
+    echo "   - PURE markdown text only for compatibility with readers like glow"
+    echo ""
     echo "AI will generate intelligent backlog immediately, then enhance with research..."
     echo ""
     
@@ -230,7 +236,7 @@ if [[ "$*" == *"--auto"* ]]; then
 **Timeline**: 1-2 days
 **Business Value**: [User can accomplish basic goal]
 
-#### Tasks
+#### Task Overview
 - [ ] Task 1 for minimal outcome
 - [ ] Task 2 for minimal outcome
 - [ ] Task 3 for minimal outcome
@@ -246,7 +252,7 @@ if [[ "$*" == *"--auto"* ]]; then
 **Business Value**: [Better user experience]
 **Dependencies**: Requires Stage 1 completion
 
-#### Tasks
+#### Task Overview
 - [ ] Enhancement task 1
 - [ ] Enhancement task 2
 - [ ] Enhancement task 3
@@ -262,7 +268,7 @@ if [[ "$*" == *"--auto"* ]]; then
 **Business Value**: [Engaging user interface]
 **Dependencies**: Requires Stage 2 completion
 
-#### Tasks
+#### Task Overview
 - [ ] Visual task 1
 - [ ] Visual task 2
 - [ ] Visual task 3

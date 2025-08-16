@@ -13,7 +13,7 @@ Vybe is a framework for AI-driven software development that provides a spec stru
 ## Core Philosophy
 
 ### Principles
-1. **Incremental Outcome Delivery** - Each stage delivers working software in 1-3 days (baby steps approach)
+1. **Incremental Outcome Delivery** - Each stage delivers working units in 1-3 days (baby steps approach)
 2. **Code-Reality Alignment** - Bridge gap between documented intentions and actual implementation
 3. **Natural Language Scope Control** - Change project scope through conversational interface
 4. **Smart Analysis Routing** - Automatically route requests to specialized audit modes
@@ -21,6 +21,7 @@ Vybe is a framework for AI-driven software development that provides a spec stru
 6. **Learning-Driven Iteration** - Each completed stage improves planning for next stage
 7. **Zero Hardcoded Assumptions** - All analysis based on YOUR actual project
 8. **Professional Workflow** - Natural language interface + structured analysis output
+9. **Living Documents** - Documentation evolves naturally without approval ceremonies
 
 ### Key Innovations
 
@@ -46,25 +47,96 @@ Natural language requests automatically route to appropriate analysis:
 "sync docs with code" → documentation + code-reality
 ```
 
+#### 4. Living Documents Philosophy
+Documentation evolves naturally without approval ceremonies:
+- **Generate and Go**: Commands create starting point documents
+- **Edit Freely**: Users modify with any editor at any time
+- **AI-Assisted Changes**: `--modify` option for AI help with specific changes
+- **Consistency on Demand**: `/vybe:audit` checks alignment when needed
+- **No Gates**: No acceptance required, documents live and evolve
+
+## Context Loading & Enforcement Principles
+
+### Loading Hierarchy
+
+The Vybe framework enforces a strict context loading hierarchy to ensure consistent, informed AI decision-making across all commands.
+
+#### 🔴 Mandatory Context (ALWAYS LOADED)
+**`.vybe/project/` documents - loaded FIRST for EVERY command:**
+- `overview.md` - Business context, users, goals, constraints
+- `architecture.md` - Technology stack, patterns, system design
+- `conventions.md` - Coding standards, practices, team agreements
+- `outcomes.md` - Staged delivery roadmap and current stage
+
+These documents form the immutable foundation that guides every decision. No command executes without this context.
+
+#### 🟡 Conditional Context (LOADED AS NEEDED)
+
+**Template Enforcement (for code generation):**
+- `.vybe/enforcement/` - Active rules for structure and patterns
+- `.vybe/patterns/` - Reusable code templates
+- Loaded by: `/vybe:plan`, `/vybe:execute`
+
+**Validation Rules (for quality checks):**
+- `.vybe/validation/` - Compliance and quality rules
+- Loaded by: `/vybe:audit`
+
+**Feature Context (for specific work):**
+- `.vybe/features/[name]/` - Requirements, design, tasks
+- Loaded when working on specific feature
+
+### Enforcement Strategy
+
+1. **Pre-Command Validation**
+   - Verify project context exists
+   - Refuse execution without foundation documents
+   - Error: "Project context not found. Run /vybe:init first"
+
+2. **Context-Driven Decisions**
+   Every AI decision references:
+   - Business goals from `overview.md`
+   - Technical constraints from `architecture.md`
+   - Team standards from `conventions.md`
+   - Current stage from `outcomes.md`
+
+3. **Template DNA Enforcement**
+   When template is set:
+   - Template patterns become mandatory
+   - All code generation follows template
+   - Audit validates against template rules
+   - Template cannot be changed (immutable DNA)
+
+### Loading Order Importance
+
+```
+1. Project Context → Understand "why" and "what"
+2. Template Rules → Understand "how" 
+3. Feature Specs → Understand specific task
+4. Execute → Make informed decisions
+```
+
+This order ensures decisions build on solid foundations, maintaining consistency as projects grow.
+
 ## Framework Architecture
 
-### Command Structure (8 Core Commands)
+### Command Structure (9 Core Commands)
 ```
 /vybe:init [project-description]      # Initialize with staged outcome roadmap
+/vybe:template [action]                # Import and analyze external templates (NEW)
 /vybe:backlog [action]                # Outcome-grouped task management 
 /vybe:plan [feature-description]      # Create feature specifications 
 /vybe:execute [feature-task]          # Execute implementation with context
-/vybe:release [stage]                 # Mark stage complete, advance to next (NEW)
+/vybe:release [stage]                 # Mark stage complete, advance to next
 /vybe:status [scope]                  # Progress tracking with outcome progression
-/vybe:audit [mode]                    # Quality assurance + code-reality analysis (ENHANCED)
-/vybe:discuss [request]               # Natural language + smart audit routing (ENHANCED)
+/vybe:audit [mode]                    # Quality assurance + code-reality analysis
+/vybe:discuss [request]               # Natural language + smart audit routing
 ```
 
 ### Enhanced Command Workflow
 ```
-init → backlog → plan → execute → release → status → audit
-         ↑                           ↓
-         └── discuss (smart routing) ←┘
+template → init → backlog → plan → execute → release → status → audit
+    ↓              ↑                           ↓
+    └─ optional    └── discuss (smart routing) ←┘
 ```
 
 ### Future Extensibility
@@ -151,6 +223,104 @@ project/
 - **Progressive Enhancement**: Add custom documents only when needed
 - **Single Responsibility**: Each document focuses on one aspect
 - **YAGNI Principle**: Don't create documents until complexity demands it
+
+## Template System
+
+### Philosophy: Template as Architectural DNA
+
+Templates provide the architectural DNA that guides all development activities in a Vybe project. Once set during initialization, the template becomes permanent and enforces its patterns throughout the project lifecycle.
+
+### Key Principles
+
+1. **One Template Per Project** - Set once during `/vybe:init`, permanent thereafter
+2. **Template DNA is Immutable** - Cannot change template mid-project (requires migration)
+3. **Living Documents Within Template** - Vybe docs can evolve, but within template constraints
+4. **AI Analysis & Generation** - Templates are analyzed by AI to generate Vybe-compatible documents
+
+### Template Workflow
+
+1. **Import**: Bring external template into Vybe
+   ```bash
+   /vybe:template import github.com/fastapi/full-stack-fastapi-template fastapi-stack
+   ```
+
+2. **Generate**: AI analyzes and creates enforcement structures
+   ```bash
+   /vybe:template generate fastapi-stack
+   ```
+
+3. **Initialize**: Set template as project DNA
+   ```bash
+   /vybe:init "My API project" --template=fastapi-stack
+   ```
+
+4. **Enforce**: All commands follow template patterns automatically
+
+### Template-Generated Structures
+
+When a template is analyzed, the system creates comprehensive enforcement structures:
+
+```
+.vybe/
+├── templates/[name]/        # Template storage
+│   ├── metadata.yml        # Template information
+│   ├── mapping.yml         # Vybe concept mapping
+│   ├── source/            # Original template reference
+│   └── generated/         # Vybe documents
+│       ├── overview.md
+│       ├── architecture.md
+│       ├── conventions.md
+│       └── patterns.yml
+│
+├── enforcement/           # Active rules (what must be followed)
+│   ├── structure.yml     # Directory requirements
+│   ├── workflows.yml     # Workflow patterns
+│   ├── components.yml    # Component templates
+│   └── services.yml      # Service patterns
+│
+├── patterns/             # Code templates (how to build)
+│   ├── [pattern].template
+│   └── ...              # Component, service, API patterns
+│
+└── validation/          # Compliance rules (what to check)
+    ├── structure-rules.yml
+    ├── naming-rules.yml
+    ├── import-rules.yml
+    └── testing-rules.yml
+```
+
+### Template Enforcement
+
+#### During Planning (`/vybe:plan`)
+- Reads `.vybe/enforcement/structure.yml` for file placement
+- Creates specs following template patterns
+- Uses `.vybe/enforcement/components.yml` for component structure
+
+#### During Execution (`/vybe:execute`)
+- Uses `.vybe/patterns/*.template` for code generation
+- Follows `.vybe/enforcement/` rules for file placement
+- Maintains naming from `.vybe/validation/naming-rules.yml`
+
+#### During Audit (`/vybe:audit`)
+- Validates against `.vybe/validation/` rules
+- Checks structure matches `.vybe/enforcement/structure.yml`
+- Verifies patterns match template requirements
+
+### Template Immutability
+
+Once a template is set during project initialization:
+- Template becomes the project's permanent architectural foundation
+- All future development follows template patterns
+- To change templates requires creating a new project and migrating
+- Documents can evolve but must remain compatible with template structure
+
+### Popular Template Examples
+
+- **FastAPI Full Stack**: Production-ready API with authentication, database, Docker
+- **Next.js Enterprise**: Scalable frontend with TypeScript, testing, CI/CD
+- **Django REST**: Batteries-included backend with admin, ORM, authentication
+- **GenAI Launchpad**: AI workflow orchestration with LangChain, Celery
+- **Microservices**: Distributed architecture with service mesh, observability
 
 ## Context Enforcement & Session Handoff
 

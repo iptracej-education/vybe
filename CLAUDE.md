@@ -4,7 +4,7 @@
 
 ## Project Context
 
-The Vybe Framework provides a complete agile-like development workflow through 7 core commands that support both solo development and multi-member team coordination, with a key focus on incremental outcome delivery through staged development.
+The Vybe Framework provides a complete agile-like development workflow through 9 core commands that support both solo development and multi-member team coordination, with a key focus on incremental outcome delivery through staged development and template-driven architecture enforcement.
 
 ## Paths & File Locations
 
@@ -27,6 +27,15 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 - **Design**: `.vybe/features/[feature-name]/design.md`
 - **Tasks**: `.vybe/features/[feature-name]/tasks.md`
 
+### Template System Paths (NEW)
+- **Templates**: `.vybe/templates/`
+- **Template Storage**: `.vybe/templates/[template-name]/`
+- **Template Source**: `.vybe/templates/[template-name]/source/`
+- **Template Metadata**: `.vybe/templates/[template-name]/metadata.yml`
+- **Enforcement Rules**: `.vybe/enforcement/`
+- **Code Patterns**: `.vybe/patterns/`
+- **Validation Rules**: `.vybe/validation/`
+
 ### Coordination Paths
 - **Session Context**: `.vybe/context/`
 - **Session Files**: `.vybe/context/sessions/`
@@ -35,17 +44,22 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 
 ### File Reading Priority for Claude Code
 1. **ALWAYS READ FIRST**: `.vybe/project/overview.md`, `.vybe/project/architecture.md`, `.vybe/project/conventions.md`, `.vybe/project/outcomes.md`
-2. **BACKLOG MANAGEMENT**: `.vybe/backlog.md` 
-3. **FEATURE SPECS**: `.vybe/features/[feature-name]/requirements.md`, `.vybe/features/[feature-name]/design.md`, `.vybe/features/[feature-name]/tasks.md`
-4. **SESSION COORDINATION**: `.vybe/context/sessions/` files
-5. **USER PROJECT**: `src/`, `docs/`, `README.md`, language-specific files
+2. **TEMPLATE ENFORCEMENT**: `.vybe/enforcement/`, `.vybe/patterns/`, `.vybe/validation/` (if template exists)
+3. **BACKLOG MANAGEMENT**: `.vybe/backlog.md` 
+4. **FEATURE SPECS**: `.vybe/features/[feature-name]/requirements.md`, `.vybe/features/[feature-name]/design.md`, `.vybe/features/[feature-name]/tasks.md`
+5. **SESSION COORDINATION**: `.vybe/context/sessions/` files
+6. **USER PROJECT**: `src/`, `docs/`, `README.md`, language-specific files
 
 ### Core Framework Structure
-- **Commands**: `.claude/commands/vybe/` - 7 production-ready commands
+- **Commands**: `.claude/commands/vybe/` - 9 production-ready commands
 - **Hooks**: `.claude/hooks/` - Multi-session coordination system
 - **Project Foundation**: `.vybe/project/` - Overview, architecture, conventions (created by init)
 - **Features**: `.vybe/features/` - Individual feature specifications (created by plan)
 - **Backlog**: `.vybe/backlog.md` - Agile backlog with member assignments
+- **Templates**: `.vybe/templates/` - Template storage and analysis (NEW)
+- **Enforcement**: `.vybe/enforcement/` - Template pattern enforcement (NEW)
+- **Patterns**: `.vybe/patterns/` - Reusable code templates (NEW)
+- **Validation**: `.vybe/validation/` - Compliance checking rules (NEW)
 
 ## Development Philosophy
 
@@ -58,9 +72,15 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 ### Incremental Outcome-Driven Development
 - Projects broken into staged outcomes (baby steps approach)
 - First minimal outcome deliverable in 1-2 days
-- Each stage builds on previous, delivers working software
+- Each stage builds on previous, delivers working units
 - UI examples requested only when needed
 - Learning between stages improves next stage
+
+### Template-Driven Architecture
+- Templates provide permanent architectural DNA for projects
+- AI analyzes templates to extract patterns and conventions
+- All development follows template-enforced structures
+- Template immutable once set (requires migration to change)
 
 ### Agile-Like Methodology
 - Outcome-grouped backlog management with prioritization
@@ -68,12 +88,20 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 - Iterative stage development with continuous delivery
 - Quality assurance with gap detection
 
-## Core Workflow - 7 Commands
+## Core Workflow - 9 Commands
+
+### 0. Template System (NEW)
+**`/vybe:template [action]`** - Import and analyze external templates
+- `import [source] [name]` - Import template from GitHub or local path
+- `generate [name]` - AI analyzes template and creates enforcement structures
+- `list` - Show available templates
+- `validate [name]` - Check template completeness
 
 ### 1. Project Initialization
-**`/vybe:init [description]`** - Initialize project with staged outcome roadmap
+**`/vybe:init [description] [--template=name]`** - Initialize project with staged outcome roadmap
 - Captures first minimal outcome, final vision, and initial stages
 - Creates `.vybe/project/` with overview.md, architecture.md, conventions.md, outcomes.md
+- **NEW**: `--template=name` option sets project architectural DNA from template
 - Establishes incremental delivery context for all future decisions
 - Sets up git-based coordination infrastructure
 
@@ -154,7 +182,7 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 ### Core Principles
 1. **Staged outcomes first**: Always start with `/vybe:init` to define incremental stages
 2. **Outcome-driven**: Use `/vybe:backlog` for stage-grouped task management
-3. **Baby steps delivery**: Each stage delivers working software in 1-3 days
+3. **Baby steps delivery**: Each stage delivers working units in 1-3 days
 4. **Continuous progression**: Use `/vybe:release` to advance through stages
 5. **Member coordination**: Use `VYBE_MEMBER` for team development
 6. **Progress visibility**: Regular `/vybe:status` for tracking outcomes
@@ -171,7 +199,7 @@ The Vybe Framework provides a complete agile-like development workflow through 7
 2. **Stage Planning**: Initialize outcome-grouped backlog, assign stages to members  
 3. **Development**: Members execute current stage tasks with `VYBE_MEMBER` set
 4. **Stage Completion**: Use `/vybe:release` to mark stages complete and advance
-5. **Continuous Delivery**: Each stage ships working software with user value
+5. **Continuous Delivery**: Each stage ships working units with user value
 4. **Coordination**: Regular status checks and quality audits
 5. **Quality**: Continuous gap detection and fix automation
 

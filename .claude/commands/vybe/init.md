@@ -37,11 +37,12 @@ grep --version    # GNU grep or BSD grep
 
 ## Usage
 ```
-/vybe:init [project-description]
+/vybe:init [project-description] [--template=template-name]
 ```
 
 ## Parameters
 - `project-description`: Optional description for new projects or documentation updates
+- `--template=template-name`: Optional template to use as architectural DNA (NEW)
 
 ## Pre-Initialization Check
 
@@ -58,9 +59,76 @@ grep --version    # GNU grep or BSD grep
 - Conventions: !`[ -f ".vybe/project/conventions.md" ] && echo "[OK] EXISTS - will update patterns" || echo "[NEW] Will create"`
 - Backlog: !`[ -f ".vybe/backlog.md" ] && echo "[OK] EXISTS - will preserve" || echo "[NEW] Will create"`
 
+## Task 0: Parse Parameters & Template Validation
+
+### Template Parameter Processing
+```bash
+echo "[INIT] PARAMETER PROCESSING"
+echo "=========================="
+echo ""
+
+# Parse command line arguments
+project_description=""
+template_name=""
+
+# Process arguments
+for arg in "$@"; do
+    case $arg in
+        --template=*)
+            template_name="${arg#*=}"
+            shift
+            ;;
+        *)
+            if [ -z "$project_description" ]; then
+                project_description="$arg"
+            fi
+            shift
+            ;;
+    esac
+done
+
+echo "Project Description: ${project_description:-'Not provided'}"
+echo "Template: ${template_name:-'None'}"
+echo ""
+
+# Validate template if specified
+if [ -n "$template_name" ]; then
+    echo "[TEMPLATE] Validating template: $template_name"
+    
+    # Check if template exists
+    if [ ! -d ".vybe/templates/$template_name" ]; then
+        echo "[ERROR] Template '$template_name' not found"
+        echo "Available templates:"
+        ls .vybe/templates/ 2>/dev/null || echo "  No templates found"
+        echo ""
+        echo "Import a template first:"
+        echo "  /vybe:template import github.com/user/repo $template_name"
+        echo "  /vybe:template generate $template_name"
+        exit 1
+    fi
+    
+    # Check if template is analyzed/generated
+    if [ -f ".vybe/templates/$template_name/metadata.yml" ]; then
+        analyzed=$(grep "^analyzed:" ".vybe/templates/$template_name/metadata.yml" | sed 's/^analyzed: *//' | tr -d '"')
+        if [ "$analyzed" != "true" ]; then
+            echo "[ERROR] Template '$template_name' not yet analyzed"
+            echo "Generate template structures first:"
+            echo "  /vybe:template generate $template_name"
+            exit 1
+        fi
+        echo "[OK] Template validated and ready"
+    else
+        echo "[ERROR] Template '$template_name' corrupted (missing metadata)"
+        exit 1
+    fi
+    
+    echo ""
+fi
+```
+
 ## CRITICAL: Mandatory Context Loading
 
-### Task 0: Load Existing Project Context (if available)
+### Task 1: Load Existing Project Context (if available)
 ```bash
 echo "[CONTEXT] LOADING PROJECT CONTEXT"
 echo "=========================="
@@ -203,7 +271,7 @@ echo ""
 echo "[PHILOSOPHY] Baby Steps to Success"
 echo "=================================="
 echo "Real software development is incremental, not big bang."
-echo "Each outcome stage will deliver working software in 1-3 days."
+echo "Each outcome stage will deliver working units in 1-3 days."
 echo ""
 
 echo "[INTERACTIVE] Capturing Your Outcome Stages"
@@ -224,19 +292,20 @@ echo "   - Can be ambitious and complex"
 echo "   - Will be reached incrementally"
 echo ""
 echo "3. INITIAL OUTCOME STAGES (Flexible roadmap)"
-echo "   Example stages:"
+echo "   Example stages (each on its own line):"
 echo "   - Stage 1: Show data (Day 1)"
 echo "   - Stage 2: Add layout (Day 3)"
 echo "   - Stage 3: Add charts (Day 5)"
 echo "   - Stage 4: Make real-time (Day 8)"
 echo ""
 echo "AI MUST ask these questions interactively and capture responses."
+echo "IMPORTANT: Format each stage on its own line with proper line breaks."
 echo ""
 
 echo "[OUTCOME PRINCIPLES]"
 echo "==================="
 echo "- Each stage builds on the previous"
-echo "- Each stage delivers working software"
+echo "- Each stage delivers working units"
 echo "- Each stage provides user value"
 echo "- UI examples requested only when needed"
 echo "- Learning from each stage informs the next"
@@ -293,12 +362,56 @@ echo ""
 echo "[APPROACH] OUTCOME-DRIVEN INTELLIGENCE:"
 echo "- Phase 1 creates outcome roadmap immediately"
 echo "- Phase 2 enhances with stage-specific research"
-echo "- Focus on shipping working software quickly"
+echo "- Focus on shipping working units quickly"
 echo "- Adapt based on learnings from each stage"
 echo ""
 ```
 
-## Task 3: Generate Intelligent Project Documentation (Phase 1 - Fast)
+## Task 3: Load Template Context (if template specified)
+
+### Template-Based Foundation Loading
+```bash
+if [ -n "$template_name" ]; then
+    echo "[TEMPLATE] LOADING TEMPLATE CONTEXT"
+    echo "==================================="
+    echo ""
+    
+    template_dir=".vybe/templates/$template_name"
+    
+    # Load template metadata for context
+    if [ -f "$template_dir/metadata.yml" ]; then
+        echo "[TEMPLATE] Loading template metadata and analysis..."
+        # AI MUST read template metadata to understand:
+        # - Detected technologies and frameworks
+        # - Template type and complexity
+        # - Architectural patterns
+        # - Generated enforcement structures
+    fi
+    
+    # Load template-generated Vybe documents as foundation
+    if [ -d "$template_dir/generated" ]; then
+        echo "[TEMPLATE] Loading template-generated Vybe documents..."
+        # AI MUST read generated documents as starting point:
+        # - overview.md template (business context from template)
+        # - architecture.md template (tech stack from template)
+        # - conventions.md template (coding standards from template)
+    fi
+    
+    # Load template mapping for Vybe integration
+    if [ -f "$template_dir/mapping.yml" ]; then
+        echo "[TEMPLATE] Loading template-to-Vybe mapping..."
+        # AI MUST understand how template concepts map to Vybe workflow
+    fi
+    
+    echo "[OK] Template context loaded - will merge with project analysis"
+    echo ""
+else
+    echo "[NO TEMPLATE] Proceeding with standard project analysis"
+    echo ""
+fi
+```
+
+## Task 4: Generate Intelligent Project Documentation (Phase 1 - Fast)
 
 ### Generate outcomes.md with Staged Roadmap
 ```bash
@@ -308,10 +421,16 @@ echo ""
 echo "[AI] IMMEDIATE OUTCOMES CREATION (30 seconds):"
 echo "AI MUST create outcomes.md using captured staged outcomes:"
 echo ""
+echo "CRITICAL: Generate CLEAN MARKDOWN without any control characters or ANSI escape codes!"
+echo "   - NO color codes, NO bold/italic terminal formatting"
+echo "   - NO special characters like ^D, <F3>, ESC sequences"
+echo "   - PURE markdown text only for compatibility with readers like glow"
+echo ""
 echo "1. OUTCOME ROADMAP GENERATION:"
 echo "   - Document first minimal outcome clearly"
 echo "   - Map path from minimal to final vision"
 echo "   - Define success metrics for each stage"
+echo "   - FORMAT: Each stage on its own line with proper newlines"
 echo "   - Estimate realistic timelines (1-3 days per stage)"
 echo ""
 echo "2. STAGE DEFINITION:"
@@ -341,6 +460,7 @@ echo "=========================================================="
 echo ""
 echo "[AI] IMMEDIATE OVERVIEW CREATION (30 seconds):"
 echo "AI MUST create overview.md aligned with staged outcomes:"
+echo "CRITICAL: Generate CLEAN MARKDOWN - no control characters, ANSI codes, or terminal formatting!"
 echo ""
 echo "1. OUTCOME-ALIGNED PROJECT CONTEXT:"
 echo "   - Business context supporting incremental delivery"
@@ -375,6 +495,7 @@ echo "=========================================================="
 echo ""
 echo "[AI] IMMEDIATE ARCHITECTURE CREATION (30 seconds):"
 echo "AI MUST create intelligent architecture.md using project description analysis:"
+echo "CRITICAL: Generate CLEAN MARKDOWN - no control characters, ANSI codes, or terminal formatting!"
 echo ""
 echo "1. SMART TECHNOLOGY INFERENCE:"
 echo "   - Infer appropriate technology stack from project type and requirements"
@@ -409,6 +530,7 @@ echo "=============================================================="
 echo ""
 echo "[AI] IMMEDIATE CONVENTIONS CREATION (30 seconds):"
 echo "AI MUST create intelligent conventions.md using project type analysis:"
+echo "CRITICAL: Generate CLEAN MARKDOWN - no control characters, ANSI codes, or terminal formatting!"
 echo ""
 echo "1. SMART STANDARDS INFERENCE:"
 echo "   - Apply standard development practices for inferred technology stack"
@@ -457,7 +579,7 @@ echo "   - .vybe/project/conventions.md (standards for staged development)"
 echo ""
 echo "[INCREMENTAL] Baby steps approach enabled:"
 echo "   - Stage 1 can ship in 1-2 days"
-echo "   - Each stage delivers working software"
+echo "   - Each stage delivers working units"
 echo "   - Learning between stages improves next stage"
 echo "   - UI examples requested only when needed"
 echo ""
@@ -467,6 +589,49 @@ echo "   - Stage-specific technology patterns"
 echo "   - Success metrics refinement"
 echo "   - Architecture evolution strategies"
 echo ""
+
+# Template enforcement setup (if template specified)
+if [ -n "$template_name" ]; then
+    echo "[TEMPLATE] TEMPLATE DNA INTEGRATION"
+    echo "=================================="
+    echo ""
+    
+    # Copy template enforcement structures to active project
+    template_dir=".vybe/templates/$template_name"
+    
+    if [ -d "$template_dir/generated" ]; then
+        echo "[TEMPLATE] Activating template enforcement structures..."
+        
+        # Copy enforcement rules if they exist
+        if [ -d ".vybe/enforcement" ]; then
+            echo "   ✓ Template enforcement rules active"
+        fi
+        
+        # Copy pattern templates if they exist  
+        if [ -d ".vybe/patterns" ]; then
+            echo "   ✓ Template code patterns active"
+        fi
+        
+        # Copy validation rules if they exist
+        if [ -d ".vybe/validation" ]; then
+            echo "   ✓ Template validation rules active"
+        fi
+        
+        echo ""
+        echo "[TEMPLATE DNA] Template '$template_name' is now project DNA:"
+        echo "   - All future commands will follow template patterns"
+        echo "   - Code generation will use template structures"
+        echo "   - Validation will check template compliance"
+        echo "   - Template cannot be changed (permanent DNA)"
+        
+        # Mark template as active in project
+        echo "template: $template_name" >> .vybe/project/.template
+        echo "template_set: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> .vybe/project/.template
+        echo "template_immutable: true" >> .vybe/project/.template
+        
+        echo ""
+    fi
+fi
 echo "[NEXT] Ready for Stage 1 development:"
 echo "   - /vybe:backlog init - Generate tasks grouped by outcomes"
 echo "   - /vybe:plan stage-1 - Plan first minimal outcome"

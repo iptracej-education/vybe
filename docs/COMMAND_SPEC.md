@@ -59,16 +59,109 @@ init → backlog → plan → execute → release → status → audit
 - **Existing Project**: Analyze codebase and extract patterns
 - **Vybe Project**: Update documentation if needed
 
+### Context Loading
+
+**Mandatory (loaded first):**
+- None required (init creates these documents)
+
+**Template Support (if using --template):**
+- `.vybe/templates/[name]/generated/` - Pre-generated Vybe documents from template
+- Template patterns and rules to incorporate
+
 ### AI Behavior
 - Document what IS (existing) vs what WILL BE (new)
 - Extract real patterns from code, not assumptions
 - Respect existing conventions while suggesting improvements
+- If template specified, merge template patterns with project analysis
 
 ### Output Files
 - `.vybe/project/overview.md`
 - `.vybe/project/architecture.md`
 - `.vybe/project/conventions.md`
 - `.vybe/backlog.md` (empty, managed by backlog command)
+
+---
+
+## /vybe:template
+
+**Purpose**: Import and analyze external templates to provide architectural DNA for projects
+
+### Usage
+```bash
+/vybe:template [action] [params]
+
+# Examples
+/vybe:template import github.com/fastapi/full-stack-fastapi-template fastapi-stack
+/vybe:template import ./local-template my-template
+/vybe:template generate fastapi-stack
+/vybe:template list
+/vybe:template validate fastapi-stack
+```
+
+### Actions
+- **import [source] [name]**: Import template from GitHub URL or local path
+- **generate [name]**: AI analyzes template and generates Vybe structures
+- **list**: Show all imported templates with metadata
+- **validate [name]**: Check template completeness and readiness
+
+### Context Loading
+
+**For import action:**
+- No context required (standalone operation)
+
+**For generate action:**
+- Template source files from `.vybe/templates/[name]/source/`
+- Existing project context if available
+
+### Tasks
+
+#### Task 1: Import Template
+- Clone/copy template source to `.vybe/templates/[name]/source/`
+- Create metadata.yml with template information
+- Preserve directory structure and all files
+- Handle both GitHub URLs and local paths
+
+#### Task 2: Analyze Template (generate)
+- **Read comprehensively**: All source files, configs, documentation
+- **Extract patterns**: Directory structure, component organization, API design
+- **Identify conventions**: Naming, file organization, coding standards
+- **Map to Vybe**: Create mapping.yml linking template concepts to Vybe
+
+#### Task 3: Generate Enforcement Structures
+- **Create `.vybe/enforcement/`**: Active rules for structure and patterns
+- **Create `.vybe/patterns/`**: Reusable code templates
+- **Create `.vybe/validation/`**: Compliance checking rules
+- **Generate Vybe documents**: overview.md, architecture.md, conventions.md
+
+#### Task 4: Validate Template
+- Check all required structures exist
+- Verify pattern templates are complete
+- Validate enforcement rules are consistent
+- Ensure Vybe documents are generated
+
+### AI Behavior
+- **Deep analysis**: Understand template's architectural philosophy
+- **Pattern extraction**: Identify reusable components and structures
+- **Smart mapping**: Connect template concepts to Vybe workflow
+- **Comprehensive generation**: Create all enforcement structures
+
+### Output Structures
+```
+.vybe/templates/[name]/
+├── metadata.yml              # Template info
+├── mapping.yml               # Vybe concept mapping
+├── source/                   # Original template
+└── generated/                # Vybe documents
+
+.vybe/enforcement/            # Active rules
+.vybe/patterns/               # Code templates
+.vybe/validation/             # Compliance rules
+```
+
+### Integration Points
+- **To init**: Templates used during project initialization
+- **From init**: `--template` option triggers template usage
+- **To all commands**: Enforcement structures guide development
 
 ---
 
@@ -95,6 +188,17 @@ init → backlog → plan → execute → release → status → audit
 - **release [version]**: Group features into releases
 - **dependencies**: Map and visualize feature dependencies
 - **capacity**: Estimate effort and sprint capacity
+
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Staged roadmap
+
+**Feature Context:**
+- `.vybe/features/*/status.md` - Current feature progress
 
 ### Tasks
 
@@ -167,21 +271,45 @@ init → backlog → plan → execute → release → status → audit
 
 ## /vybe:plan
 
-**Purpose**: Create detailed specifications for individual features
+**Purpose**: Create detailed specifications using stage-based or feature-based planning
 
 ### Usage  
 ```bash
-/vybe:plan [feature-name] [description]
+# Stage-Based Planning (Recommended)
+/vybe:plan [stage-name] [options]
+/vybe:plan stage-1                    # Generate specs for Stage 1 features
+/vybe:plan stage-2 --modify "Change: JavaScript to TypeScript"
 
-# Examples
+# Feature-Based Planning (Legacy)
+/vybe:plan [feature-name] [description]
 /vybe:plan user-authentication "JWT-based auth with refresh tokens"
-/vybe:plan user-authentication "add OAuth2 provider support"  # Update existing
-/vybe:plan payment-integration "Stripe subscription billing"
 ```
 
 ### Parameters
+
+#### Stage-Based Planning
+- `stage-name`: Stage identifier (stage-1, stage-2, etc.)
+- `--modify "changes"`: AI-assisted modifications to stage requirements
+
+#### Feature-Based Planning (Legacy)
 - `feature-name`: Kebab-case feature identifier
 - `description`: What to build or modify for this feature
+
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Staged roadmap
+
+**Template Enforcement (if template exists):**
+- `.vybe/enforcement/structure.yml` - Directory requirements
+- `.vybe/enforcement/components.yml` - Component patterns
+- `.vybe/patterns/` - Reusable code templates
+
+**Feature Context (if updating):**
+- `.vybe/features/[name]/` - Existing specs
 
 ### Tasks
 
@@ -202,14 +330,14 @@ init → backlog → plan → execute → release → status → audit
 - Define user stories with acceptance criteria
 - Document functional and non-functional requirements
 - Include edge cases and error handling
-- **Approval gate**: Review before proceeding
+- Create living document for iterative refinement
 
 #### Task 4: Technical Design
 - Create detailed design.md
 - Define architecture and component design
 - Document API contracts and data models
 - Include security and performance considerations
-- **Approval gate**: Review before proceeding
+- Generate evolving technical foundation
 
 #### Task 5: Implementation Planning
 - Break down into discrete tasks (4-8 hours each)
@@ -266,6 +394,23 @@ init → backlog → plan → execute → release → status → audit
 - `--assign=@user`: Delegate to team member
 - `--agent=type`: Delegate to specialized AI agent
 - `--guide`: Collaborative guidance mode
+
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Current stage
+
+**Template Enforcement (if template exists):**
+- `.vybe/enforcement/` - Structure and pattern rules
+- `.vybe/patterns/` - Code templates to use
+
+**Feature Context:**
+- `.vybe/features/[name]/requirements.md` - What to build
+- `.vybe/features/[name]/design.md` - How to build
+- `.vybe/features/[name]/tasks.md` - Current task details
 
 ### Tasks
 
@@ -340,6 +485,18 @@ init → backlog → plan → execute → release → status → audit
 - `stage-name`: Optional. Specific stage to mark complete (defaults to current active stage)
 - `--force`: Skip validation checks and force stage completion
 
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Stage progression
+
+**Stage Context:**
+- `.vybe/backlog.md` - Current stage status
+- `.vybe/features/*/status.md` - Task completion for stage
+
 ### Tasks
 1. **Validate Stage Completion** - Check tasks done, deliverable working, tests passing
 2. **Capture Stage Learnings** - Document what worked, challenges, timeline accuracy
@@ -377,6 +534,18 @@ init → backlog → plan → execute → release → status → audit
 
 ### Parameters
 - `topic/question`: Natural language description of what to explore
+
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Current stage
+
+**Feature Context (as relevant):**
+- `.vybe/features/[relevant]/` - Specs for discussed features
+- `.vybe/backlog.md` - Project priorities
 
 ### Tasks
 
@@ -461,6 +630,19 @@ init → backlog → plan → execute → release → status → audit
 
 ### Parameters
 - `scope`: Optional focus area (feature-name, sprint, blockers, releases)
+
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Stage progression
+
+**Progress Context:**
+- `.vybe/backlog.md` - Overall project status
+- `.vybe/features/*/status.md` - All feature progress
+- `.vybe/features/*/tasks.md` - Task breakdown
 
 ### Tasks
 
@@ -596,6 +778,23 @@ init → backlog → plan → execute → release → status → audit
 - `--auto`: Automatically fix safe issues
 - `--interactive`: Step through issues one by one
 
+### Context Loading
+
+**Mandatory (loaded first):**
+- `.vybe/project/overview.md` - Business context
+- `.vybe/project/architecture.md` - Tech stack
+- `.vybe/project/conventions.md` - Standards
+- `.vybe/project/outcomes.md` - Business outcomes
+
+**Validation Context (if template exists):**
+- `.vybe/validation/` - Compliance rules
+- `.vybe/enforcement/` - Structure requirements
+
+**Full Project Context:**
+- `.vybe/backlog.md` - Project status
+- `.vybe/features/*/` - All feature specs
+- Source code files for analysis
+
 ### Tasks
 
 #### Task 1: Load Complete State
@@ -660,6 +859,13 @@ init → backlog → plan → execute → release → status → audit
 | audit → backlog | Feature gap identification | Analysis → missing features |
 
 ## Implementation Guidelines
+
+### Living Documents Philosophy
+- **Generate Starting Points**: Commands create initial documents as foundation
+- **Edit Freely**: Users can modify any document with any editor at any time
+- **AI-Assisted Changes**: Use `--modify` options for specific AI help
+- **No Approval Gates**: No acceptance ceremonies, documents evolve naturally
+- **Consistency Checking**: Use `/vybe:audit` when alignment verification needed
 
 ### Error Handling
 - Validate project initialization before most commands

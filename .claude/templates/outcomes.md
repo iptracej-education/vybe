@@ -4,7 +4,7 @@
 **First Minimal Outcome**: {{FIRST_OUTCOME}}
 **Final Vision**: {{FINAL_VISION}}
 **Current Stage**: {{CURRENT_STAGE}}
-**Delivery Model**: Incremental staged outcomes with working software at each stage
+**Delivery Model**: Incremental staged outcomes with working units at each stage
 
 ## Outcome Progression
 
@@ -17,7 +17,7 @@
 - {{STAGE_1_METRIC_1}}
 - {{STAGE_1_METRIC_2}}
 
-**Tasks**:
+**Task Overview**:
 {{STAGE_1_TASKS}}
 
 **Dependencies**: None - Initial stage
@@ -34,7 +34,7 @@
 - {{STAGE_2_METRIC_1}}
 - {{STAGE_2_METRIC_2}}
 
-**Tasks**:
+**Task Overview**:
 {{STAGE_2_TASKS}}
 
 **Dependencies**: Requires Stage 1 completion
@@ -51,7 +51,7 @@
 - {{STAGE_3_METRIC_1}}
 - {{STAGE_3_METRIC_2}}
 
-**Tasks**:
+**Task Overview**:
 {{STAGE_3_TASKS}}
 
 **Dependencies**: Requires Stage 2 completion
@@ -110,7 +110,7 @@ graph TD
 ## Outcome Evolution Strategy
 
 ### Principles
-1. **Ship Early, Ship Often**: Every stage delivers working software
+1. **Ship Early, Ship Often**: Every stage delivers working units
 2. **Learn and Adapt**: Each stage informs the next
 3. **Value First**: Focus on user value, not features
 4. **Incremental Complexity**: Start simple, add complexity
