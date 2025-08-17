@@ -20,12 +20,27 @@ For advanced users who want to test template-driven development, see the [**Temp
   - Create your GitHub repository before starting team tutorial
 
 ### Solo Tutorial Setup
+
+**Option A: Automated Installation (Recommended)**
 ```bash
 # 1. Create test environment
 mkdir vybe-solo-test && cd vybe-solo-test
 git init
 
-# 2. Install Vybe Framework
+# 2. Install Vybe Framework automatically
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh && cd ..
+
+# 3. Ready to start tutorial
+```
+
+**Option B: Manual Installation**
+```bash
+# 1. Create test environment
+mkdir vybe-solo-test && cd vybe-solo-test
+git init
+
+# 2. Install Vybe Framework manually
 git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 

@@ -33,19 +33,17 @@ Vybe brings structure to AI-assisted development through:
 mkdir my-project && cd my-project
 git init
 
-# 2. Install Vybe Framework
-git clone https://github.com/iptracej-education/vybe.git vybe-framework
-cp -r vybe-framework/.claude .
-rm -rf vybe-framework
+# 2. Install Vybe Framework (automated)
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh
 
-# 3. Enable session continuity (recommended)
-# Copy hooks and add to ~/.claude/settings.json
-# See docs/HANDS_ON_TUTORIAL.md for complete setup
-
-# 4. Initialize your project with staged outcomes
+# 3. Initialize your project with staged outcomes
 /vybe:init "Your project description"
 # This will interactively capture your first minimal outcome and final vision
 ```
+
+### Manual Installation
+If you prefer manual setup, see `docs/HANDS_ON_TUTORIAL.md` for step-by-step instructions.
 
 ### Multi-Member Team Setup
 ```bash
@@ -56,10 +54,9 @@ rm -rf vybe-framework
 git clone https://github.com/yourusername/your-project.git
 cd your-project
 
-# 3. Install Vybe Framework
-git clone https://github.com/iptracej-education/vybe.git vybe-framework
-cp -r vybe-framework/.claude .
-rm -rf vybe-framework
+# 3. Install Vybe Framework (automated)
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh && cd ..
 
 # 4. Initialize with staged outcomes and push to shared repository
 /vybe:init "Your project description"
