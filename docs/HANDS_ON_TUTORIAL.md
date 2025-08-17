@@ -104,12 +104,12 @@ claude
 # 4. PRESENT: Complete technology stack with explanations and alternatives
 # 5. ASK: User approval before creating .vybe/tech/ registry
 
-# Expected behavior after approval:
+# Expected behavior after approval (✅ NOW IMPLEMENTED):
 # - Creates .vybe/ directory structure
-# - Creates .vybe/tech/ technology registry with established stack
+# - Creates actual .vybe/tech/ technology registry with real technology decisions
 # - Generates foundation documents based on your description
 # - Sets up staged outcome roadmap
-# - Creates stage-by-stage tool installation plan
+# - Creates stage-by-stage tool installation plan with specific commands
 # - Creates living documents you can edit freely
 ```
 
@@ -118,7 +118,7 @@ claude
 - [ ] Does AI research and recommend appropriate missing components?
 - [ ] Does AI present complete technology stack with explanations?
 - [ ] Does AI ask for user approval before proceeding?
-- [ ] Does init create .vybe/tech/ registry with concrete technology decisions?
+- [ ] Does init create actual .vybe/tech/ registry with concrete technology decisions? ✅
 - [ ] Are the generated documents specific to the project description?
 - [ ] Is the project context comprehensive enough for decision-making?
 
@@ -269,8 +269,8 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 # Command to test:
 /vybe:execute stage-1-task-1
 
-# Enhanced execute behavior with technology coordination:
-# 1. LOADS technology stack from .vybe/tech/ registry (no more guessing!)
+# Enhanced execute behavior with technology coordination (✅ REGISTRY NOW AVAILABLE):
+# 1. LOADS technology stack from actual .vybe/tech/ registry (no more guessing!)
 # 2. INSTALLS Stage 1 tools progressively (React, Node.js, MongoDB tools)
 # 3. VALIDATES installation using configured validation commands
 # 4. CREATES project structure using established technology stack
@@ -293,7 +293,7 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 ```
 
 **Enhanced Test Points:**
-- [ ] Does execute load established technology stack from .vybe/tech/ registry?
+- [ ] Does execute load established technology stack from .vybe/tech/ registry? ✅
 - [ ] Does progressive tool installation follow stages.yml configuration?
 - [ ] Does execute create actual project structure on first task?
 - [ ] Are real code files generated following established tech stack (not just documentation)?

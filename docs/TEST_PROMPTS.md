@@ -43,8 +43,9 @@ When AI presents recommendations, approve them to continue.
 Then type: /vybe:backlog init
 Then type: /vybe:execute expense-tracker-task-1
 
-Expected automatic implementation:
-- Loads established technology stack from .vybe/tech/ registry
+Expected automatic implementation (✅ REGISTRY NOW CREATED):
+- Loads established technology stack from .vybe/tech/ registry (created by init)
+- Uses actual .vybe/tech/*.yml files with specific technology decisions
 - Installs Stage 1 tools: Python, FastAPI, SQLite, pytest (progressive installation)
 - Creates actual project structure following established tech stack
 - Generates real expense tracker code (models, API endpoints, database)
@@ -87,10 +88,11 @@ Then simulate two developers:
 - Set VYBE_MEMBER=dev-1 and type: /vybe:execute my-feature
 - Set VYBE_MEMBER=dev-2 and type: /vybe:execute my-feature
 
-Expected automatic multi-member implementation:
-- Both developers use SAME established technology stack from .vybe/tech/
+Expected automatic multi-member implementation (✅ REGISTRY NOW CREATED):
+- Both developers use SAME established technology stack from .vybe/tech/ (created by init)
+- Technology registry ensures no conflicts between team members
 - Dev-1: Installs backend tools (Node.js, Express, PostgreSQL), generates backend code
-- Dev-2: Installs frontend tools (React, testing library), generates frontend code
+- Dev-2: Installs frontend tools (React, testing library), generates frontend code  
 - Both use consistent testing frameworks from technology registry
 - Git coordination with separate branches per developer
 - Technology stack consistency enforced across team
@@ -114,18 +116,18 @@ Use Vybe Framework's template system with automatic implementation and technolog
 2. /vybe:template generate genai-launchpad  
 3. /vybe:init "AI workflow platform" --template=genai-launchpad
 
-Expected template-driven technology analysis:
+Expected template-driven technology analysis (✅ REGISTRY NOW CREATED):
 - AI extracts complete technology stack from genai-launchpad template source code
 - AI detects: Python, FastAPI, SQLAlchemy, Celery, Redis, PostgreSQL
-- AI creates .vybe/tech/ registry with template's exact technology choices
+- AI creates actual .vybe/tech/ registry with template's exact technology choices
 - AI generates stage-by-stage installation plan matching template requirements
 - NO user approval needed - template defines complete technology DNA
 
 4. /vybe:backlog init
 5. /vybe:execute implement-llm-executor
 
-Expected template-driven automatic implementation:
-- Loads template's technology stack from .vybe/tech/ registry (Python, FastAPI, etc.)
+Expected template-driven automatic implementation (✅ REGISTRY NOW CREATED):
+- Loads template's technology stack from actual .vybe/tech/ registry (Python, FastAPI, etc.)
 - Installs template-required tools progressively per stage
 - Creates project structure EXACTLY matching genai-launchpad template
 - Uses template's exact code patterns and conventions (FastAPI/LangChain)
