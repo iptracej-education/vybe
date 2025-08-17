@@ -2,6 +2,8 @@
 
 A comprehensive table-top exercise walking through all Vybe commands from project initialization to completion. This tutorial simulates real development workflows to test command consistency and identify potential improvements.
 
+**Enhanced Execute Capabilities**: The `/vybe:execute` command now includes automatic code generation, unit testing, and quality gates. Instead of just providing guidance, it creates actual runnable code, runs tests automatically, and enforces template patterns when available.
+
 **Note**: Commands use performance-optimized intelligent analysis. Phase 1 provides immediate intelligent setup (~30 seconds), while Phase 2 enhances with comprehensive research in background (2-5 minutes). You get fast feedback with same final quality.
 
 ## Prerequisites & Setup
@@ -250,28 +252,40 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 - [ ] Does it indicate which stage is currently active?
 - [ ] Does it provide clear next steps for Stage 1?
 
-### Step 7: Execute Stage 1 Implementation
+### Step 7: Execute Stage 1 Implementation with Automatic Code Generation
 ```bash
 # Command to test:
-/vybe:execute stage-1
+/vybe:execute stage-1-task-1
 
-# This starts implementing the detailed tasks from stage-1/tasks.md
-# Expected behavior:
-# - Loads complete project context (all foundation docs)
-# - Shows Stage 1 task list with current status
-# - Guides implementation of specific tasks
-# - Updates progress as tasks are completed
+# Enhanced execute behavior:
+# - Loads context hierarchy: Templates → Project docs → Feature specs
+# - Creates actual project structure if first task
+# - Generates real, runnable code using Write/Edit tools
+# - Creates unit tests automatically
+# - Runs tests and auto-fixes simple failures
+# - Validates against template patterns (if template exists)
 
-# Alternative: Execute specific tasks
-# /vybe:execute stage-1-task-1    # Execute first task
-# /vybe:execute stage-1-task-2    # Execute second task
+# Expected automatic implementation:
+# 1. Creates clean project structure (src/, tests/, package.json, etc.)
+# 2. Implements actual code files following conventions.md
+# 3. Generates comprehensive unit tests
+# 4. Runs tests automatically
+# 5. Fixes test failures up to 2 attempts
+# 6. Creates working, tested code
+
+# Alternative execution modes:
+# /vybe:execute stage-1-task-2    # Next specific task
+# /vybe:execute stage-1 --complete # Complete entire stage with integration tests
 ```
 
-**Test Points:**
-- [ ] Does execute load all project context before starting?
-- [ ] Are Stage 1 tasks shown with clear guidance?
-- [ ] Does the execution follow the detailed task breakdown?
-- [ ] Is progress tracked and updated appropriately?
+**Enhanced Test Points:**
+- [ ] Does execute create actual project structure on first task?
+- [ ] Are real code files generated (not just documentation)?
+- [ ] Does it follow template patterns if template exists?
+- [ ] Are unit tests created and run automatically?
+- [ ] Does auto-fix handle simple test failures?
+- [ ] Is working, runnable code produced?
+- [ ] Does stage completion show run instructions?
 
 ## Phase 4: Quality Assurance
 
@@ -592,7 +606,7 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 
 ## Phase 3: Multi-Session Development
 
-### Step 5: Simulate Multiple Developers
+### Step 5: Simulate Multiple Developers with Automatic Implementation
 **Note**: This requires the GitHub repository setup from [Multi-Member Tutorial Setup](#multi-member-tutorial-setup) above.
 
 ```bash
@@ -600,18 +614,37 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 export VYBE_MEMBER=dev-1
 /vybe:execute my-feature
 
+# Enhanced behavior for dev-1:
+# - Finds assigned backend tasks from backlog
+# - Creates backend code structure (APIs, services, models)
+# - Generates backend-specific tests
+# - Follows template patterns for backend (if template exists)
+# - Commits to dev-1 branch
+# - Coordinates with other team members
+
 # Terminal 2 (Frontend Developer):
 export VYBE_MEMBER=dev-2  
 /vybe:execute my-feature
+
+# Enhanced behavior for dev-2:
+# - Finds assigned frontend tasks from backlog
+# - Creates frontend code structure (components, pages, styles)
+# - Generates frontend-specific tests
+# - Follows template patterns for frontend (if template exists)
+# - Commits to dev-2 branch
+# - Coordinates with backend dev's work
 
 # Terminal 3 (Project Overview):
 /vybe:status members
 ```
 
-**Test Points:**
-- [ ] Does VYBE_MEMBER environment variable work smoothly?
-- [ ] Do multiple sessions coordinate properly?
-- [ ] Is member-specific work clearly identified?
+**Enhanced Test Points:**
+- [ ] Does each developer get role-specific code generation?
+- [ ] Are template patterns applied consistently across team members?
+- [ ] Do unit tests run automatically for each developer's code?
+- [ ] Is git branch coordination working between developers?
+- [ ] Does multi-member work coordinate without conflicts?
+- [ ] Are both developers generating actual runnable code?
 
 ### Step 6: Test Assignment Conflicts
 ```bash
@@ -957,21 +990,39 @@ cat .vybe/project/.template
 # - Should reference template's workflow patterns
 ```
 
-### Step 10: Template-Enforced Code Generation
+### Step 10: Template-Enforced Code Generation with Automatic Implementation
 ```bash
 /vybe:execute document-processing-task-1
 
-# Expected AI behavior:
-# - Load template patterns from .vybe/patterns/
-# - Use template code templates for generation
-# - Follow template enforcement rules for file placement
-# - Generate code matching template conventions
-# - Maintain template architectural consistency
+# Enhanced template-driven behavior:
+# - PRIORITY 1: Load template patterns (ENFORCE STRICTLY)
+# - Use exact code templates from .vybe/patterns/
+# - Follow .vybe/enforcement/ rules with NO deviations
+# - Generate actual runnable code following template
+# - Create template-compliant tests
+# - Validate against .vybe/validation/ rules
+# - Auto-fix template violations
 
-# Verify code follows template:
-# - Check file locations match template structure
-# - Check naming follows template conventions
-# - Check code patterns match template style
+# Expected automatic implementation:
+# 1. Creates project structure EXACTLY matching template
+# 2. Generates code using template's exact patterns
+# 3. Follows template's naming conventions strictly
+# 4. Includes template's required dependencies
+# 5. Uses template's error handling patterns
+# 6. Creates tests following template test patterns
+# 7. Validates template compliance automatically
+
+# Template compliance validation:
+# - Directory structure matches enforcement rules
+# - Code patterns match template exactly
+# - No unauthorized deviations allowed
+# - Template DNA remains immutable
+
+# Verify enhanced template enforcement:
+# - All files follow template patterns exactly
+# - Tests use template test structures
+# - Code passes template validation rules
+# - Application runs using template conventions
 ```
 
 ### Step 11: Template Compliance Validation
