@@ -447,7 +447,7 @@ echo "   - Plan for iteration based on feedback"
 echo ""
 
 # Copy template and let AI customize with captured outcomes
-cp .claude/templates/outcomes.md .vybe/project/outcomes.md
+cp .claude/templates/outcomes.template.md .vybe/project/outcomes.md
 
 echo "[OK] Outcome roadmap created - staged delivery plan ready"
 echo ""
@@ -482,7 +482,7 @@ echo "   - Ready for enhancement with learnings"
 echo ""
 
 # Copy template and let AI customize with outcome focus
-cp .claude/templates/overview.md .vybe/project/overview.md
+cp .claude/templates/overview.template.md .vybe/project/overview.md
 
 echo "[OK] Outcome-driven overview created - aligned with staged delivery"
 echo ""
@@ -517,7 +517,7 @@ echo "   - Create solid foundation ready for research enhancement"
 echo ""
 
 # Copy template and let AI customize immediately based on description analysis
-cp .claude/templates/architecture.md .vybe/project/architecture.md
+cp .claude/templates/architecture.template.md .vybe/project/architecture.md
 
 echo "[OK] Intelligent architecture created immediately - ready for research enhancement"
 echo ""
@@ -552,7 +552,7 @@ echo "   - Create solid foundation ready for research enhancement"
 echo ""
 
 # Copy template and let AI customize immediately based on project analysis
-cp .claude/templates/conventions.md .vybe/project/conventions.md
+cp .claude/templates/conventions.template.md .vybe/project/conventions.md
 
 echo "[OK] Intelligent conventions created immediately - ready for research enhancement"
 echo ""
