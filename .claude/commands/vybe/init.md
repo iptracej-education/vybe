@@ -320,7 +320,397 @@ echo "- Learning from each stage informs the next"
 echo ""
 ```
 
-## Task 2.6: Performance-Optimized Intelligent Analysis
+## Task 2.6: Intelligent Environment Configuration Tutorial
+
+### Interactive API Service Requirements Interview
+```bash
+echo "[ENV] INTELLIGENT ENVIRONMENT CONFIGURATION"
+echo "=========================================="
+echo ""
+
+# Detect existing environment files
+ENV_FILES_FOUND=()
+EXISTING_KEYS=()
+
+echo "[DETECTION] Scanning for existing environment configuration..."
+
+# Check for common environment file patterns
+if [ -f ".env" ]; then
+    ENV_FILES_FOUND+=(".env")
+    echo "[FOUND] .env (main environment file)"
+fi
+
+if [ -f ".env.example" ]; then
+    ENV_FILES_FOUND+=(".env.example")
+    echo "[FOUND] .env.example (template file)"
+fi
+
+if [ -f ".env.local" ]; then
+    ENV_FILES_FOUND+=(".env.local")
+    echo "[FOUND] .env.local (local development)"
+fi
+
+if [ -f ".env.development" ]; then
+    ENV_FILES_FOUND+=(".env.development")
+    echo "[FOUND] .env.development (development environment)"
+fi
+
+# Analyze existing environment configuration
+if [ ${#ENV_FILES_FOUND[@]} -gt 0 ]; then
+    echo ""
+    echo "[ANALYZE] Scanning existing environment configuration..."
+    
+    # Extract existing API keys from all env files
+    for env_file in "${ENV_FILES_FOUND[@]}"; do
+        if [[ "$env_file" == *.env* ]]; then
+            echo "[SCAN] Analyzing $env_file..."
+            content=$(cat "$env_file" 2>/dev/null || echo "")
+            
+            # Extract existing API keys
+            while IFS= read -r line; do
+                if [[ "$line" =~ ^[A-Z_]+.*=.* ]] && [[ "$line" =~ (API_KEY|SECRET|TOKEN|_KEY) ]]; then
+                    key_name=$(echo "$line" | cut -d'=' -f1)
+                    EXISTING_KEYS+=("$key_name")
+                    echo "[EXISTING] $key_name found"
+                fi
+            done <<< "$content"
+        fi
+    done
+fi
+
+echo ""
+
+# Initialize API services detection
+declare -A DETECTED_SERVICES
+declare -A REQUIRED_KEYS
+declare -A KEY_DESCRIPTIONS
+
+echo "[API-DETECTION] Intelligent API Service Detection"
+echo "================================================"
+echo ""
+
+# Function to detect API service usage
+echo "[SCAN] Analyzing project for API service requirements..."
+
+# OpenAI/Anthropic (AI Services)
+if grep -rq "openai\|OpenAI\|anthropic\|claude" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
+    DETECTED_SERVICES["openai"]="true"
+    REQUIRED_KEYS["OPENAI_API_KEY"]="OpenAI API access"
+    KEY_DESCRIPTIONS["OPENAI_API_KEY"]="Get from: https://platform.openai.com/api-keys"
+    echo "[DETECTED] OpenAI integration found in code"
+fi
+
+if grep -rq "anthropic\|claude" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
+    DETECTED_SERVICES["anthropic"]="true"
+    REQUIRED_KEYS["ANTHROPIC_API_KEY"]="Anthropic Claude API access"
+    KEY_DESCRIPTIONS["ANTHROPIC_API_KEY"]="Get from: https://console.anthropic.com/"
+    echo "[DETECTED] Anthropic Claude integration found in code"
+fi
+
+# Check template for AI integrations
+if [ -n "$template_name" ] && [ -d ".vybe/templates/$template_name" ]; then
+    echo "[TEMPLATE] Checking template for API integrations..."
+    if find ".vybe/templates/$template_name" -name "*.py" -o -name "*.js" -o -name "*.ts" | xargs grep -l "openai\|anthropic" 2>/dev/null; then
+        DETECTED_SERVICES["openai"]="true"
+        REQUIRED_KEYS["OPENAI_API_KEY"]="OpenAI API access (from template)"
+        KEY_DESCRIPTIONS["OPENAI_API_KEY"]="Get from: https://platform.openai.com/api-keys"
+        echo "[TEMPLATE] AI integration detected in template"
+    fi
+fi
+
+# Stripe (Payments)
+if grep -rq "stripe\|payment\|checkout" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
+    DETECTED_SERVICES["stripe"]="true"
+    REQUIRED_KEYS["STRIPE_SECRET_KEY"]="Stripe payment processing"
+    REQUIRED_KEYS["STRIPE_PUBLISHABLE_KEY"]="Stripe public key"
+    KEY_DESCRIPTIONS["STRIPE_SECRET_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
+    KEY_DESCRIPTIONS["STRIPE_PUBLISHABLE_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
+    echo "[DETECTED] Stripe payment integration found"
+fi
+
+# AWS Services
+if grep -rq "boto3\|aws\|s3\|lambda" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
+    DETECTED_SERVICES["aws"]="true"
+    REQUIRED_KEYS["AWS_ACCESS_KEY_ID"]="AWS service access"
+    REQUIRED_KEYS["AWS_SECRET_ACCESS_KEY"]="AWS secret key"
+    KEY_DESCRIPTIONS["AWS_ACCESS_KEY_ID"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
+    KEY_DESCRIPTIONS["AWS_SECRET_ACCESS_KEY"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
+    echo "[DETECTED] AWS integration found"
+fi
+
+# SendGrid (Email)
+if grep -rq "sendgrid\|email.*api" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
+    DETECTED_SERVICES["sendgrid"]="true"
+    REQUIRED_KEYS["SENDGRID_API_KEY"]="SendGrid email service"
+    KEY_DESCRIPTIONS["SENDGRID_API_KEY"]="Get from: https://app.sendgrid.com/settings/api_keys"
+    echo "[DETECTED] SendGrid email integration found"
+fi
+
+# Check business requirements for additional clues
+if [ -d ".vybe/project" ]; then
+    echo "[SCAN] Analyzing business requirements..."
+    if grep -riq "payment\|billing\|subscription" .vybe/project/ 2>/dev/null; then
+        if [ -z "${DETECTED_SERVICES["stripe"]}" ]; then
+            echo "[INFERRED] Payment functionality mentioned - may need payment service API keys"
+        fi
+    fi
+    
+    if grep -riq "email\|notification\|alerts" .vybe/project/ 2>/dev/null; then
+        if [ -z "${DETECTED_SERVICES["sendgrid"]}" ]; then
+            echo "[INFERRED] Email functionality mentioned - may need email service API keys"
+        fi
+    fi
+    
+    if grep -riq "ai\|chat\|assistant\|nlp\|weather.*api" .vybe/project/ 2>/dev/null || [[ "$project_description" =~ (ai|chat|assistant|nlp|weather) ]]; then
+        if [ -z "${DETECTED_SERVICES["openai"]}" ]; then
+            DETECTED_SERVICES["openai"]="true"
+            REQUIRED_KEYS["OPENAI_API_KEY"]="OpenAI API access (from requirements)"
+            KEY_DESCRIPTIONS["OPENAI_API_KEY"]="Get from: https://platform.openai.com/api-keys"
+            echo "[INFERRED] AI/Weather functionality mentioned - OpenAI API key required"
+        fi
+    fi
+fi
+
+echo ""
+
+# Smart environment configuration based on findings
+echo "[CONFIGURATION] Smart Environment Setup"
+echo "======================================"
+echo ""
+
+if [ ${#ENV_FILES_FOUND[@]} -gt 0 ]; then
+    echo "[EXISTING] Found existing environment files:"
+    printf '  - %s\n' "${ENV_FILES_FOUND[@]}"
+    echo ""
+    
+    if [ ${#EXISTING_KEYS[@]} -gt 0 ]; then
+        echo "[EXISTING] Current API keys:"
+        printf '  - %s\n' "${EXISTING_KEYS[@]}"
+        echo ""
+    fi
+    
+    echo "AI MUST ask user how to handle existing environment configuration:"
+    echo ""
+    echo "1. [RECOMMENDED] Use existing files and add missing services"
+    echo "2. Create new .env file (backup existing)"
+    echo "3. Manual configuration (skip automatic setup)"
+    echo ""
+    echo "AI MUST capture user preference and proceed accordingly"
+    echo ""
+else
+    echo "[NEW] No environment files found - will create new configuration"
+    echo ""
+fi
+
+# STEP 1: Detect environment configuration pattern
+echo "[ENV-DETECTION] Scanning for environment configuration patterns..."
+echo "================================================================"
+echo ""
+
+ENV_CONFIG_TYPE=""
+ENV_FILES_FOUND=()
+CONFIG_INSTRUCTIONS=""
+
+# Detect Python/Node.js: .env pattern
+if find . -maxdepth 2 -name ".env*" -type f 2>/dev/null | head -1 | grep -q .; then
+    ENV_CONFIG_TYPE="dotenv"
+    ENV_FILES_FOUND=($(find . -maxdepth 2 -name ".env*" -type f 2>/dev/null))
+    CONFIG_INSTRUCTIONS="1. Copy .env.example to .env\n2. Edit .env with real API keys\n3. Never commit .env to git"
+    echo "[DETECTED] DotEnv pattern (.env files) - Python/Node.js style"
+    echo "   Files found: ${ENV_FILES_FOUND[*]}"
+
+# Detect Go: config.yaml pattern
+elif find . -maxdepth 2 -name "config.y*ml" -type f 2>/dev/null | head -1 | grep -q .; then
+    ENV_CONFIG_TYPE="yaml_config"
+    ENV_FILES_FOUND=($(find . -maxdepth 2 -name "config.y*ml" -type f 2>/dev/null))
+    CONFIG_INSTRUCTIONS="1. Edit config.yaml with real API keys\n2. Use yaml key format\n3. Keep config.yaml in .gitignore"
+    echo "[DETECTED] YAML configuration pattern - Go/general style"
+    echo "   Files found: ${ENV_FILES_FOUND[*]}"
+
+# Detect Java: application.properties pattern
+elif find . -maxdepth 2 -name "application.*" -type f 2>/dev/null | head -1 | grep -q .; then
+    ENV_CONFIG_TYPE="spring_config"
+    ENV_FILES_FOUND=($(find . -maxdepth 2 -name "application.*" -type f 2>/dev/null))
+    CONFIG_INSTRUCTIONS="1. Edit application.properties with real API keys\n2. Use property format: key=value\n3. Keep secrets in application-local.properties"
+    echo "[DETECTED] Spring/Java configuration pattern"
+    echo "   Files found: ${ENV_FILES_FOUND[*]}"
+
+# No pattern detected - ask user
+else
+    echo "[UNKNOWN] No standard configuration pattern detected"
+    echo ""
+    echo "🤔 How does your project handle API keys and secrets?"
+    echo ""
+    echo "Common patterns:"
+    echo "1. .env files (Python/Node.js) - OPENAI_API_KEY=sk-..."
+    echo "2. config.yaml files (Go/general) - openai_api_key: sk-..."
+    echo "3. application.properties (Java) - openai.api.key=sk-..."
+    echo "4. Environment variables only"
+    echo "5. Custom configuration files"
+    echo ""
+    echo "💭 AI MUST ask user which pattern they prefer and register it"
+    ENV_CONFIG_TYPE="user_specified"
+    CONFIG_INSTRUCTIONS="User will specify their preferred API configuration method"
+fi
+
+# STEP 2: Register environment configuration in technology registry
+echo ""
+echo "[REGISTRY] Registering environment configuration..."
+
+cat > .vybe/tech/environment.yml << EOF
+# Environment Configuration Registry
+# Generated by vybe framework init command
+
+configuration:
+  type: "$ENV_CONFIG_TYPE"
+  detected_files: [$(printf '"%s",' "${ENV_FILES_FOUND[@]}" | sed 's/,$//')]
+  api_key_pattern: "API_KEY|SECRET|TOKEN|_KEY"
+  
+setup_instructions: |
+$CONFIG_INSTRUCTIONS
+
+language_patterns:
+  python:
+    method: "dotenv"
+    files: [".env.example", ".env"]
+    format: "OPENAI_API_KEY=sk-your-key-here"
+    package: "python-dotenv"
+    
+  nodejs:
+    method: "dotenv" 
+    files: [".env.example", ".env"]
+    format: "OPENAI_API_KEY=sk-your-key-here"
+    package: "dotenv"
+    
+  go:
+    method: "yaml_config"
+    files: ["config.yaml", "config.yml"]
+    format: "openai_api_key: sk-your-key-here"
+    package: "gopkg.in/yaml.v2"
+    
+  java:
+    method: "properties"
+    files: ["application.properties", "application.yml"]
+    format: "openai.api.key=sk-your-key-here"
+    framework: "Spring Boot"
+    
+  cpp:
+    method: "custom"
+    files: ["config.ini", "settings.conf"]
+    format: "varies by framework"
+    note: "Project-specific implementation"
+
+security_notes: |
+  - Never commit real API keys to git
+  - Add secrets files to .gitignore
+  - Use different keys for dev/staging/production
+  - Rotate keys regularly
+  - Monitor API usage for suspicious activity
+
+validation:
+  required_for_functional_app: true
+  business_impact: "Application cannot deliver value without real API keys"
+EOF
+
+echo "[OK] Environment configuration registered in .vybe/tech/environment.yml"
+
+# STEP 3: Handle API key requirements if detected
+if [ ${#REQUIRED_KEYS[@]} -gt 0 ]; then
+    echo ""
+    echo "[API-KEYS] 🔑 API SERVICE CONFIGURATION REQUIRED"
+    echo "=============================================="
+    echo ""
+    echo "The following API services were detected and are REQUIRED:"
+    echo ""
+    
+    for key in "${!REQUIRED_KEYS[@]}"; do
+        echo "  🔑 $key"
+        echo "     Purpose: ${REQUIRED_KEYS[$key]}"
+        echo "     Get from: ${KEY_DESCRIPTIONS[$key]}"
+        echo ""
+    done
+    
+    echo "📋 CONFIGURATION METHOD FOR YOUR PROJECT:"
+    case $ENV_CONFIG_TYPE in
+        "dotenv")
+            echo "   ✅ Uses .env files (Python/Node.js style)"
+            echo "   📁 Template will provide .env.example"
+            echo "   🔧 You'll copy .env.example to .env and add real keys"
+            ;;
+        "yaml_config")
+            echo "   ✅ Uses YAML configuration (Go style)"
+            echo "   📁 Edit config.yaml with your API keys"
+            echo "   🔧 Format: openai_api_key: \"sk-your-real-key\""
+            ;;
+        "spring_config")
+            echo "   ✅ Uses Spring properties (Java style)"
+            echo "   📁 Edit application.properties with your API keys"
+            echo "   🔧 Format: openai.api.key=sk-your-real-key"
+            ;;
+        "user_specified")
+            echo "   ❓ AI will ask you to specify your preferred method"
+            echo "   📝 Your choice will be registered for future use"
+            ;;
+        *)
+            echo "   ⚙️  Custom configuration method detected"
+            echo "   📝 Follow your project's existing pattern"
+            ;;
+    esac
+    
+    echo ""
+    echo "⚠️  CRITICAL: Without real API keys, your application will NOT function"
+    echo "💡 Business value requires real integrations, not mock implementations"
+    echo ""
+else
+    echo ""
+    echo "[INFO] ✅ No external API services detected"
+    echo "   Project can proceed without additional API configuration"
+    echo ""
+fi
+
+echo "[TUTORIAL] Interactive Service Requirements Interview"
+echo "=================================================="
+echo ""
+echo "AI MUST conduct intelligent interview to determine additional service needs:"
+echo ""
+echo "CORE INTERVIEW CATEGORIES:"
+echo ""
+echo "1. APPLICATION TYPE:"
+echo "   - What type of application are you building?"
+echo "   - Web app, mobile app, API service, data pipeline, etc.?"
+echo "   - Who are your users and how will they interact?"
+echo ""
+echo "2. AI & LANGUAGE SERVICES:"
+echo "   - Will your app use AI features? (chat, content generation, analysis)"
+echo "   - Which AI providers? (OpenAI, Anthropic, Google, local models)"
+echo ""
+echo "3. DATA & DATABASES:"
+echo "   - What data will you store? (user data, content, analytics)"
+echo "   - Database preferences? (PostgreSQL, MongoDB, Redis)"
+echo "   - External data sources? (APIs, webhooks, file imports)"
+echo ""
+echo "4. COMMUNICATION:"
+echo "   - Email features? (notifications, marketing, transactional)"
+echo "   - SMS/messaging? (alerts, 2FA, customer service)"
+echo ""
+echo "5. PAYMENT & COMMERCE:"
+echo "   - Will users pay for services? (subscriptions, one-time)"
+echo "   - Payment methods? (credit cards, digital wallets)"
+echo ""
+echo "6. DEPLOYMENT & INFRASTRUCTURE:"
+echo "   - Where will you deploy? (cloud provider preferences)"
+echo "   - Scaling expectations? (users, traffic, data volume)"
+echo ""
+echo "AI MUST:"
+echo "- Ask follow-up questions based on answers"
+echo "- Suggest services based on requirements"
+echo "- Explain why certain services are recommended"
+echo "- Create comprehensive environment configuration"
+echo "- Handle existing .env files intelligently"
+echo ""
+```
+
+## Task 2.7: Performance-Optimized Intelligent Analysis
 
 ### Two-Phase Approach: Fast Setup + Deep Research
 ```bash

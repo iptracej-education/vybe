@@ -1033,6 +1033,111 @@ else
     
     implementation_success=true
 fi
+
+# CRITICAL: API Key Configuration Check
+echo ""
+echo "[API-CONFIG] 🔑 API KEY CONFIGURATION CHECK"
+echo "=========================================="
+echo ""
+
+# Check if environment configuration exists
+if [ -f ".vybe/tech/environment.yml" ]; then
+    ENV_TYPE=$(grep -E "^[[:space:]]*type:" .vybe/tech/environment.yml | cut -d: -f2 | tr -d ' "')
+    
+    echo "[DETECTED] Environment configuration type: $ENV_TYPE"
+    echo ""
+    
+    # Provide language-specific guidance
+    case $ENV_TYPE in
+        "dotenv")
+            echo "✅ NEXT STEP: Configure your .env file"
+            echo "======================================"
+            echo ""
+            echo "Your project uses .env files for API key configuration:"
+            echo ""
+            echo "🔧 REQUIRED ACTIONS:"
+            echo "1. Copy template's .env.example to create your .env file:"
+            echo "   cp .env.example .env"
+            echo ""
+            echo "2. Edit .env file and replace ALL placeholder values:"
+            echo "   # Example format:"
+            echo "   OPENAI_API_KEY=sk-your-real-openai-key-here"
+            echo "   NEWS_API_KEY=your-real-news-api-key-here"
+            echo ""
+            echo "3. NEVER commit .env file to git (should be in .gitignore)"
+            ;;
+        "yaml_config")
+            echo "✅ NEXT STEP: Configure your config.yaml file"
+            echo "============================================"
+            echo ""
+            echo "Your project uses YAML files for configuration:"
+            echo ""
+            echo "🔧 REQUIRED ACTIONS:"
+            echo "1. Edit config.yaml with your real API keys:"
+            echo "   # Example format:"
+            echo "   openai_api_key: \"sk-your-real-key-here\""
+            echo "   news_api_key: \"your-real-news-key\""
+            echo ""
+            echo "2. Keep config.yaml in .gitignore"
+            ;;
+        "spring_config")
+            echo "✅ NEXT STEP: Configure your application.properties"
+            echo "================================================="
+            echo ""
+            echo "Your project uses Spring configuration:"
+            echo ""
+            echo "🔧 REQUIRED ACTIONS:"
+            echo "1. Edit application.properties with real API keys:"
+            echo "   # Example format:"
+            echo "   openai.api.key=sk-your-real-key-here"
+            echo "   news.api.key=your-real-news-key"
+            echo ""
+            echo "2. Use application-local.properties for secrets"
+            ;;
+        "user_specified")
+            echo "❓ CUSTOM CONFIGURATION METHOD"
+            echo "============================="
+            echo ""
+            echo "Configure API keys using your specified method"
+            echo "Follow the pattern you registered during init"
+            ;;
+        *)
+            echo "⚙️  CONFIGURATION REQUIRED"
+            echo "========================="
+            echo ""
+            echo "Configure API keys according to your project's pattern"
+            echo "Check .vybe/tech/environment.yml for details"
+            ;;
+    esac
+    
+    echo ""
+    echo "💡 WHY THIS MATTERS:"
+    echo "   - Without real API keys: Application will FAIL on core functionality"
+    echo "   - With real API keys: Application delivers actual business value"
+    echo "   - Mock implementations are forbidden by vybe framework policy"
+    echo ""
+    echo "🔍 HOW TO GET API KEYS:"
+    echo "   - OpenAI: https://platform.openai.com/api-keys"
+    echo "   - NewsAPI: https://newsapi.org/register"
+    echo "   - Check your project documentation for other services"
+    echo ""
+    echo "⏸️  EXECUTION PAUSED FOR API CONFIGURATION"
+    echo "=========================================="
+    echo ""
+    echo "🎯 NEXT STEPS:"
+    echo "1. Configure your API keys using the method above"
+    echo "2. Test API connectivity (make a test call)"
+    echo "3. Return to vybe framework to continue"
+    echo ""
+    echo "💬 When ready, run: /vybe:execute $task_id (to continue)"
+    echo "   or type 'continue' if in interactive mode"
+    echo ""
+    echo "🚫 Framework will NOT proceed until real API keys are configured"
+    echo ""
+else
+    echo "[INFO] No API configuration detected - proceeding with implementation"
+    echo ""
+fi
 ```
 
 ## Task 4: Enhanced Testing and Validation
