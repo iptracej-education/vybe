@@ -376,93 +376,159 @@ init → backlog → plan → execute → release → status → audit
 
 ## /vybe:execute
 
-**Purpose**: Execute implementation tasks with AI guidance and delegation
+**Purpose**: Execute implementation tasks with automatic code generation, testing, and multi-member coordination
+
+### Enhanced Capabilities
+- **Automatic code generation** following template patterns and project conventions
+- **Unit testing after each task** with auto-fix capabilities
+- **Integration testing at stage gates**
+- **Multi-member coordination** with role-based assignments
+- **Template enforcement** when available (highest priority)
+- **Intelligent error handling** with human alerts when needed
 
 ### Usage
 ```bash
 /vybe:execute [task-id] [options]
 
-# Examples
-/vybe:execute auth-task-1                    # Direct AI execution
-/vybe:execute auth-task-1 --assign=@alice    # Delegate to team member
-/vybe:execute auth-task-1 --agent=backend    # Delegate to AI agent
-/vybe:execute auth-task-1 --guide           # Collaborative execution
+# Examples - Automatic Implementation
+/vybe:execute auth-task-1                    # AI generates actual code + tests
+/vybe:execute my-feature                     # Role-aware execution (VYBE_MEMBER)
+/vybe:execute stage-1 --complete            # Complete stage with integration tests
+
+# Examples - Multi-Member Coordination
+export VYBE_MEMBER=dev-1
+/vybe:execute my-feature                     # Execute assigned work for dev-1
+/vybe:execute my-task --role=dev-2          # Execute as dev-2
+
+# Examples - Template-Driven
+/vybe:execute api-endpoint                  # Uses template patterns strictly
+/vybe:execute component --template-validate # Check template compliance
+
+# Examples - Error Handling
+/vybe:execute complex-task --auto-fix       # Auto-fix test failures
+/vybe:execute integration --alert-human     # Alert on complex issues
+
+# Legacy - Delegation (still supported)
+/vybe:execute auth-task-1 --assign=@alice   # Delegate to team member
+/vybe:execute auth-task-1 --guide          # Collaborative execution
 ```
 
 ### Parameters
-- `task-id`: Specific task from feature tasks.md
-- `--assign=@user`: Delegate to team member
-- `--agent=type`: Delegate to specialized AI agent
-- `--guide`: Collaborative guidance mode
+- `task-id`: Specific task from feature tasks.md OR `my-feature`/`my-task` for role-aware
+- `--role=dev-N`: Specify developer role (overrides VYBE_MEMBER)
+- `--complete`: Mark stage complete with integration testing
+- `--auto-fix`: Automatically fix simple test failures
+- `--alert-human`: Alert human for complex issues (don't auto-fix)
+- `--template-validate`: Extra validation against template compliance
+- `--assign=@user`: [Legacy] Delegate to team member
+- `--guide`: [Legacy] Collaborative guidance mode
 
-### Context Loading
+### Context Loading Hierarchy
 
-**Mandatory (loaded first):**
-- `.vybe/project/overview.md` - Business context
-- `.vybe/project/architecture.md` - Tech stack
-- `.vybe/project/conventions.md` - Standards
-- `.vybe/project/outcomes.md` - Current stage
+**PRIORITY 1: Template Enforcement (if template exists) - HIGHEST PRIORITY:**
+- `.vybe/project/.template` - Check if project uses template
+- `.vybe/enforcement/` - Structure and pattern rules (ENFORCE STRICTLY)
+- `.vybe/patterns/` - Code generation templates (USE EXACTLY)
+- `.vybe/validation/` - Compliance rules (VALIDATE AGAINST)
 
-**Template Enforcement (if template exists):**
-- `.vybe/enforcement/` - Structure and pattern rules
-- `.vybe/patterns/` - Code templates to use
+**PRIORITY 2: Project Documents (mandatory) - SECOND PRIORITY:**
+- `.vybe/project/overview.md` - Business context and goals
+- `.vybe/project/architecture.md` - Technology stack and patterns
+- `.vybe/project/conventions.md` - Coding standards and practices
+- `.vybe/project/outcomes.md` - Current stage and delivery roadmap
 
-**Feature Context:**
-- `.vybe/features/[name]/requirements.md` - What to build
-- `.vybe/features/[name]/design.md` - How to build
-- `.vybe/features/[name]/tasks.md` - Current task details
+**PRIORITY 3: Feature Context - THIRD PRIORITY:**
+- `.vybe/features/[name]/requirements.md` - What to build (acceptance criteria)
+- `.vybe/features/[name]/design.md` - How to build (technical approach)
+- `.vybe/features/[name]/tasks.md` - Current task details and dependencies
 
-### Tasks
+**Multi-Member Context:**
+- `.vybe/backlog.md` - Team assignments and role-based work
+- `VYBE_MEMBER` environment variable - Current developer role
 
-#### Task 1: Load Context
-- Load all project documents (mandatory)
-- Load feature specifications for context
-- Read current task from tasks.md
-- Check task dependencies and prerequisites
+### Enhanced Tasks
 
-#### Task 2: Determine Execution Mode
-- **Direct execution**: AI implements the task
-- **Delegation**: Assign to human or AI agent
-- **Collaboration**: Guide human implementation
-- **Validation**: Check if task is ready to execute
+#### Task 1: Load Context with Template Priority
+- **TEMPLATE CHECK**: Load template patterns if project uses template
+- **PROJECT DOCS**: Load all mandatory project documents
+- **FEATURE SPECS**: Load feature specifications for context
+- **MULTI-MEMBER**: Check role assignments and team coordination
+- **TASK DETAILS**: Read current task from tasks.md and dependencies
 
-#### Task 3: Execute or Delegate
-- **Direct**: Implement following project conventions
-- **Delegate**: Create detailed brief with context
-- **Guide**: Provide step-by-step assistance
-- **Track**: Update status and dependencies
+#### Task 2: Determine Project Structure
+- **Template Structure**: Use template-defined structure exactly (NO deviations)
+- **Architecture Structure**: Follow specified technology stack and patterns
+- **Intelligent Structure**: Determine based on task requirements (last resort)
+- **First Task Setup**: Create clean project structure if this is first task
 
-#### Task 4: Validation & Updates
-- Run tests if available
-- Check against acceptance criteria
-- Update task status in status.md
-- Identify any blockers or discoveries
+#### Task 3: Execute Implementation
+- **Template-Driven Code**: Use exact patterns from `.vybe/patterns/`
+- **Document-Driven Code**: Follow `architecture.md` and `conventions.md`
+- **Intelligent Code**: Apply best practices for detected project type
+- **Multi-Member Coordination**: Respect role assignments and branch management
+- **ACTUAL CODE GENERATION**: Create real, runnable files using Write/Edit tools
 
-### Execution Modes
+#### Task 4: Unit Testing
+- **Test Creation**: Generate comprehensive unit tests for implemented code
+- **Template Test Patterns**: Use template test structures if available
+- **Auto Execution**: Run tests immediately after implementation
+- **Auto-Fix**: Handle simple test failures automatically
+- **Human Alert**: Escalate complex issues to human attention
 
-#### Direct Execution
-- Follow existing code patterns
-- Implement according to design.md
-- Create/modify files maintaining consistency
-- Write tests for new functionality
+#### Task 5: Git Coordination
+- **Branch Management**: Create/switch to feature branches for team coordination
+- **Session Tracking**: Track multi-session development work
+- **Conflict Detection**: Handle merge conflicts and coordination issues
+- **Tested Commits**: Only commit code that passes tests
 
-#### Delegation Features
-- **Smart assignment**: Match skills to task requirements
-- **Context preservation**: Full briefing with specifications
-- **Progress tracking**: Monitor delegated work
-- **Review integration**: Code review and quality checks
+#### Task 6: Stage Gate Integration (if stage complete)
+- **Integration Tests**: Run end-to-end and integration test suites
+- **Requirements Validation**: Verify all acceptance criteria are met
+- **Template Compliance**: Ensure no pattern violations occurred
+- **Run Instructions**: Provide clear instructions for starting/testing application
+- **Demo Commands**: Show specific commands to test the working software
 
-#### Collaborative Mode
-- **Step-by-step guidance**: Break down complex tasks
-- **Code suggestions**: Provide implementation hints
-- **Problem solving**: Help with technical decisions
-- **Quality assurance**: Review work in progress
+### Enhanced Execution Modes
 
-### AI Behavior
-- **Pattern following**: Consistent with project conventions
-- **Quality focused**: Meet acceptance criteria
-- **Documentation**: Update progress automatically
-- **Problem identification**: Flag issues for discussion
+#### Automatic Implementation (Default)
+- **Template Enforcement**: Strictly follow template patterns when available
+- **Code Generation**: Create actual runnable code using Write/Edit tools
+- **Pattern Consistency**: Follow existing code patterns and conventions
+- **Test Integration**: Include unit tests with every implementation
+- **Quality Gates**: No progression without passing tests
+
+#### Multi-Member Coordination
+- **Role-Based Work**: Execute tasks assigned to specific team members
+- **Branch Management**: Coordinate work across multiple developer sessions
+- **Conflict Resolution**: Handle merge conflicts and work coordination
+- **Progress Tracking**: Track individual and team progress
+
+#### Template-Driven Development
+- **Pattern Enforcement**: Never deviate from template structures
+- **Code Templates**: Use exact patterns from `.vybe/patterns/`
+- **Structure Compliance**: Follow `.vybe/enforcement/` rules strictly
+- **Validation**: Check against `.vybe/validation/` rules
+
+#### Error Handling & Quality
+- **Auto-Fix Mode**: Automatically fix simple test failures
+- **Human Alert Mode**: Escalate complex issues for human intervention
+- **Integration Testing**: Run comprehensive tests at stage gates
+- **Acceptance Validation**: Verify all requirements are met
+
+#### Legacy Modes (Still Supported)
+- **Delegation**: Assign tasks to team members or AI agents
+- **Collaborative**: Step-by-step guidance for complex implementations
+- **Review Integration**: Code review and quality check workflows
+
+### Enhanced AI Behavior
+- **Template Law**: Never violate template patterns (highest priority)
+- **Real Code Creation**: Generate actual runnable code, not documentation
+- **Automatic Testing**: Create and run tests for every implementation
+- **Quality Enforcement**: No progression without passing quality gates
+- **Multi-Member Awareness**: Coordinate with team assignments and roles
+- **Intelligent Fallback**: Use smart defaults only when patterns unspecified
+- **Error Recovery**: Auto-fix simple issues, escalate complex ones
+- **Stage Gate Validation**: Comprehensive testing at completion milestones
 
 ### Integration Points
 - **From plan**: Execute well-specified tasks

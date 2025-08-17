@@ -596,58 +596,85 @@ The Vybe framework leverages the existing hook system (`.claude/hooks/README.md`
 - **Reactive guidance** - Responds to actual development challenges, not theoretical planning
 
 ### /vybe:execute
-**Purpose**: Execute or delegate implementation tasks with AI guidance
+**Purpose**: Execute implementation tasks with automatic code generation, testing, and multi-member coordination
+
+**Enhanced Capabilities**:
+- **Automatic code generation** following template patterns and project conventions
+- **Unit testing after each task** with auto-fix capabilities
+- **Integration testing at stage gates** 
+- **Multi-member coordination** with role-based assignments
+- **Template enforcement** when available (highest priority)
+- **Intelligent error handling** with human alerts when needed
 
 **Tasks**:
-1. **Task: Load Full Context**
-   - Load all project documents (mandatory)
-   - Load feature specifications
-   - Read current task from tasks.md
-   - Check task dependencies in status.md
+1. **Task: Load Full Context with Template Priority**
+   - **PRIORITY 1**: Load template patterns if project uses template (ENFORCE STRICTLY)
+     - `.vybe/enforcement/` - Structure and component patterns
+     - `.vybe/patterns/` - Code generation templates
+     - `.vybe/validation/` - Compliance rules
+   - **PRIORITY 2**: Load project documents (mandatory)
+     - `overview.md`, `architecture.md`, `conventions.md`, `outcomes.md`
+   - **PRIORITY 3**: Load feature specifications
+     - `requirements.md`, `design.md`, `tasks.md`
+   - Check multi-member assignments and role-based work
 
-2. **Task: Determine Execution Mode**
-   - **Direct execution**: AI implements the task
-   - **Delegation**: Assign to team member or specialized agent
-   - **Collaboration**: Guide human implementation
-   - Analyze task complexity and skill requirements
+2. **Task: Determine Project Structure**
+   - **If template exists**: Use template-defined structure exactly (NO deviations)
+   - **If architecture.md exists**: Follow specified technology stack and patterns
+   - **If neither**: Intelligently determine based on task requirements
+   - Create clean project structure on first task execution
 
-3. **Task: Execute or Delegate**
-   - **If direct execution**:
-     - Scan relevant code files and understand existing patterns
-     - Implement according to design.md and project conventions
-     - Create/modify necessary files maintaining consistency
-   - **If delegation**:
-     - Identify appropriate assignee based on task type and skills
-     - Generate detailed task brief with context and requirements
-     - Set up tracking and notification preferences
-     - Update status.md with assignment information
+3. **Task: Execute Implementation**
+   - **Template-driven**: Use exact code patterns from `.vybe/patterns/`
+   - **Document-driven**: Follow `architecture.md` and `conventions.md`
+   - **Intelligent**: Apply best practices for detected project type
+   - **Generate actual code files** using Write/Edit tools
+   - **Follow role assignments** for multi-member coordination
 
-4. **Task: Validate and Track**
-   - **Direct execution**: Run tests, check acceptance criteria
-   - **Delegation**: Set up progress tracking and check-ins
-   - Document any deviations or discoveries
-   - Update task dependencies and status
+4. **Task: Unit Testing**
+   - Create comprehensive unit tests for implemented code
+   - Use template test patterns if available
+   - Follow project test conventions
+   - **Run tests automatically** after implementation
+   - **Auto-fix simple failures** or alert human for complex issues
+
+5. **Task: Git Coordination**
+   - Create feature branches for team coordination
+   - Track multi-session development
+   - Handle merge conflicts and coordination
+   - Commit tested code only
+
+6. **Task: Stage Gate Integration Testing**
+   - **At stage completion**: Run integration tests
+   - **Validate requirements**: Check all acceptance criteria met
+   - **Template compliance**: Ensure no pattern violations
+   - **Show run instructions**: How to start and test the application
 
 **Execution Modes**:
 ```bash
-# Direct AI execution (default)
+# Direct AI execution with automatic implementation (default)
 /vybe:execute user-auth-task-3
 
-# Delegate to team member
+# Multi-member coordination
+export VYBE_MEMBER=dev-1
+/vybe:execute my-feature                     # Execute assigned feature for dev-1
+/vybe:execute my-task --role=dev-2          # Execute as dev-2
+
+# Stage completion with integration testing
+/vybe:execute stage-1 --complete            # Complete stage with integration tests
+/vybe:execute implement-auth --stage-gate   # Run stage gate validation
+
+# Template-driven development
+/vybe:execute api-endpoint                  # Uses template patterns if available
+/vybe:execute frontend-component           # Follows template structure strictly
+
+# Error handling modes
+/vybe:execute complex-feature --auto-fix    # Auto-fix test failures
+/vybe:execute integration-task --alert-human # Alert on complex failures
+
+# Legacy delegation modes (still supported)
 /vybe:execute user-auth-task-3 --assign=@alice
-/vybe:execute user-auth-task-3 --assign=@alice --notify=daily
-
-# Delegate to specialized AI agent
-/vybe:execute user-auth-task-3 --agent=security-specialist
-/vybe:execute user-auth-task-3 --agent=backend-expert --review-required
-
-# Collaborative execution
 /vybe:execute user-auth-task-3 --guide
-/vybe:execute user-auth-task-3 --pair-program
-
-# Bulk delegation
-/vybe:execute user-auth-tasks-1-to-3 --assign=@alice
-/vybe:execute testing-tasks --team=qa-team
 ```
 
 **Delegation Features**:
@@ -657,18 +684,24 @@ The Vybe framework leverages the existing hook system (`.claude/hooks/README.md`
 - **Notification system**: Automated check-ins and progress reports
 - **Skill matching**: Match tasks to team member expertise
 
-**Process**:
-1. Load feature specifications and task details
-2. Understand current codebase state
-3. Implement task following project conventions
-4. Run tests if available
-5. Update task status in status.md
+**Enhanced Process**:
+1. **Context Loading**: Templates → Project docs → Feature specs (strict hierarchy)
+2. **Structure Setup**: Create project structure if first task (template-driven)
+3. **Implementation**: Generate actual code files following patterns
+4. **Unit Testing**: Create and run tests automatically
+5. **Auto-Fix**: Handle test failures intelligently or alert human
+6. **Git Coordination**: Branch management and team coordination
+7. **Stage Gates**: Integration testing at stage completion
+8. **Run Instructions**: Show how to start and test application
 
 **AI Behavior**:
-- Select appropriate implementation approach
-- Follow existing code patterns
-- Handle multi-file changes coherently
-- Validate implementation against requirements
+- **Template Enforcement**: Never deviate from template patterns when available
+- **Automatic Testing**: Every task includes test creation and execution
+- **Quality Gates**: No progression without passing tests
+- **Multi-Member Awareness**: Respect role assignments and coordinate work
+- **Intelligent Defaults**: Only when templates/docs don't specify
+- **Real Code Generation**: Create actual runnable code, not documentation
+- **Error Recovery**: Auto-fix simple issues, escalate complex ones
 
 ### /vybe:audit
 **Purpose**: Scan project for gaps, duplicates, inconsistencies, and quality issues
