@@ -421,52 +421,123 @@ if [ ! -d ".vybe/tech" ]; then
     exit 1
 fi
 
-echo "[LOADING] Loading established technology stack..."
+# CRITICAL: Read and apply technology registry (language-agnostic)
+echo "[TECH-STACK] INTELLIGENT TECHNOLOGY DETECTION"
+echo "============================================="
+echo ""
 
-# Load technology registry
-tech_loaded=false
+# Initialize UNIVERSAL technology variables (NO language assumptions)
+LANGUAGE_NAME=""
+LANGUAGE_RUNNER=""
+PACKAGE_TOOL=""
+PACKAGE_INSTALL=""
+PACKAGE_ADD=""
+TEST_RUNNER=""
+BUILD_COMMAND=""
+SERVER_RUNNER=""
+ENV_SETUP=""
+OPENAI_REQUIRED=false
+
+# CRITICAL: Extract language and commands from technology registry
 if [ -f ".vybe/tech/languages.yml" ]; then
-    echo "[OK] Loaded: languages.yml (primary language and tooling)"
-    tech_loaded=true
-fi
-
-if [ -f ".vybe/tech/frameworks.yml" ]; then
-    echo "[OK] Loaded: frameworks.yml (web/api/database frameworks)"
-fi
-
-if [ -f ".vybe/tech/testing.yml" ]; then
-    echo "[OK] Loaded: testing.yml (test frameworks and commands)"
-fi
-
-if [ -f ".vybe/tech/build.yml" ]; then
-    echo "[OK] Loaded: build.yml (build tools and processes)"
-fi
-
-if [ -f ".vybe/tech/tools.yml" ]; then
-    echo "[OK] Loaded: tools.yml (development utilities)"
-fi
-
-if [ -f ".vybe/tech/deployment.yml" ]; then
-    echo "[OK] Loaded: deployment.yml (deployment configuration)"
-fi
-
-if [ -f ".vybe/tech/stages.yml" ]; then
-    echo "[OK] Loaded: stages.yml (stage-by-stage installation plan)"
+    echo "[REGISTRY] Reading language configuration from technology registry..."
+    
+    # Extract language name (could be Python, JavaScript, Go, C++, Ruby, etc.)
+    LANGUAGE_NAME=$(grep "^[[:space:]]*name:" .vybe/tech/languages.yml | head -1 | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    echo "[DETECTED] Programming language: $LANGUAGE_NAME"
+    
+    # Extract execution commands from registry (language-specific)
+    if grep -q "run_python:\|run_code:\|run:" .vybe/tech/languages.yml; then
+        LANGUAGE_RUNNER=$(grep -E "run_python:|run_code:|run:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    fi
+    
+    # Extract package management commands (varies by language)
+    if grep -q "package_manager:" .vybe/tech/languages.yml; then
+        # Get package manager name
+        PACKAGE_TOOL=$(grep -A10 "package_manager:" .vybe/tech/languages.yml | grep "^[[:space:]]*name:" | head -1 | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        
+        # Get installation commands
+        if grep -q "install_deps:\|install_dependencies:" .vybe/tech/languages.yml; then
+            PACKAGE_INSTALL=$(grep -E "install_deps:|install_dependencies:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        fi
+        
+        if grep -q "add_package:\|install_package:" .vybe/tech/languages.yml; then
+            PACKAGE_ADD=$(grep -E "add_package:|install_package:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        fi
+    fi
+    
+    # Extract environment setup commands
+    if grep -q "venv_create:\|env_setup:\|create:" .vybe/tech/languages.yml; then
+        ENV_SETUP=$(grep -E "venv_create:|env_setup:|create:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    fi
+    
 else
-    echo "[NO] CRITICAL ERROR: stages.yml missing!"
-    echo "   Stage-based tool installation plan required."
+    echo "[ERROR] languages.yml not found in technology registry"
+    echo "   Missing: .vybe/tech/languages.yml"
+    echo "   Run: /vybe:init to establish technology foundation"
     exit 1
 fi
 
-if [ "$tech_loaded" = false ]; then
-    echo "[NO] CRITICAL ERROR: Technology stack incomplete!"
-    echo "   Missing core technology decisions."
-    echo "   Run /vybe:init to complete technology setup."
+# Extract testing configuration (language-agnostic)
+if [ -f ".vybe/tech/testing.yml" ]; then
+    echo "[REGISTRY] Reading testing configuration..."
+    
+    if grep -q "run_tests:\|test_command:" .vybe/tech/testing.yml; then
+        TEST_RUNNER=$(grep -E "run_tests:|test_command:" .vybe/tech/testing.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    fi
+    echo "[DETECTED] Test runner: $TEST_RUNNER"
+fi
+
+# Extract framework configuration for server startup (language-agnostic)
+if [ -f ".vybe/tech/frameworks.yml" ]; then
+    echo "[REGISTRY] Reading framework configuration..."
+    
+    if grep -q "dev_server:\|start_server:" .vybe/tech/frameworks.yml; then
+        SERVER_RUNNER=$(grep -E "dev_server:|start_server:" .vybe/tech/frameworks.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    fi
+    
+    # Check if AI integration is required (will be handled by intelligent API key detection)
+fi
+
+# Extract build configuration (language-agnostic)
+if [ -f ".vybe/tech/build.yml" ]; then
+    echo "[REGISTRY] Reading build configuration..."
+    
+    if grep -q "build_command:\|build:" .vybe/tech/build.yml; then
+        BUILD_COMMAND=$(grep -E "build_command:|build:" .vybe/tech/build.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    fi
+fi
+
+# Validate that essential technology was extracted
+if [ -z "$LANGUAGE_NAME" ]; then
+    echo "[ERROR] Could not determine programming language from registry"
+    echo "   Check .vybe/tech/languages.yml format"
+    exit 1
+fi
+
+# Verify stages.yml exists for progressive installation
+if [ ! -f ".vybe/tech/stages.yml" ]; then
+    echo "[ERROR] stages.yml missing from technology registry"
+    echo "   Missing: .vybe/tech/stages.yml"
+    echo "   Run: /vybe:init to complete technology setup"
     exit 1
 fi
 
 echo ""
-echo "[OK] Technology stack loaded successfully"
+echo "[SUCCESS] Technology stack extracted for $LANGUAGE_NAME:"
+echo "  Language: $LANGUAGE_NAME"
+echo "  Execution: $LANGUAGE_RUNNER"
+echo "  Package Tool: $PACKAGE_TOOL"
+echo "  Install Deps: $PACKAGE_INSTALL"
+echo "  Add Package: $PACKAGE_ADD"
+echo "  Test Runner: $TEST_RUNNER"
+echo "  Build Command: $BUILD_COMMAND"
+echo "  Server Runner: $SERVER_RUNNER"
+echo "  Environment Setup: $ENV_SETUP"
+echo "  AI Integration: $OPENAI_REQUIRED"
+echo ""
+
+echo "[STACK] All subsequent operations will use these $LANGUAGE_NAME-specific commands"
 echo ""
 ```
 
@@ -692,15 +763,52 @@ if [ "$guidance_mode" = false ]; then
     echo ""
     
     if [ "$template_exists" = true ]; then
-        echo "[TEMPLATE-DRIVEN] MANDATORY Template Implementation:"
-        echo "1. READ enforcement rules from .vybe/enforcement/"
-        echo "2. USE exact code patterns from .vybe/patterns/"
-        echo "3. FOLLOW template's naming conventions exactly"
-        echo "4. INCLUDE all template-required imports/dependencies"
-        echo "5. APPLY template's error handling patterns"
-        echo "6. VALIDATE against .vybe/validation/ rules"
+        echo "[TEMPLATE-DRIVEN] 🔥 MANDATORY Template Implementation:"
+        echo "================================================================"
         echo ""
-        echo "CRITICAL: Template patterns are LAW - no deviations allowed!"
+        echo "⚠️  CRITICAL: This project uses template '$template_name'"
+        echo "⚠️  AI MUST follow template patterns EXACTLY - NO custom implementations!"
+        echo ""
+        echo "STEP 1: READ TEMPLATE SOURCE CODE"
+        echo "================================="
+        echo "AI MUST thoroughly read and understand:"
+        echo "1. READ ALL files in .vybe/templates/$template_name/source/"
+        echo "2. ANALYZE directory structure and file organization"
+        echo "3. UNDERSTAND coding patterns, naming conventions, and architecture"
+        echo "4. IDENTIFY how the template handles similar functionality"
+        echo "5. EXTRACT template's specific implementation patterns"
+        echo ""
+        echo "STEP 2: COPY TEMPLATE PATTERNS EXACTLY"
+        echo "======================================"
+        echo "AI MUST implement using template DNA:"
+        echo "1. USE exact directory structure from template"
+        echo "2. COPY template's file naming patterns"
+        echo "3. FOLLOW template's import/dependency patterns"
+        echo "4. APPLY template's function/class organization"
+        echo "5. MAINTAIN template's error handling style"
+        echo "6. PRESERVE template's configuration patterns"
+        echo ""
+        echo "STEP 3: TEMPLATE COMPLIANCE ENFORCEMENT"
+        echo "======================================"
+        echo "AI MUST validate compliance:"
+        echo "1. READ enforcement rules from .vybe/enforcement/ (if exists)"
+        echo "2. APPLY exact code patterns from .vybe/patterns/ (if exists)"
+        echo "3. VALIDATE against .vybe/validation/ rules (if exists)"
+        echo "4. ENSURE no deviations from template architecture"
+        echo ""
+        echo "🚫 FORBIDDEN: Creating custom implementations that ignore template"
+        echo "✅ REQUIRED: Following template patterns as architectural DNA"
+        echo ""
+        echo "TEMPLATE IMPLEMENTATION CHECKLIST:"
+        echo "├── [ ] Read ALL template source files"
+        echo "├── [ ] Understand template's architecture patterns"
+        echo "├── [ ] Copy template's directory structure"
+        echo "├── [ ] Follow template's naming conventions"
+        echo "├── [ ] Use template's import/dependency patterns"
+        echo "├── [ ] Apply template's configuration style"
+        echo "├── [ ] Maintain template's error handling approach"
+        echo "└── [ ] Validate against template enforcement rules"
+        echo ""
     elif [ -f ".vybe/project/architecture.md" ] || [ -f ".vybe/project/conventions.md" ]; then
         echo "[DOCUMENT-DRIVEN] Project-Guided Implementation:"
         echo "1. FOLLOW technology stack from architecture.md"
@@ -724,6 +832,34 @@ if [ "$guidance_mode" = false ]; then
     echo "4. INCLUDE comprehensive error handling"
     echo "5. ADD appropriate logging and validation"
     echo "6. CREATE unit tests for all implemented code"
+    echo ""
+    echo "🚫 CRITICAL: NO MOCK/FAKE APPLICATIONS RULE"
+    echo "============================================="
+    echo ""
+    echo "❌ AI MUST NEVER CREATE:"
+    echo "   - Mock APIs, fake data, or placeholder implementations"
+    echo "   - Functions named mock_*, fake_*, dummy_*, or placeholder_*"
+    echo "   - Comments saying 'In production, this would...' or 'Mock implementation for demo'"
+    echo "   - Simulated responses instead of real API calls"
+    echo "   - Hard-coded test data pretending to be real data"
+    echo ""
+    echo "✅ AI MUST ALWAYS CREATE:"
+    echo "   - Real API integrations with actual HTTP requests"
+    echo "   - Proper error handling for API failures"
+    echo "   - Environment variable validation for required API keys"
+    echo "   - Clear failure messages when APIs are unavailable"
+    echo "   - Documentation explaining how to obtain real API keys"
+    echo ""
+    echo "🎯 ENFORCEMENT:"
+    echo "   If unable to create real implementation due to:"
+    echo "   - Missing API keys"
+    echo "   - Service unavailability"
+    echo "   - Technical limitations"
+    echo "   THEN AI MUST:"
+    echo "   1. CLEARLY STATE why real implementation cannot be created"
+    echo "   2. PROVIDE specific steps to obtain required resources"
+    echo "   3. CREATE implementation that will work when resources are available"
+    echo "   4. NEVER create mock/fake alternatives"
     echo ""
     
     implementation_success=false
@@ -749,16 +885,51 @@ if [ "$guidance_mode" = false ]; then
     echo "[AI] LOADING IMPLEMENTATION CONTEXT:"
     echo "=================================="
     
-    # PRIORITY 1: Template-driven implementation
+    # PRIORITY 1: Template-driven implementation (MANDATORY)
     if [ "$template_exists" = true ]; then
-        echo "[TEMPLATE] Template-driven implementation with established tech stack:"
-        echo "AI MUST:"
-        echo "1. USE established technology stack from .vybe/tech/"
-        echo "2. READ .vybe/templates/$template_name/source/ for code patterns"
-        echo "3. READ .vybe/enforcement/ for mandatory structure rules"
-        echo "4. READ .vybe/patterns/ for exact code templates"
-        echo "5. FOLLOW .vybe/validation/ rules precisely"
-        echo "6. NEVER deviate from template DNA or established tech stack"
+        echo "[TEMPLATE] 🔥 TEMPLATE-DRIVEN IMPLEMENTATION (MANDATORY)"
+        echo "======================================================="
+        echo ""
+        echo "⚠️  CRITICAL: AI MUST follow template '$template_name' patterns EXACTLY"
+        echo ""
+        echo "MANDATORY IMPLEMENTATION STEPS:"
+        echo ""
+        echo "1. TEMPLATE SOURCE ANALYSIS:"
+        echo "   - READ every file in .vybe/templates/$template_name/source/"
+        echo "   - UNDERSTAND the template's complete architecture"
+        echo "   - IDENTIFY how template handles similar features"
+        echo "   - EXTRACT exact patterns for this type of functionality"
+        echo ""
+        echo "2. TECHNOLOGY STACK INTEGRATION:"
+        echo "   - USE established technology stack from .vybe/tech/"
+        echo "   - COMBINE template patterns with detected tech stack"
+        echo "   - ENSURE template's tools match established tech stack"
+        echo ""
+        echo "3. EXACT PATTERN COPYING:"
+        echo "   - COPY template's directory structure for similar features"
+        echo "   - FOLLOW template's naming conventions precisely"
+        echo "   - REPLICATE template's import patterns"
+        echo "   - MAINTAIN template's code organization style"
+        echo "   - PRESERVE template's configuration approach"
+        echo ""
+        echo "4. ENFORCEMENT COMPLIANCE:"
+        echo "   - READ .vybe/enforcement/ for mandatory structure rules"
+        echo "   - APPLY .vybe/patterns/ for exact code templates"
+        echo "   - VALIDATE against .vybe/validation/ rules"
+        echo ""
+        echo "5. FORBIDDEN ACTIONS:"
+        echo "   🚫 Creating custom implementations that ignore template"
+        echo "   🚫 Inventing new patterns not found in template"
+        echo "   🚫 Changing template's architectural decisions"
+        echo "   🚫 Using different frameworks than template specifies"
+        echo ""
+        echo "6. REQUIRED ACTIONS:"
+        echo "   ✅ Copy template patterns exactly"
+        echo "   ✅ Extend template functionality following its patterns"
+        echo "   ✅ Maintain template's architectural consistency"
+        echo "   ✅ Use template's error handling and validation approaches"
+        echo ""
+        echo "AI MUST treat template as immutable architectural DNA!"
         echo ""
         
     # PRIORITY 2: Technology stack-driven implementation
@@ -852,6 +1023,11 @@ else
     echo "5. Implement according to requirements.md acceptance criteria"
     echo "6. Create comprehensive unit tests"
     echo "7. Validate implementation meets all requirements"
+    echo ""
+    echo "🚫 CRITICAL: NO MOCK/FAKE APPLICATIONS ALLOWED"
+    echo "   - Never create mock_*, fake_*, dummy_* functions"
+    echo "   - Always use real API calls with proper error handling"
+    echo "   - If APIs unavailable, explain why and provide real implementation"
     echo ""
     echo "[GUIDE] Ready to begin guided implementation"
     
@@ -1034,35 +1210,97 @@ if [ "$template_exists" = true ] && [ "$validation_passed" = true ]; then
     echo "===================================="
     echo ""
     
-    echo "[TEMPLATE] Validating against template rules..."
-    echo "AI MUST check:"
-    echo "1. Directory structure matches .vybe/enforcement/structure.yml"
-    echo "2. Code patterns match .vybe/patterns/"
-    echo "3. Naming conventions follow .vybe/validation/naming-rules.yml"
-    echo "4. No unauthorized deviations from template"
+    echo "[TEMPLATE] 🔍 MANDATORY TEMPLATE COMPLIANCE VALIDATION"
+    echo "====================================================="
+    echo ""
+    echo "⚠️  CRITICAL: Validating implementation against template '$template_name'"
+    echo ""
+    echo "AI MUST perform comprehensive template compliance check:"
+    echo ""
+    echo "1. STRUCTURAL COMPLIANCE:"
+    echo "   ✅ Directory structure matches template source"
+    echo "   ✅ File naming follows template conventions"
+    echo "   ✅ Project organization mirrors template patterns"
+    echo ""
+    echo "2. CODE PATTERN COMPLIANCE:"
+    echo "   ✅ Import statements follow template style"
+    echo "   ✅ Function/class organization matches template"
+    echo "   ✅ Error handling patterns copied from template"
+    echo "   ✅ Configuration management follows template approach"
+    echo ""
+    echo "3. ARCHITECTURAL COMPLIANCE:"
+    echo "   ✅ Framework usage matches template choices"
+    echo "   ✅ Database integration follows template patterns"
+    echo "   ✅ API design matches template conventions"
+    echo "   ✅ Testing approach aligns with template methods"
+    echo ""
+    echo "4. ENFORCEMENT RULES VALIDATION:"
+    echo "   ✅ All .vybe/enforcement/ rules satisfied"
+    echo "   ✅ All .vybe/patterns/ templates applied correctly"
+    echo "   ✅ All .vybe/validation/ checks passed"
+    echo "   ✅ No unauthorized deviations detected"
     echo ""
     
     # AI MUST validate template compliance
     template_compliant=true
     violations_found=""
     
-    echo "[CHECKING] Validating implementation against template..."
+    echo "[CHECKING] 🔍 Validating implementation against template DNA..."
+    echo ""
     
     # Check if enforcement directories exist
     if [ -d ".vybe/enforcement" ]; then
-        echo "[VALIDATE] Checking against enforcement rules..."
-        # AI should read and validate against .vybe/enforcement/ rules
+        echo "[ENFORCEMENT] Checking against structural enforcement rules..."
+        echo "AI MUST:"
+        echo "1. READ all files in .vybe/enforcement/"
+        echo "2. VERIFY implementation follows structural requirements"
+        echo "3. REPORT any violations with specific file/line references"
+        echo "4. FAIL validation if any enforcement rules violated"
     fi
     
     if [ -d ".vybe/patterns" ]; then
-        echo "[VALIDATE] Verifying code patterns match template..."
-        # AI should check that generated code follows .vybe/patterns/
+        echo "[PATTERNS] Verifying code patterns match template exactly..."
+        echo "AI MUST:"
+        echo "1. READ all pattern files in .vybe/patterns/"
+        echo "2. COMPARE generated code against pattern templates"
+        echo "3. VERIFY exact pattern usage (not similar, but exact)"
+        echo "4. REPORT any deviations from established patterns"
     fi
     
     if [ -d ".vybe/validation" ]; then
-        echo "[VALIDATE] Running validation rules..."
-        # AI should validate against .vybe/validation/ rules
+        echo "[VALIDATION] Running template validation rules..."
+        echo "AI MUST:"
+        echo "1. READ all validation rules in .vybe/validation/"
+        echo "2. RUN each validation check against implementation"
+        echo "3. ENSURE all naming, structure, and style rules pass"
+        echo "4. DOCUMENT any validation failures with remediation steps"
     fi
+    
+    echo ""
+    echo "[TEMPLATE-SOURCE] Comparing against original template source..."
+    echo "AI MUST:"
+    echo "1. COMPARE generated structure with .vybe/templates/$template_name/source/"
+    echo "2. VERIFY similar features use identical patterns"
+    echo "3. ENSURE no custom implementations where template provides patterns"
+    echo "4. VALIDATE that template's architectural decisions are preserved"
+    echo ""
+    
+    echo "CRITICAL VALIDATION QUESTIONS AI MUST ANSWER:"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "❓ Does the directory structure match the template exactly?"
+    echo "❓ Are file names following template conventions precisely?"
+    echo "❓ Do import patterns match those found in template source?"
+    echo "❓ Is error handling implemented using template's approach?"
+    echo "❓ Are configuration patterns copied from template source?"
+    echo "❓ Would a template expert recognize this as template-compliant?"
+    echo ""
+    
+    echo "🚨 VIOLATION CONSEQUENCES:"
+    echo "▪️ Template violations break architectural consistency"
+    echo "▪️ Custom implementations defeat template benefits"
+    echo "▪️ Non-compliance creates maintenance nightmares"
+    echo "▪️ Template DNA corruption makes upgrades impossible"
+    echo ""
     
     # AI should check file structure, naming conventions, and code patterns
     echo "[AI] AI MUST verify:"
@@ -1241,11 +1479,87 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
         echo "5. VALIDATE instructions work with current implementation"
         
         echo ""
-        echo "[DEMO] Test the working application:"
+        echo "[TESTABLE-UNITS] GENERATE COMPREHENSIVE WORKING DEMONSTRATION"
+        echo "=========================================================="
+        echo ""
+        
+        echo "[AI REQUIREMENT] AI MUST create testable working units for this stage:"
+        echo ""
+        echo "1. CREATE WORKING DEMONSTRATION SCRIPT:"
+        echo "   - Generate demo.sh (or demo.bat for Windows) script"
+        echo "   - Include step-by-step commands to test all implemented features"
+        echo "   - Add validation checks that confirm functionality works"
+        echo "   - Include expected output examples for user verification"
+        echo ""
+        echo "2. CREATE USER TEST ENVIRONMENT:"
+        echo "   - Generate test-environment.md with:"
+        echo "     * Prerequisites and setup instructions"
+        echo "     * Step-by-step testing procedure"
+        echo "     * Expected results for each test"
+        echo "     * Troubleshooting common issues"
+        echo ""
+        echo "3. CREATE VALIDATION CHECKLIST:"
+        echo "   - Generate stage-validation-checklist.md with:"
+        echo "     * Functional requirements verification"
+        echo "     * User acceptance criteria validation"
+        echo "     * Performance/quality gate checks"
+        echo "     * Integration points verification"
+        echo ""
+        echo "4. CREATE WORKING EXAMPLES:"
+        echo "   - Generate example inputs/requests for testing"
+        echo "   - Create sample data files if needed"
+        echo "   - Provide curl commands for API testing (if applicable)"
+        echo "   - Include screenshot instructions for UI testing (if applicable)"
+        echo ""
+        echo "5. TECHNOLOGY STACK-SPECIFIC TEST COMMANDS:"
+        echo "   - Read .vybe/tech/testing.yml for test framework commands"
+        echo "   - Read .vybe/tech/languages.yml for execution commands"
+        echo "   - Read .vybe/tech/build.yml for build verification commands"
+        echo "   - Generate commands using established technology stack"
+        echo ""
+        echo "6. CREATE AUTOMATED VERIFICATION SCRIPT:"
+        echo "   - Generate verify-stage.sh that automatically tests all functionality"
+        echo "   - Include health checks and basic smoke tests"
+        echo "   - Provide pass/fail results with clear output"
+        echo "   - Make it executable and ready for CI/CD integration"
+        echo ""
+        
+        echo "[GENERATION] AI MUST NOW create these testable working units:"
+        echo ""
+        echo "TARGET FILES TO CREATE:"
+        echo "├── demo.sh (or demo.bat)                    # Interactive demonstration script"
+        echo "├── test-environment.md                      # User testing guide"
+        echo "├── stage-validation-checklist.md           # Acceptance criteria checklist"
+        echo "├── verify-stage.sh (or verify-stage.bat)   # Automated verification"
+        echo "├── example-requests/ (if applicable)       # Sample API requests"
+        echo "├── sample-data/ (if applicable)            # Test data files"
+        echo "└── testing-outputs/ (if applicable)        # Expected output examples"
+        echo ""
+        
+        echo "[REQUIREMENTS] Each generated file MUST:"
+        echo "✓ Be immediately executable/usable by end user"
+        echo "✓ Include clear instructions and expected results"
+        echo "✓ Use technology stack commands from .vybe/tech/"
+        echo "✓ Follow template patterns if template exists"
+        echo "✓ Validate the specific stage requirements implemented"
+        echo "✓ Provide troubleshooting guidance for common issues"
+        echo "✓ Include both manual and automated testing approaches"
+        echo ""
+        
+        echo "[CRITICAL] AI MUST create these working units NOW, not just describe them!"
+        echo "User should be able to:"
+        echo "1. Run ./demo.sh and see working functionality immediately"
+        echo "2. Follow test-environment.md to validate everything works"
+        echo "3. Use verify-stage.sh for automated validation"
+        echo "4. Check off items in stage-validation-checklist.md"
+        echo ""
+        
+        echo "[DEMO] Test the working application using generated tools:"
         # AI should provide specific demo commands based on what was implemented
-        echo "- Check application is running"
-        echo "- Test main functionality"
-        echo "- Verify stage requirements are met"
+        echo "- Run: ./demo.sh (interactive demonstration)"
+        echo "- Run: ./verify-stage.sh (automated verification)"
+        echo "- Follow: test-environment.md (manual testing guide)"
+        echo "- Check: stage-validation-checklist.md (acceptance validation)"
         
     else
         echo ""

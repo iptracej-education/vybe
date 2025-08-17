@@ -126,6 +126,7 @@ The Vybe Framework provides a complete agile-like development workflow through 9
 - Loads complete project context (overview, architecture, conventions)
 - Progress tracking and status updates
 - Coordinates with multi-session workflows
+- **ENFORCES REAL APPLICATIONS**: Never creates mock/fake implementations
 
 ### 5. Progress Tracking
 **`/vybe:status [scope]`** - "How are we doing?" - Progress and assignments
@@ -186,6 +187,15 @@ The Vybe Framework provides a complete agile-like development workflow through 9
 4. **Continuous progression**: Use `/vybe:release` to advance through stages
 5. **Member coordination**: Use `VYBE_MEMBER` for team development
 6. **Progress visibility**: Regular `/vybe:status` for tracking outcomes
+7. **🚫 REAL APPLICATIONS ONLY**: Never create mock/fake implementations
+
+### Real Application Enforcement
+- **FORBIDDEN**: Mock APIs, fake data, placeholder implementations
+- **FORBIDDEN**: Functions named `mock_*`, `fake_*`, `dummy_*`, `placeholder_*`
+- **FORBIDDEN**: Comments saying "In production, this would..." 
+- **REQUIRED**: Real API integrations with proper error handling
+- **REQUIRED**: Clear failure messages when APIs are unavailable
+- **REQUIRED**: Documentation for obtaining real API keys
 
 ### Command Flow
 ```
