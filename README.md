@@ -9,7 +9,7 @@ Vybe is a spec-driven framework for Claude Code that lets you plan and develop s
 ## Overview
 
 Vybe brings structure to AI-assisted development through:
-- **Specification-first workflow with agile backlog management** - Every feature starts with clear requirements and design in organized backlog
+- **Specification-first workflow with backlog management** - Every feature starts with clear requirements and design in organized backlog
 - **Incremental outcome approach** - Break projects into stages that deliver working units in days each
 - **Multi-developer coordination** - Single session or multiple Claude Code sessions work together seamlessly  
 - **Quality assurance** - Built-in gap detection and fix automation
