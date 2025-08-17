@@ -1202,12 +1202,168 @@ cat .vybe/project/.template
 
 ---
 
+## Session Continuity Tutorial 🔄
+
+**Purpose**: Test Vybe's session handoff and context preservation across Claude Code restarts.
+
+**Prerequisites**: Complete install.sh setup with hooks enabled.
+
+### Phase 1: Complete a Stage
+```bash
+# 1. Start new project with session tracking
+mkdir session-test && cd session-test
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh && cd ..
+
+# 2. Initialize project 
+/vybe:init "Simple task manager with local storage"
+
+# 3. Create and execute first stage
+/vybe:backlog init
+/vybe:plan task-crud "Basic task CRUD operations"
+/vybe:execute task-1-create-tasks
+
+# 4. Complete Stage 1 
+/vybe:release stage-1
+
+# Expected: Stage marked complete, learnings captured
+```
+
+### Phase 2: Test Session Handoff
+```bash
+# 5. Check current status before restart
+/vybe:status outcomes
+
+# 6. **RESTART CLAUDE CODE NOW**
+# - Close Claude Code completely
+# - Reopen Claude Code  
+# - Navigate back to your project directory
+
+# Expected during restart:
+# If conversation compacts, you should see:
+# "🔄 PreCompact triggered - Saving Vybe context..."
+# "✅ Context saved: .vybe/context/precompact/checkpoint-[id].json"
+# "🚀 Ready for compaction - context is safe!"
+
+# NOT: Standard Claude Code compaction message
+```
+
+### Phase 3: Resume Work Seamlessly
+```bash
+# 7. After restart, verify context preservation
+/vybe:status outcomes
+# Expected: Shows Stage 1 complete, Stage 2 ready
+
+# 8. Continue exactly where you left off
+/vybe:plan stage-2 "User interface and data persistence"
+/vybe:execute task-1-ui-foundation
+
+# Expected: Picks up context, knows project history
+```
+
+### Phase 4: Test Mid-Task Interruption
+```bash
+# 9. Start complex task
+/vybe:execute task-2-data-storage
+
+# 10. **INTERRUPT by restarting Claude Code mid-execution**
+
+# 11. After restart, check session recovery
+/vybe:status
+# Expected: Shows in-progress task status
+
+# 12. Resume interrupted work
+/vybe:execute task-2-data-storage
+# Expected: Continues from where it left off
+```
+
+### Session Continuity Success Criteria
+
+#### ✅ Hook Installation Working
+- [ ] `install.sh` configures hooks without errors
+- [ ] `~/.claude/.claude/hooks/` contains executable hook files
+- [ ] `~/.claude/settings.json` has hooks section enabled
+
+#### ✅ Context Preservation  
+- [ ] PreCompact hook triggers before conversation compaction
+- [ ] Vybe context saved to `.vybe/context/precompact/`
+- [ ] NO standard Claude Code compaction message
+- [ ] Session state preserved across restarts
+
+#### ✅ Seamless Resume
+- [ ] `/vybe:status` shows correct project state after restart
+- [ ] Completed stages remain marked as complete
+- [ ] In-progress work can be resumed
+- [ ] Project context and history accessible
+
+#### ✅ Multi-Session Coordination
+- [ ] Git state preserved across sessions
+- [ ] Task dependencies maintained
+- [ ] Member assignments (if using teams) preserved
+- [ ] Session tracking files created in `.vybe/context/sessions/`
+
+### Troubleshooting Session Issues
+
+**❌ Standard compaction message appears:**
+- Check hooks installation: `ls -la ~/.claude/.claude/hooks/`
+- Verify settings.json: `grep -A 5 '"hooks"' ~/.claude/settings.json`
+- Restart Claude Code after fixing configuration
+
+**❌ Context lost after restart:**
+- Check `.vybe/context/` directory exists and has content
+- Verify precompact.py is executable: `ls -la ~/.claude/.claude/hooks/precompact.py`
+- Ensure project has proper .vybe structure
+
+**❌ Resume commands don't work:**
+- Run `/vybe:status` to check current project state  
+- Verify you're in the correct project directory
+- Check git repository is properly initialized
+
+### Expected Session Handoff Message
+
+When hooks work correctly, you'll see:
+```
+🔄 PreCompact triggered (auto) - Saving Vybe context...
+✅ Context saved: .vybe/context/precompact/checkpoint-[session_id].json
+
+============================================================
+VYBE CONTEXT PRESERVED
+============================================================
+# Context Restored After Compaction
+
+Session [session_id] was automatically saved before compaction.
+
+## Resume Current Work
+You were working as: **general-purpose** agent
+On task range: **stage-1-implementation**
+
+To continue exactly where you left off:
+/vybe:task-continue general-purpose stage-1-implementation [session_id]
+
+## Active Features
+- task-crud
+
+## Context Recovery
+All work has been preserved in .vybe/context/precompact/
+- Checkpoint: checkpoint-[session_id].json
+- Git diff: diff-[session_id].patch  
+- Transcript: transcript-[session_id].txt
+
+The Vybe framework ensures no work is lost during compaction.
+============================================================
+
+🚀 Ready for compaction - context is safe!
+```
+
+---
+
 **Ready to begin tutorial execution!**
 
-This tutorial provides three comprehensive paths for testing the entire Vybe framework:
+This tutorial provides four comprehensive paths for testing the entire Vybe framework:
 
 **🏗️ Template Tutorial** - 15 steps testing template import, AI analysis, and template-driven development
 **👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
 **👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
+**🔄 Session Continuity Tutorial** - 4 phases testing context preservation and seamless handoff across Claude Code restarts
 
-All tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. The template tutorial adds comprehensive testing of AI-driven template analysis and architectural DNA enforcement. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
+All tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. The template tutorial adds comprehensive testing of AI-driven template analysis and architectural DNA enforcement. The session continuity tutorial validates that work is never lost and development can seamlessly resume across sessions. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
