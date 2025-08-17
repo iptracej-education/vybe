@@ -405,7 +405,147 @@ echo "   - Mode: $([ "$guidance_mode" = true ] && echo "Guidance" || echo "Direc
 echo ""
 ```
 
-## Task 2: Git Coordination Setup
+## Task 2: Technology Stack Preparation
+
+### Load and Prepare Required Technology Stack
+```bash
+echo "[TECH] TECHNOLOGY STACK PREPARATION"
+echo "==================================="
+echo ""
+
+# CRITICAL: Load established technology decisions
+if [ ! -d ".vybe/tech" ]; then
+    echo "[NO] CRITICAL ERROR: Technology stack not found!"
+    echo "   Technology registry missing from .vybe/tech/"
+    echo "   Run /vybe:init first to establish technology foundation."
+    exit 1
+fi
+
+echo "[LOADING] Loading established technology stack..."
+
+# Load technology registry
+tech_loaded=false
+if [ -f ".vybe/tech/languages.yml" ]; then
+    echo "[OK] Loaded: languages.yml (primary language and tooling)"
+    tech_loaded=true
+fi
+
+if [ -f ".vybe/tech/frameworks.yml" ]; then
+    echo "[OK] Loaded: frameworks.yml (web/api/database frameworks)"
+fi
+
+if [ -f ".vybe/tech/testing.yml" ]; then
+    echo "[OK] Loaded: testing.yml (test frameworks and commands)"
+fi
+
+if [ -f ".vybe/tech/build.yml" ]; then
+    echo "[OK] Loaded: build.yml (build tools and processes)"
+fi
+
+if [ -f ".vybe/tech/tools.yml" ]; then
+    echo "[OK] Loaded: tools.yml (development utilities)"
+fi
+
+if [ -f ".vybe/tech/deployment.yml" ]; then
+    echo "[OK] Loaded: deployment.yml (deployment configuration)"
+fi
+
+if [ -f ".vybe/tech/stages.yml" ]; then
+    echo "[OK] Loaded: stages.yml (stage-by-stage installation plan)"
+else
+    echo "[NO] CRITICAL ERROR: stages.yml missing!"
+    echo "   Stage-based tool installation plan required."
+    exit 1
+fi
+
+if [ "$tech_loaded" = false ]; then
+    echo "[NO] CRITICAL ERROR: Technology stack incomplete!"
+    echo "   Missing core technology decisions."
+    echo "   Run /vybe:init to complete technology setup."
+    exit 1
+fi
+
+echo ""
+echo "[OK] Technology stack loaded successfully"
+echo ""
+```
+
+### Determine Current Stage Requirements
+```bash
+echo "[STAGE] DETERMINING STAGE REQUIREMENTS"
+echo "====================================="
+echo ""
+
+# Determine which stage we're in based on task and project progress
+current_stage="stage-1"  # Default to first stage
+
+# AI should determine current stage from:
+# 1. Task number and feature complexity
+# 2. Existing project structure
+# 3. Previous stage completions
+# 4. Requirements of current task
+
+echo "[ANALYZE] AI MUST determine current development stage:"
+echo "1. READ .vybe/tech/stages.yml for stage definitions"
+echo "2. ANALYZE task requirements for technology needs"
+echo "3. CHECK existing project files for current setup level"
+echo "4. DETERMINE which stage tools are needed for this task"
+echo ""
+
+echo "Current stage: $current_stage"
+echo ""
+```
+
+### Progressive Technology Installation
+```bash
+echo "[INSTALL] PROGRESSIVE TECHNOLOGY INSTALLATION"
+echo "============================================"
+echo ""
+
+echo "[STAGE] Installing tools for: $current_stage"
+echo ""
+
+# AI MUST read stages.yml and install required tools for current stage
+echo "[AI] AI MUST:"
+echo "============"
+echo "1. READ .vybe/tech/stages.yml for current stage requirements"
+echo "2. CHECK which tools are already installed"
+echo "3. INSTALL missing tools using stage-specific commands"
+echo "4. VALIDATE installation using stage validation commands"
+echo "5. PREPARE development environment for implementation"
+echo ""
+
+echo "[CRITICAL] AI implementation required:"
+echo "===================================="
+echo "AI should now:"
+echo "1. Parse stages.yml to get current stage requirements"
+echo "2. Run installation commands for missing tools"
+echo "3. Execute validation commands to verify setup"
+echo "4. Report installation status and any issues"
+echo "5. Ensure environment is ready for code implementation"
+echo ""
+
+# Example of what AI should implement:
+echo "[EXAMPLE] What AI should do:"
+echo "1. Read stages.yml: required_tools for $current_stage"
+echo "2. Check: npm --version, node --version (if Node.js stage)"
+echo "3. Install: npm install -g create-react-app (if missing)"
+echo "4. Validate: create-react-app --version"
+echo "5. Setup: Initialize project structure if needed"
+echo ""
+
+installation_success=false
+installation_log=""
+
+# AI should set these after actual installation:
+# installation_success=true
+# installation_log="list of installed tools and setup steps"
+
+echo "[READY] Technology preparation phase complete"
+echo ""
+```
+
+## Task 3: Git Coordination Setup
 
 ### Initialize Session and Check Git State
 ```bash
@@ -601,47 +741,48 @@ if [ "$guidance_mode" = false ]; then
     echo "AI MUST generate actual implementation files now"
     echo ""
     
-    # CONTEXT-DRIVEN AI IMPLEMENTATION
-    echo "[AI] Beginning context-driven code generation..."
+    # TECHNOLOGY STACK-DRIVEN AI IMPLEMENTATION
+    echo "[AI] Beginning technology stack-driven code generation..."
     echo ""
     
-    # HIERARCHY: Template > Project Documents > Intelligent Analysis
+    # HIERARCHY: Template > Technology Stack > Project Documents > Intelligent Analysis
     echo "[AI] LOADING IMPLEMENTATION CONTEXT:"
     echo "=================================="
     
     # PRIORITY 1: Template-driven implementation
     if [ "$template_exists" = true ]; then
-        echo "[TEMPLATE] Loading template patterns and structure..."
+        echo "[TEMPLATE] Template-driven implementation with established tech stack:"
         echo "AI MUST:"
-        echo "1. READ .vybe/templates/$template_name/source/ for code patterns"
-        echo "2. READ .vybe/enforcement/ for mandatory structure rules"
-        echo "3. READ .vybe/patterns/ for exact code templates"
-        echo "4. FOLLOW .vybe/validation/ rules precisely"
-        echo "5. NEVER deviate from template DNA"
+        echo "1. USE established technology stack from .vybe/tech/"
+        echo "2. READ .vybe/templates/$template_name/source/ for code patterns"
+        echo "3. READ .vybe/enforcement/ for mandatory structure rules"
+        echo "4. READ .vybe/patterns/ for exact code templates"
+        echo "5. FOLLOW .vybe/validation/ rules precisely"
+        echo "6. NEVER deviate from template DNA or established tech stack"
         echo ""
         
-    # PRIORITY 2: Project document-driven implementation  
-    elif [ -f ".vybe/project/architecture.md" ] || [ -f ".vybe/project/conventions.md" ]; then
-        echo "[DOCUMENTS] Loading project-specific guidance..."
-        echo "AI MUST:"
-        echo "1. READ .vybe/project/architecture.md for tech stack decisions"
-        echo "2. READ .vybe/project/conventions.md for coding standards"
-        echo "3. READ .vybe/project/overview.md for business context"
-        echo "4. EXTRACT technology choices and apply them"
-        echo "5. INFER project structure from architecture decisions"
-        echo ""
-        
-    # PRIORITY 3: Intelligent analysis of existing code and task
+    # PRIORITY 2: Technology stack-driven implementation
     else
-        echo "[INTELLIGENT] Analyzing codebase and task requirements..."
+        echo "[TECH-STACK] Technology stack-driven implementation:"
         echo "AI MUST:"
-        echo "1. SCAN existing project files for patterns and structure"
-        echo "2. ANALYZE task description and requirements for technology hints"
-        echo "3. DETECT project type from configuration files"
-        echo "4. APPLY industry best practices for detected technology"
-        echo "5. CREATE structure that supports future growth"
+        echo "1. USE established technology stack from .vybe/tech/"
+        echo "2. FOLLOW languages.yml for primary language and tooling"
+        echo "3. USE frameworks.yml for web/api/database choices"
+        echo "4. APPLY testing.yml for test framework and approach"
+        echo "5. IMPLEMENT using build.yml for build process"
+        echo "6. FOLLOW project conventions and standards"
         echo ""
     fi
+    
+    echo "[STACK] Using established technology decisions:"
+    echo "=============================================="
+    echo "AI MUST read and apply:"
+    echo "- .vybe/tech/languages.yml for language-specific implementation"
+    echo "- .vybe/tech/frameworks.yml for framework-specific patterns"
+    echo "- .vybe/tech/testing.yml for testing approach and tools"
+    echo "- .vybe/tech/build.yml for build and bundling approach"
+    echo "- .vybe/tech/tools.yml for development utilities"
+    echo ""
     
     # AI MUST read and understand task requirements
     echo "[AI] ANALYZING TASK REQUIREMENTS:"
@@ -767,53 +908,43 @@ if [ "$implementation_success" = true ]; then
         echo ""
     fi
     
-    # Intelligently determine test command based on context
+    # Use established testing configuration from technology stack
     test_command=""
     test_framework="unknown"
     
-    echo "[DETECT] Determining test framework from context..."
+    echo "[TESTING] Using established testing configuration..."
     
-    # Check template for test framework
-    if [ "$template_exists" = true ] && [ -f ".vybe/templates/$template_name/metadata.yml" ]; then
-        template_test_framework=$(grep "test_framework:" ".vybe/templates/$template_name/metadata.yml" 2>/dev/null | cut -d: -f2 | tr -d ' "')
-        if [ -n "$template_test_framework" ]; then
-            test_framework="$template_test_framework"
-            echo "[TEMPLATE] Test framework from template: $test_framework"
-        fi
-    fi
-    
-    # Check project conventions for test framework (context-driven)
-    if [ "$test_framework" = "unknown" ] && [ -f ".vybe/project/conventions.md" ]; then
-        echo "[CONVENTIONS] AI MUST read conventions.md to extract test framework"
-        echo "AI should scan conventions.md for testing section and extract framework choice"
-        
-        # AI should read and understand the conventions, not use hardcoded patterns
-        if [ "$test_framework" != "unknown" ]; then
-            echo "[CONVENTIONS] Test framework from conventions.md: $test_framework"
-        fi
-    fi
-    
-    # Context-driven detection from existing project files
-    if [ "$test_framework" = "unknown" ]; then
-        echo "[SCAN] AI MUST scan project files to detect test framework:"
-        echo ""
-        echo "[AI ANALYSIS] AI should:"
-        echo "1. READ all configuration files to understand project setup"
-        echo "2. SCAN dependency files for test frameworks"
-        echo "3. EXAMINE existing test files for framework patterns"
-        echo "4. CHECK for test scripts in build configurations"
-        echo "5. ANALYZE project structure for test organization"
-        echo ""
-        echo "[DETECTION] AI MUST determine test framework from context, not assumptions"
+    # Load testing configuration from technology stack
+    if [ -f ".vybe/tech/testing.yml" ]; then
+        echo "[STACK] Loading test configuration from technology stack:"
+        echo "AI MUST:"
+        echo "1. READ .vybe/tech/testing.yml for established test framework"
+        echo "2. USE configured test commands from testing.yml"
+        echo "3. FOLLOW established testing patterns and structure"
+        echo "4. APPLY configured coverage requirements"
+        echo "5. USE established test directory organization"
         echo ""
         
-        # AI should intelligently detect, not use hardcoded if-then logic
-        # The test_framework and test_command should be set based on actual analysis
+        echo "[CONFIG] AI should extract from testing.yml:"
+        echo "- Test framework and version"
+        echo "- Unit test command"
+        echo "- Integration test command"
+        echo "- Coverage requirements and thresholds"
+        echo "- Test file patterns and organization"
+        echo ""
+        
+        # AI should read testing.yml and extract actual configuration
+        # test_framework and test_command should come from the file
+        
+    else
+        echo "[ERROR] No testing configuration found in technology stack!"
+        echo "Technology stack should have been established during init"
+        echo "AI MUST check .vybe/tech/testing.yml for test configuration"
     fi
     
     echo ""
-    echo "[FRAMEWORK] Test framework: $test_framework"
-    echo "[COMMAND] Test command: ${test_command:-'AI must determine'}"
+    echo "[FRAMEWORK] Test framework: ${test_framework:-'From testing.yml'}"
+    echo "[COMMAND] Test command: ${test_command:-'From testing.yml'}"
     echo ""
     
     # Run tests with auto-fix capability
@@ -1071,43 +1202,43 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
         echo "=========================================="
         echo ""
         
-        # Context-driven run instructions - NO HARDCODING
-        echo "[CONTEXT] AI MUST determine run instructions from actual context:"
+        # Technology stack-driven run instructions
+        echo "[RUN] AI MUST provide run instructions from established technology stack:"
         echo ""
         
-        # PRIORITY 1: Template-defined instructions
+        # PRIORITY 1: Use established technology stack
+        echo "[STACK] AI MUST use established technology configuration:"
+        echo "1. READ .vybe/tech/languages.yml for primary language and package manager"
+        echo "2. READ .vybe/tech/build.yml for build commands and processes"
+        echo "3. READ .vybe/tech/deployment.yml for run and startup commands"
+        echo "4. READ .vybe/tech/tools.yml for development server setup"
+        echo "5. USE configured commands, not assumptions"
+        echo ""
+        
+        # PRIORITY 2: Template-defined instructions (if template exists)
         if [ "$template_exists" = true ]; then
-            echo "[TEMPLATE] AI MUST:"
-            echo "1. READ .vybe/templates/$template_name/ for run instructions"
-            echo "2. CHECK template metadata for startup commands"
-            echo "3. FOLLOW template's deployment/run patterns exactly"
+            echo "[TEMPLATE] AI MUST also:"
+            echo "1. READ .vybe/templates/$template_name/ for template-specific run patterns"
+            echo "2. COMBINE template instructions with established tech stack"
+            echo "3. FOLLOW template's deployment patterns exactly"
             echo ""
         fi
         
-        # PRIORITY 2: Project documentation
+        # PRIORITY 3: Project documentation enhancement
         if [ -f "README.md" ]; then
             echo "[DOCUMENTATION] AI MUST:"
-            echo "1. READ README.md for existing run instructions"
-            echo "2. EXTRACT setup and startup commands"
-            echo "3. ADAPT instructions to current implementation"
+            echo "1. READ README.md for any additional context"
+            echo "2. ENHANCE with current implementation specifics"
+            echo "3. UPDATE README.md if run instructions changed"
             echo ""
         fi
         
-        # PRIORITY 3: Intelligent analysis of project structure
-        echo "[ANALYSIS] AI MUST analyze project context:"
-        echo "1. SCAN all configuration files to understand project type"
-        echo "2. EXAMINE implemented code to find entry points"
-        echo "3. DETECT build systems and dependency managers"
-        echo "4. IDENTIFY any services or databases that need startup"
-        echo "5. DETERMINE appropriate ports and access methods"
-        echo ""
-        
-        echo "[INSTRUCTIONS] AI MUST provide contextual run instructions:"
-        echo "1. READ actual project files (not assumptions)"
-        echo "2. ANALYZE implemented task code for specific requirements"
-        echo "3. PROVIDE exact commands for THIS specific implementation"
-        echo "4. INCLUDE any setup steps needed for the current task"
-        echo "5. GIVE working demonstration commands"
+        echo "[INSTRUCTIONS] AI MUST provide technology stack-based run instructions:"
+        echo "1. USE established build and run commands from .vybe/tech/"
+        echo "2. APPLY current implementation's specific entry points"
+        echo "3. INCLUDE any stage-specific setup requirements"
+        echo "4. PROVIDE working demonstration commands for this stage"
+        echo "5. VALIDATE instructions work with current implementation"
         
         echo ""
         echo "[DEMO] Test the working application:"

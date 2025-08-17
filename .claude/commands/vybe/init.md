@@ -411,6 +411,144 @@ else
 fi
 ```
 
+## Task 3.5: Complete Technology Stack Capture and Planning
+
+### Interactive Technology Stack Definition
+```bash
+echo "[TECH] COMPLETE TECHNOLOGY STACK CAPTURE"
+echo "========================================"
+echo ""
+echo "Project Description: $project_description"
+echo "Template: $([ "$template_exists" = true ] && echo "$template_name" || echo "None")"
+echo ""
+
+if [ "$template_exists" = true ]; then
+    echo "[TEMPLATE] Using template-defined technology stack"
+    echo "AI MUST:"
+    echo "1. READ template source code to extract exact technologies used"
+    echo "2. ANALYZE template dependencies and requirements"
+    echo "3. CREATE complete tech stack registry from template"
+    echo "4. MAP template tools to stage-by-stage installation plan"
+    echo ""
+else
+    echo "[INTERACTIVE] Capturing complete technology roadmap"
+    echo "AI MUST interactively determine:"
+    echo ""
+    echo "1. PRIMARY PROGRAMMING LANGUAGE:"
+    echo "   - What language best fits the project requirements?"
+    echo "   - Version requirements and constraints"
+    echo "   - Package manager and tooling"
+    echo ""
+    echo "2. APPLICATION ARCHITECTURE:"
+    echo "   - Web application? API? Desktop? Mobile? CLI?"
+    echo "   - Frontend framework needs (if web app)"
+    echo "   - Backend framework requirements (if needed)"
+    echo "   - Database requirements and type"
+    echo ""
+    echo "3. DEVELOPMENT TOOLS:"
+    echo "   - Build system and bundlers"
+    echo "   - Development server setup"
+    echo "   - Code quality tools (linting, formatting)"
+    echo "   - IDE/editor configuration"
+    echo ""
+    echo "4. TESTING STRATEGY:"
+    echo "   - Unit testing framework"
+    echo "   - Integration testing approach"
+    echo "   - End-to-end testing tools (if needed)"
+    echo "   - Code coverage requirements"
+    echo ""
+    echo "5. DEPLOYMENT PIPELINE:"
+    echo "   - Build process and artifacts"
+    echo "   - Environment management"
+    echo "   - Deployment targets and methods"
+    echo "   - CI/CD pipeline requirements"
+    echo ""
+fi
+
+echo "[CRITICAL] AI MUST create complete technology roadmap:"
+echo "====================================================="
+echo ""
+echo "Create .vybe/tech/ directory structure with:"
+echo "1. languages.yml - Primary language, version, package manager"
+echo "2. frameworks.yml - Web/API/DB frameworks and versions"
+echo "3. testing.yml - Test frameworks, commands, and requirements"
+echo "4. build.yml - Build tools, scripts, and processes"
+echo "5. tools.yml - Development tools and utilities"
+echo "6. deployment.yml - Deployment configuration and targets"
+echo "7. stages.yml - Stage-by-stage tool installation plan"
+echo ""
+echo "EACH STAGE should specify:"
+echo "- Required tools and dependencies for that stage"
+echo "- Installation commands and setup steps"
+echo "- Validation commands to verify setup"
+echo "- Development workflow for that stage"
+echo ""
+```
+
+### Create Technology Registry Structure
+```bash
+echo "[SETUP] Creating technology registry structure..."
+mkdir -p .vybe/tech
+
+# Create technology registry files
+echo "[CREATE] Creating complete technology stack registry..."
+
+echo "# AI MUST populate this with actual technology decisions" > .vybe/tech/languages.yml
+echo "# AI MUST populate this with actual framework choices" > .vybe/tech/frameworks.yml
+echo "# AI MUST populate this with actual testing setup" > .vybe/tech/testing.yml
+echo "# AI MUST populate this with actual build configuration" > .vybe/tech/build.yml
+echo "# AI MUST populate this with actual development tools" > .vybe/tech/tools.yml
+echo "# AI MUST populate this with actual deployment setup" > .vybe/tech/deployment.yml
+
+# Critical: Stage-by-stage installation plan
+cat > .vybe/tech/stages.yml << 'EOF'
+# Stage-by-Stage Technology Preparation Plan
+# AI MUST populate with progressive tool installation
+
+stages:
+  stage-1:
+    name: "Basic Development Setup"
+    description: "Core language and basic development tools"
+    required_tools: []  # AI MUST fill
+    install_commands: []  # AI MUST fill
+    validation_commands: []  # AI MUST fill
+    
+  stage-2:
+    name: "Framework and Testing Setup"
+    description: "Web frameworks and testing infrastructure"
+    required_tools: []  # AI MUST fill
+    install_commands: []  # AI MUST fill
+    validation_commands: []  # AI MUST fill
+    
+  stage-3:
+    name: "Database and Integration"
+    description: "Database setup and integration testing"
+    required_tools: []  # AI MUST fill
+    install_commands: []  # AI MUST fill
+    validation_commands: []  # AI MUST fill
+    
+  stage-final:
+    name: "Production Readiness"
+    description: "Deployment tools and production validation"
+    required_tools: []  # AI MUST fill
+    install_commands: []  # AI MUST fill
+    validation_commands: []  # AI MUST fill
+
+# AI MUST customize stages based on project requirements
+EOF
+
+echo "[OK] Technology registry structure created"
+echo ""
+echo "[AI] AI MUST NOW:"
+echo "================"
+echo "1. DETERMINE complete technology stack from project context"
+echo "2. POPULATE all .vybe/tech/*.yml files with concrete decisions"
+echo "3. CREATE stage-by-stage installation plan in stages.yml"
+echo "4. ENSURE each stage has specific tools and commands"
+echo "5. VALIDATE that all stages build toward complete working system"
+echo ""
+```
+
 ## Task 4: Generate Intelligent Project Documentation (Phase 1 - Fast)
 
 ### Generate outcomes.md with Staged Roadmap
