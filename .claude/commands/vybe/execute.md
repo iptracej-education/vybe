@@ -589,16 +589,89 @@ if [ "$guidance_mode" = false ]; then
     echo "AI MUST generate actual implementation files now"
     echo ""
     
-    # AI IMPLEMENTATION HAPPENS HERE
-    # This is where Claude should actually use Write/Edit tools to create code
+    # CONTEXT-DRIVEN AI IMPLEMENTATION
+    echo "[AI] Beginning context-driven code generation..."
+    echo ""
     
-    # After implementation, AI should set:
-    # implementation_success=true
-    # implementation_files="list of created/modified files"
-    # test_files="list of test files created"
+    # HIERARCHY: Template > Project Documents > Intelligent Analysis
+    echo "[AI] LOADING IMPLEMENTATION CONTEXT:"
+    echo "=================================="
     
-    echo "[PLACEHOLDER] Implementation phase ready"
-    echo "AI should now create actual code files"
+    # PRIORITY 1: Template-driven implementation
+    if [ "$template_exists" = true ]; then
+        echo "[TEMPLATE] Loading template patterns and structure..."
+        echo "AI MUST:"
+        echo "1. READ .vybe/templates/$template_name/source/ for code patterns"
+        echo "2. READ .vybe/enforcement/ for mandatory structure rules"
+        echo "3. READ .vybe/patterns/ for exact code templates"
+        echo "4. FOLLOW .vybe/validation/ rules precisely"
+        echo "5. NEVER deviate from template DNA"
+        echo ""
+        
+    # PRIORITY 2: Project document-driven implementation  
+    elif [ -f ".vybe/project/architecture.md" ] || [ -f ".vybe/project/conventions.md" ]; then
+        echo "[DOCUMENTS] Loading project-specific guidance..."
+        echo "AI MUST:"
+        echo "1. READ .vybe/project/architecture.md for tech stack decisions"
+        echo "2. READ .vybe/project/conventions.md for coding standards"
+        echo "3. READ .vybe/project/overview.md for business context"
+        echo "4. EXTRACT technology choices and apply them"
+        echo "5. INFER project structure from architecture decisions"
+        echo ""
+        
+    # PRIORITY 3: Intelligent analysis of existing code and task
+    else
+        echo "[INTELLIGENT] Analyzing codebase and task requirements..."
+        echo "AI MUST:"
+        echo "1. SCAN existing project files for patterns and structure"
+        echo "2. ANALYZE task description and requirements for technology hints"
+        echo "3. DETECT project type from configuration files"
+        echo "4. APPLY industry best practices for detected technology"
+        echo "5. CREATE structure that supports future growth"
+        echo ""
+    fi
+    
+    # AI MUST read and understand task requirements
+    echo "[AI] ANALYZING TASK REQUIREMENTS:"
+    echo "============================="
+    
+    if [ -f "$feature_dir/requirements.md" ]; then
+        echo "[READ] AI MUST read requirements.md for acceptance criteria"
+    fi
+    
+    if [ -f "$feature_dir/design.md" ]; then
+        echo "[READ] AI MUST read design.md for technical approach"
+    fi
+    
+    echo ""
+    echo "[AI] CONTEXT-DRIVEN STRUCTURE DETERMINATION:"
+    echo "=========================================="
+    echo ""
+    echo "AI MUST now:"
+    echo "1. READ all relevant context files (templates, project docs, existing code)"
+    echo "2. ANALYZE task requirements and determine what needs to be built"
+    echo "3. DETERMINE appropriate project structure based on context hierarchy"
+    echo "4. CREATE actual implementation files using Write/Edit tools"
+    echo "5. IMPLEMENT real, runnable code (not documentation)"
+    echo "6. FOLLOW the context hierarchy: Template > Documents > Intelligence"
+    echo "7. INCLUDE comprehensive error handling and validation"
+    echo "8. CREATE unit tests that actually test the implemented functionality"
+    echo ""
+    
+    echo "[IMPLEMENTATION] AI should now create actual files:"
+    echo "================================================="
+    echo "- Use Read tool to understand existing context"
+    echo "- Use Write/Edit tools to create implementation files"
+    echo "- Follow patterns found in context, not hardcoded assumptions"
+    echo "- Create working code that meets the task requirements"
+    echo ""
+    
+    # AI should set these after actual implementation:
+    implementation_success=false
+    implementation_files=""
+    test_files=""
+    
+    echo "[READY] Context loaded - AI should now implement based on actual context"
     
 else
     echo "[GUIDE] COLLABORATIVE GUIDANCE MODE"
@@ -658,44 +731,110 @@ if [ "$implementation_success" = true ]; then
         echo ""
         
         if [ "$template_exists" = true ]; then
-            echo "[TEMPLATE] Creating tests using template patterns:"
-            echo "1. Use .vybe/patterns/test.template if exists"
-            echo "2. Follow template's test structure exactly"
-            echo "3. Include template's test utilities/helpers"
+            echo "[TEMPLATE] AI MUST create tests following template patterns:"
+            echo "1. READ .vybe/patterns/test.template for exact test structure"
+            echo "2. USE template's test framework and utilities"
+            echo "3. FOLLOW template's naming conventions for test files"
+            echo "4. INCLUDE template's required test categories"
+            echo "5. APPLY template's assertion patterns"
         else
-            echo "[STANDARD] Creating tests using best practices:"
-            echo "1. Detect test framework from project structure"
-            echo "2. Create comprehensive test coverage"
-            echo "3. Include edge cases and error conditions"
+            echo "[CONTEXT] AI MUST create tests based on project context:"
+            echo "1. READ .vybe/project/conventions.md for test standards"
+            echo "2. DETECT test framework from existing project files"
+            echo "3. SCAN codebase for existing test patterns"
+            echo "4. ANALYZE package.json/requirements.txt for test dependencies"
+            echo "5. CREATE tests matching existing project style"
         fi
         echo ""
-        echo "AI MUST create test files now using Write tool"
+        echo "[CRITICAL] AI MUST now:"
+        echo "1. USE Write tool to create actual test files"
+        echo "2. IMPLEMENT real test cases (not just comments)"
+        echo "3. TEST all implemented functionality"
+        echo "4. INCLUDE edge cases and error conditions"
+        echo "5. ENSURE tests are runnable and pass"
         echo ""
     fi
     
-    # Determine test command
+    # Intelligently determine test command based on context
     test_command=""
-    if [ -f "package.json" ]; then
-        if grep -q '"test":' package.json; then
-            test_command="npm test"
-            echo "[DETECTED] Using npm test"
-        else
-            echo "[SETUP] Adding test script to package.json"
-            echo "AI should add test script if missing"
+    test_framework="unknown"
+    
+    echo "[DETECT] Determining test framework from context..."
+    
+    # Check template for test framework
+    if [ "$template_exists" = true ] && [ -f ".vybe/templates/$template_name/metadata.yml" ]; then
+        template_test_framework=$(grep "test_framework:" ".vybe/templates/$template_name/metadata.yml" 2>/dev/null | cut -d: -f2 | tr -d ' "')
+        if [ -n "$template_test_framework" ]; then
+            test_framework="$template_test_framework"
+            echo "[TEMPLATE] Test framework from template: $test_framework"
         fi
-    elif [ -f "requirements.txt" ] && (grep -q pytest requirements.txt || command -v pytest >/dev/null); then
-        test_command="pytest"
-        echo "[DETECTED] Using pytest"
-    elif [ -f "pom.xml" ]; then
-        test_command="mvn test"
-        echo "[DETECTED] Using Maven test"
-    elif [ -f "Cargo.toml" ]; then
-        test_command="cargo test"
-        echo "[DETECTED] Using Cargo test"
-    else
-        echo "[WARNING] No test framework detected"
-        echo "AI should set up appropriate test framework"
     fi
+    
+    # Check project conventions for test framework
+    if [ "$test_framework" = "unknown" ] && [ -f ".vybe/project/conventions.md" ]; then
+        if grep -qi "jest\|vitest" ".vybe/project/conventions.md"; then
+            test_framework="jest"
+        elif grep -qi "pytest" ".vybe/project/conventions.md"; then
+            test_framework="pytest"
+        elif grep -qi "junit" ".vybe/project/conventions.md"; then
+            test_framework="junit"
+        fi
+        
+        if [ "$test_framework" != "unknown" ]; then
+            echo "[CONVENTIONS] Test framework from conventions.md: $test_framework"
+        fi
+    fi
+    
+    # Detect from existing project files
+    if [ "$test_framework" = "unknown" ]; then
+        if [ -f "package.json" ]; then
+            if grep -q '"jest"' package.json; then
+                test_framework="jest"
+                test_command="npm test"
+                echo "[DETECTED] Jest from package.json dependencies"
+            elif grep -q '"vitest"' package.json; then
+                test_framework="vitest"
+                test_command="npm test"
+                echo "[DETECTED] Vitest from package.json dependencies"
+            elif grep -q '"test":' package.json; then
+                test_framework="npm"
+                test_command="npm test"
+                echo "[DETECTED] npm test script found"
+            else
+                echo "[SETUP] No test script in package.json"
+                echo "AI MUST add appropriate test script based on project type"
+            fi
+        elif [ -f "requirements.txt" ]; then
+            if grep -q "pytest" requirements.txt; then
+                test_framework="pytest"
+                test_command="pytest"
+                echo "[DETECTED] pytest from requirements.txt"
+            elif command -v pytest >/dev/null; then
+                test_framework="pytest"
+                test_command="pytest"
+                echo "[DETECTED] pytest available in system"
+            else
+                echo "[SETUP] No pytest found"
+                echo "AI MUST add pytest to requirements.txt"
+            fi
+        elif [ -f "pom.xml" ]; then
+            test_framework="junit"
+            test_command="mvn test"
+            echo "[DETECTED] Maven project with JUnit"
+        elif [ -f "Cargo.toml" ]; then
+            test_framework="cargo"
+            test_command="cargo test"
+            echo "[DETECTED] Rust project with Cargo test"
+        else
+            echo "[WARNING] No project configuration found"
+            echo "AI MUST determine appropriate test framework from task context"
+        fi
+    fi
+    
+    echo ""
+    echo "[FRAMEWORK] Test framework: $test_framework"
+    echo "[COMMAND] Test command: ${test_command:-'AI must determine'}"
+    echo ""
     
     # Run tests with auto-fix capability
     while [ "$test_success" = false ] && [ "$auto_fix_attempts" -lt "$max_auto_fix" ]; do
@@ -717,14 +856,27 @@ if [ "$implementation_success" = true ]; then
                 
                 if [ "$auto_fix_attempts" -lt "$max_auto_fix" ]; then
                     echo ""
-                    echo "[AUTO-FIX] Attempting to fix test failures..."
-                    echo "AI MUST:"
-                    echo "1. Read test failure output from log"
-                    echo "2. Identify root cause of failures"
-                    echo "3. Fix implementation or test code"
-                    echo "4. Re-run tests automatically"
+                    echo "[AUTO-FIX] Attempting to fix test failures (attempt $auto_fix_attempts/$max_auto_fix)..."
                     echo ""
-                    echo "AI should analyze failures and fix code now"
+                    echo "[ANALYZE] AI MUST analyze failure log:"
+                    echo "1. READ .vybe/sessions/$session_id-test-$((auto_fix_attempts - 1)).log"
+                    echo "2. IDENTIFY specific error messages and failure types"
+                    echo "3. DETERMINE if issue is in implementation or test code"
+                    echo "4. LOCATE exact files and line numbers with problems"
+                    echo ""
+                    echo "[FIX] AI MUST make targeted fixes:"
+                    echo "1. USE Edit tool to fix identified issues"
+                    echo "2. MAINTAIN template compliance if template exists"
+                    echo "3. PRESERVE existing working functionality"
+                    echo "4. FIX syntax errors, import issues, logic errors"
+                    echo "5. UPDATE test assertions if requirements changed"
+                    echo ""
+                    echo "[VALIDATE] After fixes:"
+                    echo "1. VERIFY fixes address root cause of failures"
+                    echo "2. ENSURE no new issues introduced"
+                    echo "3. MAINTAIN code quality and standards"
+                    echo ""
+                    echo "AI should now read failure log and apply fixes..."
                     echo ""
                 else
                     echo ""
@@ -779,14 +931,47 @@ if [ "$template_exists" = true ] && [ "$validation_passed" = true ]; then
     echo "4. No unauthorized deviations from template"
     echo ""
     
-    # AI should validate template compliance here
+    # AI MUST validate template compliance
     template_compliant=true
+    violations_found=""
+    
+    echo "[CHECKING] Validating implementation against template..."
+    
+    # Check if enforcement directories exist
+    if [ -d ".vybe/enforcement" ]; then
+        echo "[VALIDATE] Checking against enforcement rules..."
+        # AI should read and validate against .vybe/enforcement/ rules
+    fi
+    
+    if [ -d ".vybe/patterns" ]; then
+        echo "[VALIDATE] Verifying code patterns match template..."
+        # AI should check that generated code follows .vybe/patterns/
+    fi
+    
+    if [ -d ".vybe/validation" ]; then
+        echo "[VALIDATE] Running validation rules..."
+        # AI should validate against .vybe/validation/ rules
+    fi
+    
+    # AI should check file structure, naming conventions, and code patterns
+    echo "[AI] AI MUST verify:"
+    echo "1. Directory structure matches template requirements"
+    echo "2. File naming follows template conventions"
+    echo "3. Code patterns match template examples"
+    echo "4. Dependencies align with template specifications"
+    echo "5. No unauthorized deviations from template DNA"
     
     if [ "$template_compliant" = true ]; then
         echo "[PASSED] ✅ Template compliance validated"
     else
-        echo "[FAILED] ❌ Template violations found"
-        echo "AI MUST fix violations to maintain template consistency"
+        echo "[FAILED] ❌ Template violations found: $violations_found"
+        echo ""
+        echo "[REQUIRED] AI MUST fix violations:"
+        echo "1. Read template requirements again"
+        echo "2. Identify specific violations"
+        echo "3. Correct implementation to match template"
+        echo "4. Re-validate compliance"
+        echo ""
         validation_passed=false
     fi
 fi
@@ -811,25 +996,100 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
     
     integration_success=true
     
-    # Run integration tests
-    if [ -f "package.json" ] && grep -q '"test:integration"' package.json; then
-        echo "[RUN] npm run test:integration"
-        if ! npm run test:integration 2>&1 | tee ".vybe/sessions/$session_id-integration.log"; then
-            integration_success=false
+    # Context-driven integration testing
+    echo "[CONTEXT] Determining integration test approach..."
+    
+    integration_test_command=""
+    integration_approach="manual"
+    
+    # Check template for integration testing approach
+    if [ "$template_exists" = true ]; then
+        echo "[TEMPLATE] Using template-defined integration testing..."
+        if [ -f ".vybe/patterns/integration-test.template" ]; then
+            echo "[TEMPLATE] AI MUST follow .vybe/patterns/integration-test.template"
+            integration_approach="template"
         fi
-    elif [ "$test_command" = "pytest" ]; then
-        echo "[RUN] pytest tests/ -k integration"
-        if ! pytest tests/ -k integration 2>&1 | tee ".vybe/sessions/$session_id-integration.log"; then
-            integration_success=false
-        fi
-    else
-        echo "[MANUAL] Running manual integration validation..."
-        echo "AI MUST verify:"
-        echo "1. All components work together correctly"
-        echo "2. API endpoints respond as expected"
-        echo "3. Database operations complete successfully"
-        echo "4. UI interactions work end-to-end"
     fi
+    
+    # Check project conventions for integration testing
+    if [ "$integration_approach" = "manual" ] && [ -f ".vybe/project/conventions.md" ]; then
+        echo "[CONVENTIONS] Checking integration test standards..."
+        if grep -qi "integration.*test" ".vybe/project/conventions.md"; then
+            echo "[CONVENTIONS] Integration testing standards found"
+        fi
+    fi
+    
+    # Detect existing integration test setup
+    if [ -f "package.json" ]; then
+        if grep -q '"test:integration"' package.json; then
+            integration_test_command="npm run test:integration"
+            integration_approach="automated"
+            echo "[DETECTED] npm integration test script"
+        elif grep -q '"test:e2e"' package.json; then
+            integration_test_command="npm run test:e2e"
+            integration_approach="automated"
+            echo "[DETECTED] npm e2e test script"
+        fi
+    elif [ "$test_framework" = "pytest" ]; then
+        if [ -d "tests/integration" ]; then
+            integration_test_command="pytest tests/integration/"
+            integration_approach="automated"
+            echo "[DETECTED] pytest integration tests directory"
+        elif find . -name "*integration*test*.py" -type f | head -1 | grep -q .; then
+            integration_test_command="pytest -k integration"
+            integration_approach="automated"
+            echo "[DETECTED] pytest integration test files"
+        fi
+    elif [ "$test_framework" = "junit" ]; then
+        integration_test_command="mvn integration-test"
+        integration_approach="automated"
+        echo "[DETECTED] Maven integration test phase"
+    fi
+    
+    echo "[APPROACH] Integration testing: $integration_approach"
+    echo ""
+    
+    # Run integration tests based on detected approach
+    case $integration_approach in
+        "automated")
+            echo "[RUN] $integration_test_command"
+            if ! eval "$integration_test_command" 2>&1 | tee ".vybe/sessions/$session_id-integration.log"; then
+                integration_success=false
+                echo "[FAILED] ❌ Integration tests failed"
+                echo "AI MUST review .vybe/sessions/$session_id-integration.log and fix issues"
+            else
+                echo "[PASSED] ✅ Integration tests passed"
+            fi
+            ;;
+        "template")
+            echo "[TEMPLATE] Running template-defined integration validation..."
+            echo "AI MUST:"
+            echo "1. READ .vybe/patterns/integration-test.template"
+            echo "2. EXECUTE template-defined integration checks"
+            echo "3. VALIDATE all template requirements are met"
+            echo "4. REPORT any template compliance issues"
+            ;;
+        "manual")
+            echo "[MANUAL] Running comprehensive integration validation..."
+            echo ""
+            echo "[AI VALIDATION] AI MUST verify:"
+            echo "================================"
+            echo "1. All implemented components work together correctly"
+            echo "2. API endpoints respond as expected (if applicable)"
+            echo "3. Database operations complete successfully (if applicable)"
+            echo "4. UI interactions work end-to-end (if applicable)"
+            echo "5. External service integrations function (if applicable)"
+            echo "6. Configuration settings are applied correctly"
+            echo "7. Error handling works across component boundaries"
+            echo "8. Performance meets requirements under integration load"
+            echo ""
+            echo "[DEMONSTRATION] AI MUST provide working demo:"
+            echo "1. Show how to run/test the implemented functionality"
+            echo "2. Provide example commands or interactions"
+            echo "3. Verify that stage requirements are demonstrably met"
+            echo "4. Document any setup needed for others to test"
+            ;;
+    esac
     
     # Validate requirements
     echo ""
@@ -846,29 +1106,43 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
         echo "=========================================="
         echo ""
         
-        # Determine run instructions based on project type
-        if [ -f "package.json" ]; then
-            echo "Node.js Application:"
-            echo "1. npm install            # Install dependencies"
-            echo "2. npm start              # Start the application"
-            echo "3. npm run dev            # Development mode (if available)"
+        # Context-driven run instructions - NO HARDCODING
+        echo "[CONTEXT] AI MUST determine run instructions from actual context:"
+        echo ""
+        
+        # PRIORITY 1: Template-defined instructions
+        if [ "$template_exists" = true ]; then
+            echo "[TEMPLATE] AI MUST:"
+            echo "1. READ .vybe/templates/$template_name/ for run instructions"
+            echo "2. CHECK template metadata for startup commands"
+            echo "3. FOLLOW template's deployment/run patterns exactly"
             echo ""
-            echo "Access at: http://localhost:3000 (or check console output)"
-            echo ""
-            echo "Quick test commands:"
-            echo "- npm test               # Run all tests"
-            echo "- curl http://localhost:3000/api/health  # Health check"
-        elif [ -f "requirements.txt" ]; then
-            echo "Python Application:"
-            echo "1. pip install -r requirements.txt  # Install dependencies"
-            echo "2. python app.py OR python main.py  # Start application"
-            echo ""
-            echo "Or with virtual environment:"
-            echo "1. python -m venv venv"
-            echo "2. source venv/bin/activate"
-            echo "3. pip install -r requirements.txt"
-            echo "4. python app.py"
         fi
+        
+        # PRIORITY 2: Project documentation
+        if [ -f "README.md" ]; then
+            echo "[DOCUMENTATION] AI MUST:"
+            echo "1. READ README.md for existing run instructions"
+            echo "2. EXTRACT setup and startup commands"
+            echo "3. ADAPT instructions to current implementation"
+            echo ""
+        fi
+        
+        # PRIORITY 3: Intelligent analysis of project structure
+        echo "[ANALYSIS] AI MUST analyze project context:"
+        echo "1. SCAN all configuration files to understand project type"
+        echo "2. EXAMINE implemented code to find entry points"
+        echo "3. DETECT build systems and dependency managers"
+        echo "4. IDENTIFY any services or databases that need startup"
+        echo "5. DETERMINE appropriate ports and access methods"
+        echo ""
+        
+        echo "[INSTRUCTIONS] AI MUST provide contextual run instructions:"
+        echo "1. READ actual project files (not assumptions)"
+        echo "2. ANALYZE implemented task code for specific requirements"
+        echo "3. PROVIDE exact commands for THIS specific implementation"
+        echo "4. INCLUDE any setup steps needed for the current task"
+        echo "5. GIVE working demonstration commands"
         
         echo ""
         echo "[DEMO] Test the working application:"
