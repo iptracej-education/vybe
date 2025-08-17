@@ -14,24 +14,32 @@ Vybe is a framework for AI-driven software development that provides a spec stru
 
 ### Principles
 1. **Incremental Outcome Delivery** - Each stage delivers working units in 1-3 days (baby steps approach)
-2. **Code-Reality Alignment** - Bridge gap between documented intentions and actual implementation
-3. **Natural Language Scope Control** - Change project scope through conversational interface
-4. **Smart Analysis Routing** - Automatically route requests to specialized audit modes
-5. **Business Outcome Focus** - Every feature must tie to business value, eliminate orphan code
-6. **Learning-Driven Iteration** - Each completed stage improves planning for next stage
-7. **Zero Hardcoded Assumptions** - All analysis based on YOUR actual project
-8. **Professional Workflow** - Natural language interface + structured analysis output
-9. **Living Documents** - Documentation evolves naturally without approval ceremonies
+2. **Technology Stack Coordination** - Complete technology decisions established upfront, progressive tool installation
+3. **Code-Reality Alignment** - Bridge gap between documented intentions and actual implementation
+4. **Natural Language Scope Control** - Change project scope through conversational interface
+5. **Smart Analysis Routing** - Automatically route requests to specialized audit modes
+6. **Business Outcome Focus** - Every feature must tie to business value, eliminate orphan code
+7. **Learning-Driven Iteration** - Each completed stage improves planning for next stage
+8. **Zero Hardcoded Assumptions** - All analysis based on YOUR actual project context
+9. **Professional Workflow** - Natural language interface + structured analysis output
+10. **Living Documents** - Documentation evolves naturally without approval ceremonies
 
 ### Key Innovations
 
-#### 1. Incremental Staged Outcomes
+#### 1. Technology Stack Intelligence & Progressive Preparation
+- **Intelligent Analysis**: AI parses project descriptions to extract explicit technologies and recommend missing components
+- **Complete Technology Registry**: Establishes technology decisions in `.vybe/tech/` with stage-by-stage installation plan  
+- **Progressive Tool Installation**: Execute command installs required tools stage-by-stage based on current development needs
+- **User Approval Flow**: AI presents complete technology recommendations with explanations before proceeding
+- **No Technology Guessing**: Execute command uses established decisions instead of detection or assumptions
+
+#### 2. Incremental Staged Outcomes
 - **Stage 1**: Minimal functional outcome (Day 1-2)
 - **Stage 2+**: Progressive enhancements building on previous stages
 - **UI Examples**: Requested only when needed (not everything upfront)
 - **Learning Integration**: Each stage completion improves next stage planning
 
-#### 2. Code-Reality Analysis Engine
+#### 3. Code-Reality Analysis Engine
 Five specialized audit modes that analyze YOUR actual project:
 - **code-reality**: Compare docs vs actual implementation
 - **scope-drift**: Detect feature creep beyond original vision
@@ -39,7 +47,7 @@ Five specialized audit modes that analyze YOUR actual project:
 - **documentation**: Sync README/docs with actual code
 - **mvp-extraction**: Extract minimal viable scope for timeline constraints
 
-#### 3. Smart Audit Routing
+#### 4. Smart Audit Routing
 Natural language requests automatically route to appropriate analysis:
 ```bash
 "reshape to fit 2 weeks" → mvp-extraction --timeline=14days + scope-drift
@@ -47,7 +55,7 @@ Natural language requests automatically route to appropriate analysis:
 "sync docs with code" → documentation + code-reality
 ```
 
-#### 4. Living Documents Philosophy
+#### 5. Living Documents Philosophy
 Documentation evolves naturally without approval ceremonies:
 - **Generate and Go**: Commands create starting point documents
 - **Edit Freely**: Users modify with any editor at any time
@@ -121,11 +129,11 @@ This order ensures decisions build on solid foundations, maintaining consistency
 
 ### Command Structure (9 Core Commands)
 ```
-/vybe:init [project-description]      # Initialize with staged outcome roadmap
-/vybe:template [action]                # Import and analyze external templates (NEW)
+/vybe:init [project-description] [--template=name]  # Initialize with intelligent technology analysis
+/vybe:template [action]                              # Import and analyze external templates
 /vybe:backlog [action]                # Outcome-grouped task management 
 /vybe:plan [feature-description]      # Create feature specifications 
-/vybe:execute [feature-task]          # Execute implementation with context
+/vybe:execute [feature-task]          # Execute with automatic code generation & progressive tech preparation
 /vybe:release [stage]                 # Mark stage complete, advance to next
 /vybe:status [scope]                  # Progress tracking with outcome progression
 /vybe:audit [mode]                    # Quality assurance + code-reality analysis
@@ -402,28 +410,47 @@ The Vybe framework leverages the existing hook system (`.claude/hooks/README.md`
 ## Command Specifications
 
 ### /vybe:init
-**Purpose**: Create intelligent project foundation for new or existing projects
+**Purpose**: Create intelligent project foundation with technology stack analysis and staged outcome roadmap
+
+**Enhanced Capabilities**:
+- **Intelligent Technology Analysis**: Parses project description to extract explicit technologies
+- **Technology Stack Registry**: Creates `.vybe/tech/` with complete technology decisions
+- **Progressive Installation Planning**: Stage-by-stage tool installation roadmap
+- **User Approval Flow**: AI presents complete technology recommendations before proceeding
 
 **Tasks**:
-1. **Task: Analyze Project State**
+1. **Task: Parse Parameters & Template Validation**
+   - Process command line arguments and project description
+   - Validate template if --template specified
+   - Extract explicit technology requirements from description
+
+2. **Task: Analyze Project State**
    - Check for .git repository
    - Detect existing .vybe/project documents
    - Scan for code and configuration files
    - Determine project type (new/existing/vybe-enabled)
 
-2. **Task: Generate Project Overview**
+3. **Task: Complete Technology Stack Capture and Planning** *(NEW)*
+   - AI-driven technology analysis and recommendation
+   - Research best practices for application domain
+   - Present complete technology stack with explanations
+   - Get user approval before creating technology registry
+   - Create `.vybe/tech/` structure with stage-by-stage installation plan
+
+4. **Task: Generate Project Overview**
    - Create/update `.vybe/project/overview.md`
-   - Document business goals and user context
+   - Document business goals and user context aligned with staged outcomes
    - Define project scope and constraints
    - Keep to 1-2 pages maximum
 
-3. **Task: Document Architecture**
+5. **Task: Document Architecture**
    - Create/update `.vybe/project/architecture.md`
-   - Document technology stack discovered or planned
+   - Document established technology stack from registry
+   - Include architectural patterns supporting staged development
    - Capture system design patterns
    - Map file structure organization
 
-4. **Task: Extract Conventions**
+6. **Task: Extract Conventions**
    - Create/update `.vybe/project/conventions.md`
    - Extract coding standards from existing code
    - Document git workflow and commit patterns

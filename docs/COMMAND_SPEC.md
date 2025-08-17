@@ -36,26 +36,56 @@ init → backlog → plan → execute → release → status → audit
 
 ## /vybe:init
 
-**Purpose**: Initialize project with AI-generated foundation and structure
+**Purpose**: Initialize project with AI-generated foundation, intelligent technology stack analysis, and staged outcome roadmap
 
 ### Usage
 ```bash
-/vybe:init [project-description]
+/vybe:init [project-description] [--template=template-name]
 ```
 
 ### Parameters
-- `project-description`: Optional description for new projects or documentation updates
+- `project-description`: Project description with optional technology specifications
+- `--template=template-name`: Optional template to use as architectural DNA
+
+### Enhanced Capabilities
+- **Intelligent Technology Analysis**: Parses project description to extract explicit technologies and recommends missing components
+- **Technology Stack Registry**: Creates `.vybe/tech/` with complete technology decisions and stage-by-stage installation plan
+- **Template Integration**: Extracts technology stack from template source code when template specified
+- **User Approval Flow**: Presents complete technology recommendations and gets user approval before proceeding
 
 ### Tasks
-1. **Analyze Project State** - Detect git, code files, existing documentation
-2. **Create Directory Structure** - Set up .vybe hierarchy
-3. **Generate Project Overview** - Business context and goals
-4. **Document Architecture** - Technology stack and patterns  
-5. **Extract Conventions** - Coding standards from existing code
-6. **Update Project Files** - README, .gitignore, CLAUDE.md
+1. **Parse Parameters & Template Validation** - Process command line arguments and validate template if specified
+2. **Analyze Project State** - Detect git, code files, existing documentation
+3. **Complete Technology Stack Capture and Planning** - **NEW**
+   - Interactive technology stack definition
+   - AI-driven analysis and recommendation
+   - Technology registry creation (`.vybe/tech/`)
+   - Stage-by-stage installation planning
+4. **Create Directory Structure** - Set up .vybe hierarchy
+5. **Generate Intelligent Project Documentation** - Business context, architecture, conventions, and outcomes with technology integration
+6. **Incremental Outcome Stages Capture** - Define staged delivery roadmap with user interaction
+7. **Update Project Files** - README, .gitignore, CLAUDE.md
+
+### Technology Registry Structure
+Creates `.vybe/tech/` directory with:
+- `languages.yml` - Primary language, version, package manager
+- `frameworks.yml` - Web/API/database frameworks and versions
+- `testing.yml` - Test frameworks, commands, and requirements
+- `build.yml` - Build tools, scripts, and processes
+- `tools.yml` - Development tools and utilities
+- `deployment.yml` - Deployment configuration and targets
+- `stages.yml` - Stage-by-stage tool installation plan
+
+### AI Process Flow
+1. **Parse** - Extract explicit technologies from project description
+2. **Research** - Analyze best practices for application domain and technology combinations
+3. **Recommend** - Intelligently suggest missing components with explanations
+4. **Present** - Show complete technology stack with reasoning and alternatives
+5. **Approve** - Get user approval or guide to re-run with more specific requirements
+6. **Create** - Generate technology registry only after user approval
 
 ### Process
-- **New Project**: Generate based on description
+- **New Project**: Generate based on description and intelligent technology analysis
 - **Existing Project**: Analyze codebase and extract patterns
 - **Vybe Project**: Update documentation if needed
 
@@ -376,15 +406,18 @@ init → backlog → plan → execute → release → status → audit
 
 ## /vybe:execute
 
-**Purpose**: Execute implementation tasks with automatic code generation, testing, and multi-member coordination
+**Purpose**: Execute implementation tasks with automatic code generation, progressive technology preparation, testing, and multi-member coordination
 
 ### Enhanced Capabilities
-- **Automatic code generation** following template patterns and project conventions
-- **Unit testing after each task** with auto-fix capabilities
-- **Integration testing at stage gates**
-- **Multi-member coordination** with role-based assignments
-- **Template enforcement** when available (highest priority)
-- **Intelligent error handling** with human alerts when needed
+- **Technology Stack-Driven Implementation**: Uses established technology decisions from `.vybe/tech/` registry (no more guessing)
+- **Progressive Technology Preparation**: Installs required tools stage-by-stage based on current development stage
+- **Automatic Code Generation**: Creates real, runnable code following established technology stack and patterns
+- **Context-Driven Testing**: Uses testing configuration from `testing.yml` for framework and commands
+- **Unit Testing with Auto-Fix**: Runs tests after implementation with automatic error correction (max 2 attempts)
+- **Integration Testing at Stage Gates**: Comprehensive integration validation when stage completes
+- **Multi-Member Coordination**: Role-based assignments with git-based coordination
+- **Template Enforcement**: Template patterns are "LAW" when available (highest priority)
+- **Quality Gates**: Cannot progress without passing tests and validation
 
 ### Usage
 ```bash
@@ -450,43 +483,59 @@ export VYBE_MEMBER=dev-1
 
 #### Task 1: Load Context with Template Priority
 - **TEMPLATE CHECK**: Load template patterns if project uses template
+- **TECHNOLOGY STACK**: Load established technology decisions from `.vybe/tech/` registry
 - **PROJECT DOCS**: Load all mandatory project documents
 - **FEATURE SPECS**: Load feature specifications for context
 - **MULTI-MEMBER**: Check role assignments and team coordination
 - **TASK DETAILS**: Read current task from tasks.md and dependencies
 
-#### Task 2: Determine Project Structure
-- **Template Structure**: Use template-defined structure exactly (NO deviations)
-- **Architecture Structure**: Follow specified technology stack and patterns
-- **Intelligent Structure**: Determine based on task requirements (last resort)
-- **First Task Setup**: Create clean project structure if this is first task
+#### Task 2: Technology Stack Preparation - **NEW**
+- **Load Technology Registry**: Read complete technology stack from `.vybe/tech/` directory
+- **Determine Current Stage**: Analyze task requirements and project progress to determine development stage
+- **Progressive Installation**: Install required tools for current stage using `stages.yml` configuration
+- **Validate Setup**: Run validation commands to ensure all required tools are properly installed
+- **Environment Preparation**: Set up development environment for implementation
 
-#### Task 3: Execute Implementation
-- **Template-Driven Code**: Use exact patterns from `.vybe/patterns/`
-- **Document-Driven Code**: Follow `architecture.md` and `conventions.md`
+#### Task 3: Git Coordination Setup
+- **Session Tracking**: Initialize session ID and tracking
+- **Branch Management**: Create or switch to appropriate task branch
+- **Working Tree Check**: Verify clean state or handle uncommitted changes
+- **Multi-Member Coordination**: Handle git-based team coordination
+
+#### Task 4: Execute Implementation with Technology Stack
+- **Technology Stack-Driven Code**: Use established technology decisions from `.vybe/tech/` registry
+- **Template-Driven Code**: Use exact patterns from `.vybe/patterns/` (if template exists)
+- **Project Structure**: Follow project structure using established technology stack
 - **Intelligent Code**: Apply best practices for detected project type
 - **Multi-Member Coordination**: Respect role assignments and branch management
 - **ACTUAL CODE GENERATION**: Create real, runnable files using Write/Edit tools
 
-#### Task 4: Unit Testing
-- **Test Creation**: Generate comprehensive unit tests for implemented code
-- **Template Test Patterns**: Use template test structures if available
-- **Auto Execution**: Run tests immediately after implementation
-- **Auto-Fix**: Handle simple test failures automatically
-- **Human Alert**: Escalate complex issues to human attention
+#### Task 5: Enhanced Testing and Validation
+- **Technology Stack-Driven Testing**: Use testing configuration from `testing.yml` for framework and commands
+- **Test Creation**: Generate comprehensive unit tests following established testing patterns
+- **Template Test Patterns**: Use template test structures if available (highest priority)
+- **Auto Execution**: Run tests immediately after implementation using configured test commands
+- **Auto-Fix with Limits**: Handle test failures automatically (max 2 attempts) with intelligent error analysis
+- **Human Alert**: Escalate complex issues after auto-fix limit reached
 
-#### Task 5: Git Coordination
-- **Branch Management**: Create/switch to feature branches for team coordination
-- **Session Tracking**: Track multi-session development work
-- **Conflict Detection**: Handle merge conflicts and coordination issues
-- **Tested Commits**: Only commit code that passes tests
+#### Task 6: Template Compliance Validation (if template exists)
+- **Pattern Compliance**: Validate implementation against template patterns from `.vybe/patterns/`
+- **Structure Validation**: Check directory structure matches template enforcement rules
+- **Code Standards**: Verify naming conventions and coding patterns follow template
+- **Violation Detection**: Identify and fix any unauthorized deviations from template DNA
 
-#### Task 6: Stage Gate Integration (if stage complete)
-- **Integration Tests**: Run end-to-end and integration test suites
+#### Task 7: Integration Testing (Stage Gates)
+- **Context-Driven Integration**: Use integration test approach from technology stack configuration
+- **End-to-End Validation**: Run comprehensive integration tests when stage completes
 - **Requirements Validation**: Verify all acceptance criteria are met
-- **Template Compliance**: Ensure no pattern violations occurred
-- **Run Instructions**: Provide clear instructions for starting/testing application
-- **Demo Commands**: Show specific commands to test the working software
+- **Technology Stack Instructions**: Provide run instructions based on `deployment.yml` and `build.yml`
+- **Working Demo**: Show specific commands to test the implemented functionality
+
+#### Task 8: Status Update and Git Commit
+- **Task Status Update**: Mark task as completed in `tasks.md` and update feature status
+- **Session Tracking**: Update session tracking with results and file changes
+- **Git Coordination**: Commit changes with descriptive messages for team coordination
+- **Quality Gates**: Only commit code that passes all tests and validation
 
 ### Enhanced Execution Modes
 

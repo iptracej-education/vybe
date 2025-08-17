@@ -92,22 +92,34 @@ claude
 
 ## Phase 1: Project Foundation
 
-### Step 1: Initialize New Project
+### Step 1: Initialize New Project with Technology Stack Analysis
 ```bash
 # Command to test:
-/vybe:init "Personal task management app with user authentication, API integrations, and data export features"
+/vybe:init "Personal task management app with React, Node.js, and MongoDB. Need user authentication, API integrations, and data export features with testing setup."
 
-# Expected behavior:
+# Expected AI analysis process:
+# 1. EXTRACT: React, Node.js, MongoDB, task management, authentication, API integrations
+# 2. RESEARCH: Best practices for MERN stack, authentication approaches, testing
+# 3. RECOMMEND: Missing components like Express (backend), JWT (auth), Jest (testing)
+# 4. PRESENT: Complete technology stack with explanations and alternatives
+# 5. ASK: User approval before creating .vybe/tech/ registry
+
+# Expected behavior after approval:
 # - Creates .vybe/ directory structure
+# - Creates .vybe/tech/ technology registry with established stack
 # - Generates foundation documents based on your description
 # - Sets up staged outcome roadmap
+# - Creates stage-by-stage tool installation plan
 # - Creates living documents you can edit freely
 ```
 
 **Test Points:**
-- [ ] Does init create all required foundation documents?
+- [ ] Does AI extract explicit technologies from description correctly?
+- [ ] Does AI research and recommend appropriate missing components?
+- [ ] Does AI present complete technology stack with explanations?
+- [ ] Does AI ask for user approval before proceeding?
+- [ ] Does init create .vybe/tech/ registry with concrete technology decisions?
 - [ ] Are the generated documents specific to the project description?
-- [ ] Do technology choices match the project requirements?
 - [ ] Is the project context comprehensive enough for decision-making?
 
 ### Step 2: Review Foundation Documents
@@ -252,15 +264,17 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 - [ ] Does it indicate which stage is currently active?
 - [ ] Does it provide clear next steps for Stage 1?
 
-### Step 7: Execute Stage 1 Implementation with Automatic Code Generation
+### Step 7: Execute Stage 1 Implementation with Technology Stack-Driven Code Generation
 ```bash
 # Command to test:
 /vybe:execute stage-1-task-1
 
-# Enhanced execute behavior:
-# - Loads context hierarchy: Templates → Project docs → Feature specs
-# - Creates actual project structure if first task
-# - Generates real, runnable code using Write/Edit tools
+# Enhanced execute behavior with technology coordination:
+# 1. LOADS technology stack from .vybe/tech/ registry (no more guessing!)
+# 2. INSTALLS Stage 1 tools progressively (React, Node.js, MongoDB tools)
+# 3. VALIDATES installation using configured validation commands
+# 4. CREATES project structure using established technology stack
+# 5. GENERATES real, runnable code following MERN stack patterns
 # - Creates unit tests automatically
 # - Runs tests and auto-fixes simple failures
 # - Validates against template patterns (if template exists)
@@ -279,13 +293,16 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 ```
 
 **Enhanced Test Points:**
+- [ ] Does execute load established technology stack from .vybe/tech/ registry?
+- [ ] Does progressive tool installation follow stages.yml configuration?
 - [ ] Does execute create actual project structure on first task?
-- [ ] Are real code files generated (not just documentation)?
+- [ ] Are real code files generated following established tech stack (not just documentation)?
 - [ ] Does it follow template patterns if template exists?
-- [ ] Are unit tests created and run automatically?
-- [ ] Does auto-fix handle simple test failures?
-- [ ] Is working, runnable code produced?
-- [ ] Does stage completion show run instructions?
+- [ ] Are unit tests created using established testing framework from testing.yml?
+- [ ] Does auto-fix handle test failures intelligently (max 2 attempts)?
+- [ ] Is working, runnable code produced that follows technology stack?
+- [ ] Does stage completion show technology-specific run instructions?
+- [ ] Are installation validation commands executed successfully?
 
 ## Phase 4: Quality Assurance
 

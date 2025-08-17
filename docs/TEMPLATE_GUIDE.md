@@ -15,12 +15,28 @@ The Vybe Template System allows you to import external templates (like GitHub re
 - **Development Patterns**: Component templates, service patterns, API designs
 - **Quality Standards**: Testing approaches, validation rules, compliance
 
-### Template Immutability
+### Template Immutability & Living Documents
 Once set during project initialization, templates become **permanent project DNA**:
-- ✅ You can evolve documents and code within template constraints
-- ✅ You can add features following template patterns  
-- ❌ You cannot change the template mid-project
-- ❌ To use a different template, create a new project and migrate
+
+### What's Immutable (Template DNA)
+- ❌ Template choice cannot be changed mid-project
+- ❌ Core architectural patterns must be followed
+- ❌ Directory structure requirements are enforced
+- ❌ Code generation patterns cannot be bypassed
+
+### What's Living (Project Evolution)
+- ✅ **Vybe documents can evolve freely** - Edit with any editor, no approval needed
+- ✅ **Add features following template patterns** - Extend within architectural constraints
+- ✅ **Customize project context** - Adapt business goals, user descriptions, conventions
+- ✅ **Iterate on requirements** - Refine specs based on learnings and discoveries
+
+### Living Documents Philosophy
+Templates provide architectural DNA while preserving the flexibility of living documents:
+- **Generate and Go**: Template creates starting point documents
+- **Edit Freely**: Modify any .md file with your preferred editor
+- **AI-Assisted Changes**: Use `--modify` options for AI help with specific updates
+- **No Approval Gates**: No acceptance ceremonies - documents evolve naturally
+- **Template Compliance**: Architecture patterns enforced, but content evolution encouraged
 
 ## Template Workflow
 
@@ -70,18 +86,24 @@ Use template as project DNA:
 
 **What happens:**
 - Template becomes permanent project DNA
-- All Vybe documents generated using template patterns
-- Enforcement structures activated
-- Future commands follow template rules
+- **Living documents created using template patterns** - foundation that evolves freely
+- Enforcement structures activated for code generation and validation
+- Future commands follow template rules while allowing document evolution
 
 ### 4. Develop Following Template DNA
-All commands now enforce template patterns:
+All commands now enforce template patterns with intelligent technology coordination:
 
 ```bash
 /vybe:plan user-auth       # Creates specs following template structure
-/vybe:execute auth-task-1  # Generates code using template patterns
+/vybe:execute auth-task-1  # Uses template technology stack + progressive tool installation
 /vybe:audit               # Validates against template compliance
 ```
+
+**Technology Stack Coordination**: Templates now provide complete technology decisions:
+- **No Technology Guessing**: Execute commands use template's exact technology stack
+- **Progressive Installation**: Tools installed stage-by-stage based on template requirements
+- **Template Registry**: Complete `.vybe/tech/` structure extracted from template source code
+- **Validation Commands**: Template-specific commands for verifying tool installation
 
 ## Template Management Commands
 
