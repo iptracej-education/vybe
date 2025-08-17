@@ -254,6 +254,14 @@ fi
 |   |-- overview.md      # Business context and goals
 |   |-- architecture.md  # Technical decisions
 |   `-- conventions.md   # Development standards
+|-- tech/               # Technology stack registry (NEW)
+|   |-- languages.yml   # Primary language and package manager
+|   |-- frameworks.yml  # Web/API/database frameworks
+|   |-- testing.yml     # Testing frameworks and commands
+|   |-- build.yml       # Build tools and development server
+|   |-- tools.yml       # Development tools and utilities
+|   |-- deployment.yml  # Deployment configuration
+|   `-- stages.yml      # Progressive tool installation plan
 |-- backlog.md          # Feature planning
 `-- features/           # Feature specifications (empty initially)
 ```
@@ -510,12 +518,21 @@ mkdir -p .vybe/tech
 # Create technology registry files
 echo "[CREATE] Creating complete technology stack registry..."
 
-echo "# AI MUST populate this with actual technology decisions" > .vybe/tech/languages.yml
-echo "# AI MUST populate this with actual framework choices" > .vybe/tech/frameworks.yml
-echo "# AI MUST populate this with actual testing setup" > .vybe/tech/testing.yml
-echo "# AI MUST populate this with actual build configuration" > .vybe/tech/build.yml
-echo "# AI MUST populate this with actual development tools" > .vybe/tech/tools.yml
-echo "# AI MUST populate this with actual deployment setup" > .vybe/tech/deployment.yml
+# IMPORTANT: AI must now create actual technology files based on the analysis
+# This replaces the placeholder approach with real implementation
+
+echo "[AI] NOW CREATING ACTUAL TECHNOLOGY REGISTRY FILES..."
+echo "===================================================="
+echo ""
+echo "Based on project analysis: $project_description"
+echo ""
+echo "AI MUST NOW:"
+echo "1. Parse the project description and extract technology requirements"
+echo "2. Create specific .yml files with actual technology decisions"
+echo "3. Base decisions on the technology analysis already performed"
+echo "4. Include specific versions, commands, and configurations"
+echo ""
+echo "CREATING TECHNOLOGY REGISTRY WITH REAL DATA..."
 
 # Critical: Stage-by-stage installation plan
 cat > .vybe/tech/stages.yml << 'EOF'
@@ -554,57 +571,55 @@ stages:
 # AI MUST customize stages based on project requirements
 EOF
 
-echo "[OK] Technology registry structure created"
+echo "[OK] Technology registry base structure created"
 echo ""
-echo "[AI] AI MUST NOW PERFORM INTELLIGENT ANALYSIS:"
+
+# AI IMPLEMENTATION: Create actual technology registry files
+echo "[AI] CREATING ACTUAL TECHNOLOGY REGISTRY FILES"
 echo "=============================================="
 echo ""
-echo "STEP 1: PARSE AND EXTRACT"
-echo "========================"
-echo "From project description: \"$project_description\""
-echo "AI MUST extract:"
-echo "- Explicitly mentioned technologies and tools"
-echo "- Application type and domain (task management, e-commerce, etc.)"
-echo "- Performance/complexity requirements (quick, production, enterprise)"
-echo "- Any specific constraints or preferences"
+echo "Based on project analysis and user context:"
+echo "Project: $project_description"
 echo ""
-echo "STEP 2: RESEARCH AND ANALYZE"
-echo "=========================="
-echo "AI MUST research current best practices for:"
-echo "- Identified application domain (what do task management apps typically need?)"
-echo "- Specified technology combinations (how do python+fastapi projects work?)"
-echo "- Missing critical components (database needs, testing approaches, etc.)"
-echo "- Development workflow optimization"
+echo "AI is now analyzing the project description and creating specific technology registry files..."
 echo ""
-echo "STEP 3: INTELLIGENT RECOMMENDATIONS"
-echo "================================="
-echo "AI MUST recommend missing pieces with explanations:"
-echo "- Database: None needed vs SQLite vs PostgreSQL (with reasons)"
-echo "- Testing: Unit testing framework + integration approach"
-echo "- Development tools: Servers, linters, formatters"
-echo "- Deployment: Local development vs production considerations"
+
+# This is where AI will implement the actual technology analysis and file creation
+# The AI should:
+# 1. Parse the project description
+# 2. Extract mentioned technologies
+# 3. Research and recommend missing components
+# 4. Create specific .yml files with actual technology decisions
+# 5. Populate stages.yml with real installation commands
+
+echo "[CRITICAL] AI MUST NOW IMPLEMENT:"
+echo "================================"
 echo ""
-echo "STEP 4: PRESENT COMPLETE STACK TO USER"
-echo "====================================="
-echo "AI MUST show user:"
-echo "- What was specified: 'You mentioned: python, uv, FastAPI'"
-echo "- What is recommended: 'For task management, I recommend: SQLite + pytest'"
-echo "- Why each recommendation: 'SQLite for quick development, easy setup'"
-echo "- Alternatives: 'Or PostgreSQL if you plan to scale'"
-echo "- Ask for approval: 'Does this technology stack work for you?'"
+echo "1. ANALYZE PROJECT DESCRIPTION: '$project_description'"
+echo "   - Extract explicit technologies (Python, FastAPI, etc.)"
+echo "   - Identify project type (expense tracker, web app, etc.)"
+echo "   - Determine complexity needs (quick development, production, etc.)"
 echo ""
-echo "STEP 5: HANDLE USER RESPONSE"
-echo "=========================="
-echo "IF user approves: Populate .vybe/tech/*.yml files with decisions"
-echo "IF user rejects: Ask what they'd prefer and guide them to re-run with details"
-echo "IF user wants alternatives: Present other options and reasoning"
+echo "2. CREATE COMPLETE TECHNOLOGY STACK FILES:"
+echo "   - languages.yml: Primary language, version, package manager"
+echo "   - frameworks.yml: Web/API/database frameworks and versions"
+echo "   - testing.yml: Test frameworks, commands, validation"
+echo "   - build.yml: Build tools, scripts, development server"
+echo "   - tools.yml: Development tools, linters, formatters"
+echo "   - deployment.yml: Deployment setup, environment configuration"
 echo ""
-echo "STEP 6: CREATE TECHNOLOGY REGISTRY (ONLY AFTER APPROVAL)"
-echo "========================================================"
-echo "1. POPULATE all .vybe/tech/*.yml files with approved decisions"
-echo "2. CREATE stage-by-stage installation plan in stages.yml"
-echo "3. ENSURE each stage has specific tools and commands"
-echo "4. VALIDATE that all stages build toward complete working system"
+echo "3. POPULATE STAGES.YML WITH REAL INSTALLATION PLAN:"
+echo "   - Stage 1: Core language and basic tools"
+echo "   - Stage 2: Web framework and testing setup"
+echo "   - Stage 3: Database and integration tools"
+echo "   - Stage Final: Production and deployment tools"
+echo ""
+echo "4. USE ACTUAL COMMANDS AND VERSIONS:"
+echo "   - Specific installation commands (pip install, npm install, etc.)"
+echo "   - Version requirements and constraints"
+echo "   - Validation commands to check installation"
+echo ""
+echo "AI MUST CREATE THESE FILES NOW WITH REAL TECHNOLOGY DECISIONS!"
 echo ""
 ```
 
@@ -773,6 +788,15 @@ echo "   - .vybe/project/outcomes.md (staged delivery roadmap)"
 echo "   - .vybe/project/overview.md (business context aligned with outcomes)"
 echo "   - .vybe/project/architecture.md (technology supporting incremental growth)"
 echo "   - .vybe/project/conventions.md (standards for staged development)"
+echo ""
+echo "[TECHNOLOGY] Complete technology stack registry created:"
+echo "   - .vybe/tech/languages.yml (primary language and package manager)"
+echo "   - .vybe/tech/frameworks.yml (web/API/database frameworks)"
+echo "   - .vybe/tech/testing.yml (testing frameworks and commands)"
+echo "   - .vybe/tech/build.yml (build tools and development server)"
+echo "   - .vybe/tech/tools.yml (development tools and utilities)"
+echo "   - .vybe/tech/deployment.yml (deployment configuration)"
+echo "   - .vybe/tech/stages.yml (progressive tool installation plan)"
 echo ""
 echo "[INCREMENTAL] Baby steps approach enabled:"
 echo "   - Stage 1 can ship in 1-2 days"
