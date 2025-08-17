@@ -502,21 +502,33 @@ fi
 
 # Check if project structure needs to be created
 project_structure_exists=false
-if [ -d "src" ] || [ -f "package.json" ] || [ -f "requirements.txt" ] || [ -f "pom.xml" ] || [ -f "Cargo.toml" ]; then
+
+# AI must detect existing structure from actual files, not hardcoded patterns
+echo "[DETECT] Scanning for existing project structure..."
+if find . -maxdepth 3 -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.rs" -o -name "*.go" -o -name "*.php" -o -name "*.rb" -o -name "*.cpp" -o -name "*.c" \) 2>/dev/null | head -1 | grep -q .; then
     project_structure_exists=true
-    echo "[EXISTS] Project structure already exists"
+    echo "[EXISTS] Code files found - project structure exists"
+elif find . -maxdepth 2 -type f \( -name "package*.json" -o -name "requirements*.txt" -o -name "pom.xml" -o -name "Cargo.toml" -o -name "go.mod" -o -name "composer.json" -o -name "Gemfile" \) 2>/dev/null | head -1 | grep -q .; then
+    project_structure_exists=true
+    echo "[EXISTS] Configuration files found - project initialized"
 else
-    echo "[CREATE] Need to create project structure"
+    echo "[CREATE] No project structure detected - needs creation"
     
     if [ "$template_exists" = true ]; then
-        echo "[TEMPLATE] Using template-defined structure"
-        echo "AI MUST create EXACT directory structure from template"
+        echo "[TEMPLATE] AI MUST create structure from template:"
+        echo "1. READ .vybe/templates/$template_name/source/ for exact structure"
+        echo "2. COPY directory layout from template precisely"
+        echo "3. CREATE files matching template patterns"
     elif [ -f ".vybe/project/architecture.md" ]; then
-        echo "[ARCHITECTURE] Using architecture-defined structure"
-        echo "AI MUST follow technology stack from architecture.md"
+        echo "[ARCHITECTURE] AI MUST determine structure from architecture.md:"
+        echo "1. READ .vybe/project/architecture.md for technology choices"
+        echo "2. INFER appropriate directory structure from tech stack"
+        echo "3. CREATE structure supporting chosen technologies"
     else
-        echo "[INTELLIGENT] Determining structure from task requirements"
-        echo "AI MUST use best practices for detected project type"
+        echo "[INTELLIGENT] AI MUST determine structure from task analysis:"
+        echo "1. ANALYZE task requirements for technology hints"
+        echo "2. EXAMINE any existing project files for patterns"
+        echo "3. CREATE structure appropriate for task requirements"
     fi
 fi
 
@@ -770,65 +782,33 @@ if [ "$implementation_success" = true ]; then
         fi
     fi
     
-    # Check project conventions for test framework
+    # Check project conventions for test framework (context-driven)
     if [ "$test_framework" = "unknown" ] && [ -f ".vybe/project/conventions.md" ]; then
-        if grep -qi "jest\|vitest" ".vybe/project/conventions.md"; then
-            test_framework="jest"
-        elif grep -qi "pytest" ".vybe/project/conventions.md"; then
-            test_framework="pytest"
-        elif grep -qi "junit" ".vybe/project/conventions.md"; then
-            test_framework="junit"
-        fi
+        echo "[CONVENTIONS] AI MUST read conventions.md to extract test framework"
+        echo "AI should scan conventions.md for testing section and extract framework choice"
         
+        # AI should read and understand the conventions, not use hardcoded patterns
         if [ "$test_framework" != "unknown" ]; then
             echo "[CONVENTIONS] Test framework from conventions.md: $test_framework"
         fi
     fi
     
-    # Detect from existing project files
+    # Context-driven detection from existing project files
     if [ "$test_framework" = "unknown" ]; then
-        if [ -f "package.json" ]; then
-            if grep -q '"jest"' package.json; then
-                test_framework="jest"
-                test_command="npm test"
-                echo "[DETECTED] Jest from package.json dependencies"
-            elif grep -q '"vitest"' package.json; then
-                test_framework="vitest"
-                test_command="npm test"
-                echo "[DETECTED] Vitest from package.json dependencies"
-            elif grep -q '"test":' package.json; then
-                test_framework="npm"
-                test_command="npm test"
-                echo "[DETECTED] npm test script found"
-            else
-                echo "[SETUP] No test script in package.json"
-                echo "AI MUST add appropriate test script based on project type"
-            fi
-        elif [ -f "requirements.txt" ]; then
-            if grep -q "pytest" requirements.txt; then
-                test_framework="pytest"
-                test_command="pytest"
-                echo "[DETECTED] pytest from requirements.txt"
-            elif command -v pytest >/dev/null; then
-                test_framework="pytest"
-                test_command="pytest"
-                echo "[DETECTED] pytest available in system"
-            else
-                echo "[SETUP] No pytest found"
-                echo "AI MUST add pytest to requirements.txt"
-            fi
-        elif [ -f "pom.xml" ]; then
-            test_framework="junit"
-            test_command="mvn test"
-            echo "[DETECTED] Maven project with JUnit"
-        elif [ -f "Cargo.toml" ]; then
-            test_framework="cargo"
-            test_command="cargo test"
-            echo "[DETECTED] Rust project with Cargo test"
-        else
-            echo "[WARNING] No project configuration found"
-            echo "AI MUST determine appropriate test framework from task context"
-        fi
+        echo "[SCAN] AI MUST scan project files to detect test framework:"
+        echo ""
+        echo "[AI ANALYSIS] AI should:"
+        echo "1. READ all configuration files to understand project setup"
+        echo "2. SCAN dependency files for test frameworks"
+        echo "3. EXAMINE existing test files for framework patterns"
+        echo "4. CHECK for test scripts in build configurations"
+        echo "5. ANALYZE project structure for test organization"
+        echo ""
+        echo "[DETECTION] AI MUST determine test framework from context, not assumptions"
+        echo ""
+        
+        # AI should intelligently detect, not use hardcoded if-then logic
+        # The test_framework and test_command should be set based on actual analysis
     fi
     
     echo ""
@@ -1019,32 +999,17 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
         fi
     fi
     
-    # Detect existing integration test setup
-    if [ -f "package.json" ]; then
-        if grep -q '"test:integration"' package.json; then
-            integration_test_command="npm run test:integration"
-            integration_approach="automated"
-            echo "[DETECTED] npm integration test script"
-        elif grep -q '"test:e2e"' package.json; then
-            integration_test_command="npm run test:e2e"
-            integration_approach="automated"
-            echo "[DETECTED] npm e2e test script"
-        fi
-    elif [ "$test_framework" = "pytest" ]; then
-        if [ -d "tests/integration" ]; then
-            integration_test_command="pytest tests/integration/"
-            integration_approach="automated"
-            echo "[DETECTED] pytest integration tests directory"
-        elif find . -name "*integration*test*.py" -type f | head -1 | grep -q .; then
-            integration_test_command="pytest -k integration"
-            integration_approach="automated"
-            echo "[DETECTED] pytest integration test files"
-        fi
-    elif [ "$test_framework" = "junit" ]; then
-        integration_test_command="mvn integration-test"
-        integration_approach="automated"
-        echo "[DETECTED] Maven integration test phase"
-    fi
+    # Context-driven integration test detection
+    echo "[AI DETECTION] AI MUST scan for integration test setup:"
+    echo "1. READ project configuration files for integration test scripts"
+    echo "2. SCAN test directories for integration test organization"
+    echo "3. EXAMINE existing test files for integration patterns"
+    echo "4. CHECK build system for integration test phases"
+    echo "5. ANALYZE project conventions for integration testing approach"
+    echo ""
+    
+    # AI should determine integration testing approach from actual context
+    # integration_test_command and integration_approach should be set by AI analysis
     
     echo "[APPROACH] Integration testing: $integration_approach"
     echo ""
@@ -1163,13 +1128,6 @@ if [ "$stage_complete" = true ] && [ "$validation_passed" = true ]; then
         validation_passed=false
     fi
 fi
-    elif [ -f "Cargo.toml" ]; then
-        echo "[TEST] Running cargo test..."
-        # cargo test 2>&1 | tee ".vybe/sessions/$session_id-test.log"
-        echo "[INFO] Test results logged to session file"
-    else
-        echo "[INFO] No test framework detected - skipping automated tests"
-    fi
     
     # Validate against acceptance criteria
     echo ""
@@ -1188,17 +1146,13 @@ fi
     echo ""
     echo "[VALIDATE] Code quality checks..."
     
-    # Check if linting/formatting is configured
-    if [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ]; then
-        echo "[LINT] ESLint configuration found"
-        # eslint . --ext .js,.ts 2>&1 | tee -a ".vybe/sessions/$session_id-lint.log"
-    elif [ -f "pyproject.toml" ] && grep -q "ruff\|flake8\|pylint" pyproject.toml; then
-        echo "[LINT] Python linting configured"  
-        # Run Python linting
-    elif [ -f "Cargo.toml" ]; then
-        echo "[LINT] Running cargo clippy..."
-        # cargo clippy 2>&1 | tee -a ".vybe/sessions/$session_id-lint.log"
-    fi
+    # Context-driven code quality checks
+    echo "[QUALITY] AI MUST determine code quality tools from project context:"
+    echo "1. SCAN project for linting configuration files"
+    echo "2. READ .vybe/project/conventions.md for quality standards"
+    echo "3. CHECK template for required quality tools (if template exists)"
+    echo "4. RUN appropriate linting/formatting tools based on context"
+    echo "5. LOG results to session file for review"
     
     echo "[OK] Validation completed"
 fi
