@@ -38,7 +38,11 @@ git clone https://github.com/iptracej-education/vybe.git vybe-framework
 cp -r vybe-framework/.claude .
 rm -rf vybe-framework
 
-# 3. Initialize your project with staged outcomes
+# 3. Enable session continuity (recommended)
+# Copy hooks and add to ~/.claude/settings.json
+# See docs/HANDS_ON_TUTORIAL.md for complete setup
+
+# 4. Initialize your project with staged outcomes
 /vybe:init "Your project description"
 # This will interactively capture your first minimal outcome and final vision
 ```
@@ -141,5 +145,92 @@ export VYBE_MEMBER=dev-1
 - **Command reference**: [`docs/COMMAND_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/COMMAND_SPEC.md) - All 9 commands with examples
 - **Framework specification**: [`docs/VYBE_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/VYBE_SPEC.md) - Complete technical documentation
 - **Multi-session testing**: Simulate multiple developers working together
+
+## Supported Programming Languages
+
+The vybe framework is **language-agnostic** and intelligently adapts to any programming language by reading the technology registry. The framework automatically detects and uses the appropriate tools for each language:
+
+### ✅ **Fully Supported Languages**
+
+| Language | Package Managers | Test Frameworks | Build Tools | Server/Runtime |
+|----------|------------------|-----------------|-------------|----------------|
+| **Python** | uv, poetry, pip | pytest, unittest | setuptools, poetry build | uvicorn, gunicorn |
+| **JavaScript/Node.js** | npm, yarn, pnpm | jest, mocha, vitest | webpack, vite, rollup | node, nodemon |
+| **TypeScript** | npm, deno, bun | jest, vitest, deno test | tsc, vite, turbo | node, deno, bun |
+| **C/C++** | make, cmake, conan | gtest, catch2, ctest | make, cmake, ninja | direct execution |
+| **Go** | go mod | go test | go build | go run |
+| **Ruby** | bundler, gem | rspec, minitest | rake | ruby, rails server |
+| **R** | renv, CRAN | testthat | R CMD build | Rscript |
+| **Rust** | cargo | cargo test | cargo build | cargo run |
+| **Java** | maven, gradle | junit, testng | maven, gradle | java, spring boot |
+| **C#/.NET** | dotnet, nuget | xunit, nunit | dotnet build | dotnet run |
+
+### 🔧 **How Language Detection Works**
+
+1. **Template Analysis**: When importing templates, vybe intelligently analyzes:
+   - Package manager files (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, etc.)
+   - Build configurations (`Makefile`, `CMakeLists.txt`, `build.gradle`, etc.)
+   - Test directories and frameworks
+   - Server/runtime configurations
+
+2. **Technology Registry Creation**: Creates language-specific `.vybe/tech/languages.yml`:
+   ```yaml
+   # Example for Python with uv
+   language:
+     name: Python
+     version: "3.12"
+   
+   execution:
+     run: "uv run python {file}"
+     interactive: "uv run python"
+   
+   package_manager:
+     name: uv
+     install_deps: "uv pip install -e ."
+     add_package: "uv add {package}"
+   
+   testing:
+     run_tests: "uv run python -m pytest"
+   ```
+
+3. **Universal Execution**: All vybe commands read this registry and use the appropriate tools:
+   - **Python project**: Uses `uv run python`, `uv add`, `uv run pytest`
+   - **Node.js project**: Uses `node`, `npm install`, `npm test`
+   - **Go project**: Uses `go run`, `go get`, `go test`
+   - **C++ project**: Uses `g++`, `make`, `make test`
+
+### 🚀 **Adding New Languages**
+
+The framework easily supports new languages by creating appropriate technology registries:
+
+```yaml
+# Example: Swift
+language:
+  name: Swift
+
+execution:
+  run: "swift {file}"
+  build_and_run: "swift run"
+
+package_manager:
+  name: swift
+  install_deps: "swift package resolve"
+  add_package: "swift package add {package}"
+
+testing:
+  run_tests: "swift test"
+
+build:
+  build_cmd: "swift build"
+```
+
+### 🎯 **Language-Agnostic Features**
+
+- **Template Import**: Works with templates in any language
+- **Code Generation**: Follows language-specific patterns and conventions
+- **Testing**: Uses appropriate test frameworks automatically
+- **Dependency Management**: Uses correct package managers
+- **Build & Run**: Executes using proper language tools
+- **Multi-Language Projects**: Supports polyglot projects with multiple languages
 
 **Platform support**: Linux, macOS, WSL2, Git Bash (not Windows CMD)
