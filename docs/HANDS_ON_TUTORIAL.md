@@ -1003,7 +1003,25 @@ cat .vybe/project/.template
 
 ## Phase 4: Template-Guided Development
 
-### Step 9: Template-Aware Feature Planning
+### Step 9: Generate Template-Driven Backlog
+```bash
+# Create outcome-grouped backlog following template patterns
+/vybe:backlog init
+
+# Expected AI behavior:
+# - Load template enforcement rules
+# - Use template patterns for stage organization  
+# - Follow template's workflow progression
+# - Generate stages that align with template architecture
+# - Create backlog structure using template-specific organization
+```
+
+**Test Points:**
+- [ ] Does backlog follow template organizational patterns?
+- [ ] Are stages aligned with template workflow structure?
+- [ ] Does generated backlog respect template conventions?
+
+### Step 10: Template-Aware Feature Planning
 ```bash
 /vybe:plan document-processing "Create workflow for processing and analyzing uploaded documents"
 
@@ -1020,7 +1038,7 @@ cat .vybe/project/.template
 # - Should reference template's workflow patterns
 ```
 
-### Step 10: Template-Enforced Code Generation with Automatic Implementation
+### Step 11: Template-Enforced Code Generation with Automatic Implementation
 ```bash
 /vybe:execute document-processing-task-1
 
@@ -1055,7 +1073,7 @@ cat .vybe/project/.template
 # - Application runs using template conventions
 ```
 
-### Step 11: Template Compliance Validation
+### Step 12: Template Compliance Validation
 ```bash
 /vybe:audit
 
@@ -1075,7 +1093,7 @@ cat .vybe/project/.template
 
 ## Phase 5: Template DNA Immutability Testing
 
-### Step 12: Test Template Immutability
+### Step 13: Test Template Immutability
 ```bash
 # Try to change template (should fail)
 /vybe:init "Same project" --template=different-template
@@ -1087,7 +1105,7 @@ cat .vybe/project/.template
 # - Suggest migration approach if template change needed
 ```
 
-### Step 13: Template-Guided Discussion
+### Step 14: Template-Guided Discussion
 ```bash
 /vybe:discuss "How can I add real-time features to this workflow platform?"
 
@@ -1101,7 +1119,7 @@ cat .vybe/project/.template
 
 ## Phase 6: Template System Verification
 
-### Step 14: Complete Template Workflow Test
+### Step 15: Complete Template Workflow Test
 ```bash
 # Test complete development cycle with template
 /vybe:status          # Should show template-guided progress
@@ -1117,7 +1135,7 @@ cat .vybe/project/.template
 # - Template cannot be changed mid-project
 ```
 
-### Step 15: Template Migration Scenario
+### Step 16: Template Migration Scenario
 ```bash
 # Test template migration guidance
 /vybe:discuss "This GenAI template is too complex, I want to switch to a simpler FastAPI template"
@@ -1323,7 +1341,7 @@ The Vybe framework ensures no work is lost during compaction.
 
 This tutorial provides four comprehensive paths for testing the entire Vybe framework:
 
-**🏗️ Template Tutorial** - 15 steps testing template import, AI analysis, and template-driven development
+**🏗️ Template Tutorial** - 16 steps testing template import, AI analysis, and template-driven development
 **👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
 **👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
 **🔄 Session Continuity Tutorial** - 4 phases testing context preservation and seamless handoff across Claude Code restarts
