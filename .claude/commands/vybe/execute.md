@@ -131,7 +131,7 @@ if [ "$task_id" = "my-feature" ] || [ "$task_id" = "my-task" ]; then
     # Find next assigned feature or task
     if [ "$task_id" = "my-feature" ]; then
         # Find next unstarted feature assigned to this developer
-        next_feature=$(sed -n "/^### $developer_role/,/^### /p" .vybe/backlog.md | grep "^- \[ \]" | head -1 | sed 's/^- \[ \] //' | sed 's/ .*//')
+        next_feature=$(sed -n "/^### $developer_role/,/^### /p" .vybe/backlog.md | grep -m 1 "^- \[ \]" | sed 's/^- \[ \] //' | sed 's/ .*//')
         
         if [ -z "$next_feature" ]; then
             echo "[INFO] No unstarted features assigned to $developer_role"
@@ -154,7 +154,7 @@ if [ "$task_id" = "my-feature" ] || [ "$task_id" = "my-task" ]; then
         fi
         
         # Find first incomplete task
-        first_task=$(grep -n "^- \[ \]" "$feature_dir/tasks.md" | head -1 | sed 's/.*\([0-9]*\)\..*/\1/')
+        first_task=$(grep -m 1 -n "^- \[ \]" "$feature_dir/tasks.md" | sed 's/.*\([0-9]*\)\..*/\1/')
         
         if [ -z "$first_task" ]; then
             echo "[INFO] All tasks in $next_feature are complete"
@@ -322,7 +322,7 @@ task_status="pending"
 # Read task from tasks.md
 if [ -f "$feature_dir/tasks.md" ]; then
     # Find the specific task line
-    task_line=$(grep -n ".*$task_number\." "$feature_dir/tasks.md" | head -1)
+    task_line=$(grep -m 1 -n ".*$task_number\." "$feature_dir/tasks.md")
     
     if [ -n "$task_line" ]; then
         task_found=true
@@ -346,7 +346,7 @@ if [ -f "$feature_dir/tasks.md" ]; then
     else
         echo "[NO] ERROR: Task $task_number not found in tasks.md"
         echo "Available tasks:"
-        grep -n "^- \[" "$feature_dir/tasks.md" | head -5
+        grep -m 5 -n "^- \[" "$feature_dir/tasks.md"
         exit 1
     fi
 else
@@ -443,32 +443,32 @@ if [ -f ".vybe/tech/languages.yml" ]; then
     echo "[REGISTRY] Reading language configuration from technology registry..."
     
     # Extract language name (could be Python, JavaScript, Go, C++, Ruby, etc.)
-    LANGUAGE_NAME=$(grep "^[[:space:]]*name:" .vybe/tech/languages.yml | head -1 | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+    LANGUAGE_NAME=$(grep -m 1 "^[[:space:]]*name:" .vybe/tech/languages.yml | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     echo "[DETECTED] Programming language: $LANGUAGE_NAME"
     
     # Extract execution commands from registry (language-specific)
     if grep -q "run_python:\|run_code:\|run:" .vybe/tech/languages.yml; then
-        LANGUAGE_RUNNER=$(grep -E "run_python:|run_code:|run:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        LANGUAGE_RUNNER=$(grep -m 1 -E "run_python:|run_code:|run:" .vybe/tech/languages.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     fi
     
     # Extract package management commands (varies by language)
     if grep -q "package_manager:" .vybe/tech/languages.yml; then
         # Get package manager name
-        PACKAGE_TOOL=$(grep -A10 "package_manager:" .vybe/tech/languages.yml | grep "^[[:space:]]*name:" | head -1 | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        PACKAGE_TOOL=$(grep -m 1 -A10 "package_manager:" .vybe/tech/languages.yml | grep "^[[:space:]]*name:" | sed 's/.*name:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
         
         # Get installation commands
         if grep -q "install_deps:\|install_dependencies:" .vybe/tech/languages.yml; then
-            PACKAGE_INSTALL=$(grep -E "install_deps:|install_dependencies:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+            PACKAGE_INSTALL=$(grep -m 1 -E "install_deps:|install_dependencies:" .vybe/tech/languages.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
         fi
         
         if grep -q "add_package:\|install_package:" .vybe/tech/languages.yml; then
-            PACKAGE_ADD=$(grep -E "add_package:|install_package:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+            PACKAGE_ADD=$(grep -m 1 -E "add_package:|install_package:" .vybe/tech/languages.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
         fi
     fi
     
     # Extract environment setup commands
     if grep -q "venv_create:\|env_setup:\|create:" .vybe/tech/languages.yml; then
-        ENV_SETUP=$(grep -E "venv_create:|env_setup:|create:" .vybe/tech/languages.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        ENV_SETUP=$(grep -m 1 -E "venv_create:|env_setup:|create:" .vybe/tech/languages.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     fi
     
 else
@@ -483,7 +483,7 @@ if [ -f ".vybe/tech/testing.yml" ]; then
     echo "[REGISTRY] Reading testing configuration..."
     
     if grep -q "run_tests:\|test_command:" .vybe/tech/testing.yml; then
-        TEST_RUNNER=$(grep -E "run_tests:|test_command:" .vybe/tech/testing.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        TEST_RUNNER=$(grep -m 1 -E "run_tests:|test_command:" .vybe/tech/testing.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     fi
     echo "[DETECTED] Test runner: $TEST_RUNNER"
 fi
@@ -493,7 +493,7 @@ if [ -f ".vybe/tech/frameworks.yml" ]; then
     echo "[REGISTRY] Reading framework configuration..."
     
     if grep -q "dev_server:\|start_server:" .vybe/tech/frameworks.yml; then
-        SERVER_RUNNER=$(grep -E "dev_server:|start_server:" .vybe/tech/frameworks.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        SERVER_RUNNER=$(grep -m 1 -E "dev_server:|start_server:" .vybe/tech/frameworks.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     fi
     
     # Check if AI integration is required (will be handled by intelligent API key detection)
@@ -504,7 +504,7 @@ if [ -f ".vybe/tech/build.yml" ]; then
     echo "[REGISTRY] Reading build configuration..."
     
     if grep -q "build_command:\|build:" .vybe/tech/build.yml; then
-        BUILD_COMMAND=$(grep -E "build_command:|build:" .vybe/tech/build.yml | head -1 | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
+        BUILD_COMMAND=$(grep -m 1 -E "build_command:|build:" .vybe/tech/build.yml | sed 's/.*:[[:space:]]*["'\'']*\([^"'\'']*\)["'\'']*$/\1/')
     fi
 fi
 
@@ -714,14 +714,23 @@ fi
 # Check if project structure needs to be created
 project_structure_exists=false
 
-# AI must detect existing structure from actual files, not hardcoded patterns
-echo "[DETECT] Scanning for existing project structure..."
-if find . -maxdepth 3 -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.rs" -o -name "*.go" -o -name "*.php" -o -name "*.rb" -o -name "*.cpp" -o -name "*.c" \) 2>/dev/null | head -1 | grep -q .; then
-    project_structure_exists=true
-    echo "[EXISTS] Code files found - project structure exists"
-elif find . -maxdepth 2 -type f \( -name "package*.json" -o -name "requirements*.txt" -o -name "pom.xml" -o -name "Cargo.toml" -o -name "go.mod" -o -name "composer.json" -o -name "Gemfile" \) 2>/dev/null | head -1 | grep -q .; then
+# OPTIMIZED: Use cached detection if available
+echo "[DETECT] Checking project structure..."
+if [ -f ".vybe/project/.detected/language" ]; then
+    # Use cached detection
+    DETECTED_LANG=$(cat .vybe/project/.detected/language)
+    if [ "$DETECTED_LANG" != "unknown" ]; then
+        project_structure_exists=true
+        echo "[CACHED] Project structure detected: $DETECTED_LANG"
+    fi
+elif [ -f "package.json" ] || [ -f "requirements.txt" ] || [ -f "go.mod" ] || [ -f "Cargo.toml" ]; then
+    # Quick check for common config files
     project_structure_exists=true
     echo "[EXISTS] Configuration files found - project initialized"
+elif find . -maxdepth 2 -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" \) -print -quit 2>/dev/null | grep -q .; then
+    # Limited find for code files
+    project_structure_exists=true
+    echo "[EXISTS] Code files found - project structure exists"
 else
     echo "[CREATE] No project structure detected - needs creation"
     

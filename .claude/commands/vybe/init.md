@@ -197,14 +197,20 @@ fi
 
 ### For Existing Projects
 ```bash
-# Detect primary language (cross-platform)
-find . -type f \( -name "*.js" -o -name "*.py" -o -name "*.go" \) 2>/dev/null | head -10
+# Detect primary language (cross-platform) - OPTIMIZED
+# Only scan if detection cache doesn't exist
+if [ ! -f ".vybe/project/.detected" ]; then
+    find . -maxdepth 3 -type f \( -name "*.js" -o -name "*.py" -o -name "*.go" \) 2>/dev/null | head -10
+fi
 
 # Analyze package managers
 ls package*.json requirements.txt go.mod Cargo.toml pom.xml 2>/dev/null
 
-# Check test structure (works on BSD and GNU find)
-find . -type d \( -name "__tests__" -o -name "test" -o -name "tests" -o -name "spec" \) 2>/dev/null | head -5
+# Check test structure (works on BSD and GNU find) - OPTIMIZED
+# Only scan if test framework not already detected
+if [ ! -f ".vybe/project/.test-framework" ]; then
+    find . -maxdepth 3 -type d \( -name "__tests__" -o -name "test" -o -name "tests" -o -name "spec" \) 2>/dev/null | head -5
+fi
 
 # Extract git conventions
 git log --oneline -20 2>/dev/null || echo "No git history"
@@ -226,6 +232,7 @@ grep -E "test|spec" package.json 2>/dev/null || true
 # Create Vybe directories (POSIX-compliant)
 mkdir -p .vybe/project
 mkdir -p .vybe/features
+mkdir -p .vybe/project/.detected  # Store detection results
 
 # Create initial files if not exist (works on all platforms)
 test -f ".vybe/backlog.md" || touch .vybe/backlog.md
@@ -389,23 +396,23 @@ echo "[API-DETECTION] Intelligent API Service Detection"
 echo "================================================"
 echo ""
 
-# Function to detect API service usage
-echo "[SCAN] Analyzing project for API service requirements..."
-
-# OpenAI/Anthropic (AI Services)
-if grep -rq "openai\|OpenAI\|anthropic\|claude" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
-    DETECTED_SERVICES["openai"]="true"
-    REQUIRED_KEYS["OPENAI_API_KEY"]="OpenAI API access"
-    KEY_DESCRIPTIONS["OPENAI_API_KEY"]="Get from: https://platform.openai.com/api-keys"
-    echo "[DETECTED] OpenAI integration found in code"
-fi
-
-if grep -rq "anthropic\|claude" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
-    DETECTED_SERVICES["anthropic"]="true"
-    REQUIRED_KEYS["ANTHROPIC_API_KEY"]="Anthropic Claude API access"
-    KEY_DESCRIPTIONS["ANTHROPIC_API_KEY"]="Get from: https://console.anthropic.com/"
-    echo "[DETECTED] Anthropic Claude integration found in code"
-fi
+# Check if we already have cached API detection results
+if [ -f ".vybe/project/.detected/apis" ]; then
+    echo "[CACHED] Loading previously detected API services..."
+    source ".vybe/project/.detected/apis"
+else
+    echo "[SCAN] Analyzing project for API service requirements..."
+    
+    # Single pass grep for all API patterns - MUCH FASTER
+    API_SCAN=$(grep -m 20 -r -l -E "openai|OpenAI|anthropic|claude|stripe|payment|checkout|boto3|aws|s3|lambda|sendgrid|email.*api" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null)
+    
+    # Check results once
+    if echo "$API_SCAN" | grep -q -E "openai|OpenAI|anthropic|claude"; then
+        DETECTED_SERVICES["openai"]="true"
+        REQUIRED_KEYS["OPENAI_API_KEY"]="OpenAI API access"
+        KEY_DESCRIPTIONS["OPENAI_API_KEY"]="Get from: https://platform.openai.com/api-keys"
+        echo "[DETECTED] AI integration found in code"
+    fi
 
 # Check template for AI integrations
 if [ -n "$template_name" ] && [ -d ".vybe/templates/$template_name" ]; then
@@ -418,32 +425,45 @@ if [ -n "$template_name" ] && [ -d ".vybe/templates/$template_name" ]; then
     fi
 fi
 
-# Stripe (Payments)
-if grep -rq "stripe\|payment\|checkout" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
-    DETECTED_SERVICES["stripe"]="true"
-    REQUIRED_KEYS["STRIPE_SECRET_KEY"]="Stripe payment processing"
-    REQUIRED_KEYS["STRIPE_PUBLISHABLE_KEY"]="Stripe public key"
-    KEY_DESCRIPTIONS["STRIPE_SECRET_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
-    KEY_DESCRIPTIONS["STRIPE_PUBLISHABLE_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
-    echo "[DETECTED] Stripe payment integration found"
-fi
-
-# AWS Services
-if grep -rq "boto3\|aws\|s3\|lambda" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
-    DETECTED_SERVICES["aws"]="true"
-    REQUIRED_KEYS["AWS_ACCESS_KEY_ID"]="AWS service access"
-    REQUIRED_KEYS["AWS_SECRET_ACCESS_KEY"]="AWS secret key"
-    KEY_DESCRIPTIONS["AWS_ACCESS_KEY_ID"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
-    KEY_DESCRIPTIONS["AWS_SECRET_ACCESS_KEY"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
-    echo "[DETECTED] AWS integration found"
-fi
-
-# SendGrid (Email)
-if grep -rq "sendgrid\|email.*api" . --include="*.py" --include="*.js" --include="*.ts" 2>/dev/null; then
-    DETECTED_SERVICES["sendgrid"]="true"
-    REQUIRED_KEYS["SENDGRID_API_KEY"]="SendGrid email service"
-    KEY_DESCRIPTIONS["SENDGRID_API_KEY"]="Get from: https://app.sendgrid.com/settings/api_keys"
-    echo "[DETECTED] SendGrid email integration found"
+    # Continue with single-pass results
+    if echo "$API_SCAN" | grep -q -E "stripe|payment|checkout"; then
+        DETECTED_SERVICES["stripe"]="true"
+        REQUIRED_KEYS["STRIPE_SECRET_KEY"]="Stripe payment processing"
+        REQUIRED_KEYS["STRIPE_PUBLISHABLE_KEY"]="Stripe public key"
+        KEY_DESCRIPTIONS["STRIPE_SECRET_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
+        KEY_DESCRIPTIONS["STRIPE_PUBLISHABLE_KEY"]="Get from: https://dashboard.stripe.com/apikeys"
+        echo "[DETECTED] Stripe payment integration found"
+    fi
+    
+    if echo "$API_SCAN" | grep -q -E "boto3|aws|s3|lambda"; then
+        DETECTED_SERVICES["aws"]="true"
+        REQUIRED_KEYS["AWS_ACCESS_KEY_ID"]="AWS service access"
+        REQUIRED_KEYS["AWS_SECRET_ACCESS_KEY"]="AWS secret key"
+        KEY_DESCRIPTIONS["AWS_ACCESS_KEY_ID"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
+        KEY_DESCRIPTIONS["AWS_SECRET_ACCESS_KEY"]="Get from: https://console.aws.amazon.com/iam/home#/security_credentials"
+        echo "[DETECTED] AWS integration found"
+    fi
+    
+    if echo "$API_SCAN" | grep -q -E "sendgrid|email.*api"; then
+        DETECTED_SERVICES["sendgrid"]="true"
+        REQUIRED_KEYS["SENDGRID_API_KEY"]="SendGrid email service"
+        KEY_DESCRIPTIONS["SENDGRID_API_KEY"]="Get from: https://app.sendgrid.com/settings/api_keys"
+        echo "[DETECTED] SendGrid email integration found"
+    fi
+    
+    # Store detection results for next time
+    mkdir -p .vybe/project/.detected
+    {
+        for service in "${!DETECTED_SERVICES[@]}"; do
+            echo "DETECTED_SERVICES[$service]='${DETECTED_SERVICES[$service]}'"
+        done
+        for key in "${!REQUIRED_KEYS[@]}"; do
+            echo "REQUIRED_KEYS[$key]='${REQUIRED_KEYS[$key]}'"
+        done
+        for desc in "${!KEY_DESCRIPTIONS[@]}"; do
+            echo "KEY_DESCRIPTIONS[$desc]='${KEY_DESCRIPTIONS[$desc]}'"
+        done
+    } > .vybe/project/.detected/apis
 fi
 
 # Check business requirements for additional clues
@@ -666,6 +686,14 @@ else
     echo "[INFO] ✅ No external API services detected"
     echo "   Project can proceed without additional API configuration"
     echo ""
+fi
+
+# Initialize cache system for faster future operations
+echo "[OPTIMIZE] Initializing performance cache..."
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    chmod +x .claude/hooks/cache-manager.sh
+    .claude/hooks/cache-manager.sh init > /dev/null 2>&1
+    echo "[OPTIMIZE] ✅ Cache initialized - future commands will be faster"
 fi
 
 echo "[TUTORIAL] Interactive Service Requirements Interview"

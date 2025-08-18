@@ -150,7 +150,7 @@ if [ -f ".vybe/backlog.md" ]; then
     echo ""
     echo "[MEMBERS] MEMBER MANAGEMENT:"
     if grep -q "^## Members:" .vybe/backlog.md 2>/dev/null; then
-        member_count=$(grep "^## Members:" .vybe/backlog.md | grep -o "[0-9]*" | head -1)
+        member_count=$(grep -m 1 "^## Members:" .vybe/backlog.md | grep -o "[0-9]*")
         echo "   Members configured: $member_count developer(s)"
         echo "   /vybe:backlog assign [feature] [dev-N] - Assign features"
         echo "   /vybe:execute my-feature - Execute assigned work"
@@ -761,12 +761,12 @@ if [[ "$1" == "assign" ]]; then
     fi
     
     # Find the feature in the backlog
-    feature_line=$(grep -n ".*$feature_name.*" .vybe/backlog.md | grep "^[0-9]*:- \[" | head -1)
+    feature_line=$(grep -m 1 -n ".*$feature_name.*" .vybe/backlog.md | grep "^[0-9]*:- \[")
     
     if [ -z "$feature_line" ]; then
         echo "[NO] ERROR: Feature '$feature_name' not found in backlog"
         echo "Available features:"
-        grep "^- \[" .vybe/backlog.md | sed 's/^- \[ \] /   /' | head -5
+        grep -m 5 "^- \[" .vybe/backlog.md | sed 's/^- \[ \] /   /'
         exit 1
     fi
     

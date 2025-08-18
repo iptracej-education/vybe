@@ -96,7 +96,7 @@ echo ""
 
 # Save current working files list
 find . -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.md" 2>/dev/null | \
-    grep -v node_modules | grep -v .git | head -20 > "$MANUAL_DIR/working-files-$SESSION_ID.txt"
+    grep -m 20 -v node_modules | grep -v .git > "$MANUAL_DIR/working-files-$SESSION_ID.txt"
 
 # Create continuation instructions
 INSTRUCTIONS_FILE="$MANUAL_DIR/continue-$SESSION_ID.md"

@@ -111,9 +111,9 @@ fi
 if [ -f ".vybe/backlog.md" ]; then
     echo "[OK] Loaded: backlog.md (feature priorities, releases)"
     # Extract relevant context
-    feature_priority=$(grep -i "$feature_name" .vybe/backlog.md | grep -o "P[0-9]" | head -1 || echo "P1")
-    feature_size=$(grep -i "$feature_name" .vybe/backlog.md | grep -o "Size: [SMLX]L*" | head -1 || echo "Size: M")
-    release_target=$(grep -B5 -i "$feature_name" .vybe/backlog.md | grep "Release" | head -1 || echo "Next Release")
+    feature_priority=$(grep -m 1 -i "$feature_name" .vybe/backlog.md | grep -o "P[0-9]" || echo "P1")
+    feature_size=$(grep -m 1 -i "$feature_name" .vybe/backlog.md | grep -o "Size: [SMLX]L*" || echo "Size: M")
+    release_target=$(grep -m 1 -B5 -i "$feature_name" .vybe/backlog.md | grep "Release" || echo "Next Release")
     
     echo "   Strategic Context:"
     echo "   - Priority: $feature_priority"

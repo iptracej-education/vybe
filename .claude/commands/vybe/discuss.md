@@ -168,7 +168,7 @@ if [ -f ".vybe/backlog.md" ]; then
     # Check if members are configured
     if grep -q "^## Members:" .vybe/backlog.md; then
         members_configured=true
-        member_count=$(grep "^## Members:" .vybe/backlog.md | grep -o "[0-9]*" | head -1)
+        member_count=$(grep -m 1 "^## Members:" .vybe/backlog.md | grep -o "[0-9]*")
         echo "[OK] Members configured: $member_count developer(s)"
         
         # Load member assignments

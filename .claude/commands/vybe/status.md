@@ -162,7 +162,7 @@ members=()
 
 if [ -f ".vybe/backlog.md" ] && grep -q "^## Members:" .vybe/backlog.md; then
     members_configured=true
-    member_count=$(grep "^## Members:" .vybe/backlog.md | grep -o "[0-9]*" | head -1)
+    member_count=$(grep -m 1 "^## Members:" .vybe/backlog.md | grep -o "[0-9]*")
     
     # Extract member roles
     for i in $(seq 1 $member_count); do
@@ -473,7 +473,7 @@ if [ "$scope" = "outcomes" ]; then
     # Next actions
     echo "[NEXT] Recommended Actions:"
     if [ $completed_stages -lt $total_stages ]; then
-        current_stage_name=$(grep -A 1 "IN PROGRESS" .vybe/backlog.md | head -1 | sed 's/.*: //' | sed 's/ .*//')
+        current_stage_name=$(grep -m 1 -A 1 "IN PROGRESS" .vybe/backlog.md | sed 's/.*: //' | sed 's/ .*//')
         echo "   Continue Stage $((completed_stages + 1)): $current_stage_name"
         echo "   /vybe:execute [task] - Work on current stage"
         echo "   /vybe:release - Mark stage complete when done"
@@ -560,7 +560,7 @@ if [ "$scope" = "members" ]; then
             # Check for recent activity
             recent_activity=""
             if [ -d ".vybe/sessions" ]; then
-                recent_activity=$(grep -l "\"task_id\":.*\"$dev\"" .vybe/sessions/*.json 2>/dev/null | head -1)
+                recent_activity=$(grep -m 1 -l "\"task_id\":.*\"$dev\"" .vybe/sessions/*.json 2>/dev/null)
                 if [ -n "$recent_activity" ]; then
                     last_task=$(grep '"task_id"' "$recent_activity" | cut -d'"' -f4)
                     last_time=$(grep '"completed"' "$recent_activity" | cut -d'"' -f4 2>/dev/null)
@@ -705,7 +705,7 @@ if [ "$scope" = "my-work" ] || [[ "$scope" =~ ^dev-[1-5]$ ]]; then
                     
                     # Check feature status
                     if [ -f "$feature_dir/status.md" ]; then
-                        feature_status=$(grep "Status:" "$feature_dir/status.md" | head -1 | cut -d: -f2 | sed 's/^[[:space:]]*//')
+                        feature_status=$(grep -m 1 "Status:" "$feature_dir/status.md" | cut -d: -f2 | sed 's/^[[:space:]]*//')
                         echo "      - $feature_name: $feature_status"
                     else
                         echo "      - $feature_name: Planning phase"
@@ -764,8 +764,8 @@ if [ "$scope" = "my-work" ] || [[ "$scope" =~ ^dev-[1-5]$ ]]; then
                     
                     # Get detailed task status for in-progress features
                     if [ -f ".vybe/features/$feature_name/status.md" ]; then
-                        task_progress=$(grep "Progress:" ".vybe/features/$feature_name/status.md" | grep -o "[0-9]*%" | head -1)
-                        current_task=$(grep -A 5 "Current.*Sprint" ".vybe/features/$feature_name/status.md" | grep "->" | sed 's/.*-> //' | head -1)
+                        task_progress=$(grep -m 1 "Progress:" ".vybe/features/$feature_name/status.md" | grep -o "[0-9]*%")
+                        current_task=$(grep -m 1 -A 5 "Current.*Sprint" ".vybe/features/$feature_name/status.md" | grep "->" | sed 's/.*-> //')
                         
                         echo "      [ACTIVE] $feature_name (in progress: ${task_progress:-unknown})"
                         if [ -n "$current_task" ]; then
@@ -790,8 +790,8 @@ if [ "$scope" = "my-work" ] || [[ "$scope" =~ ^dev-[1-5]$ ]]; then
             
             # Next action recommendation
             echo "### Next Actions for $developer_role"
-            next_feature=$(echo "$my_section" | grep "^- \[ \]" | head -1 | sed 's/^- \[ \] //' | sed 's/ .*//')
-            current_feature=$(echo "$my_section" | grep "^- \[~\]" | head -1 | sed 's/^- \[~\] //' | sed 's/ .*//')
+            next_feature=$(echo "$my_section" | grep -m 1 "^- \[ \]" | sed 's/^- \[ \] //' | sed 's/ .*//')
+            current_feature=$(echo "$my_section" | grep -m 1 "^- \[~\]" | sed 's/^- \[~\] //' | sed 's/ .*//')
             
             if [ -n "$current_feature" ]; then
                 echo "   Continue current work:"
@@ -866,9 +866,9 @@ if [ "$scope" != "overall" ] && [ "$scope" != "members" ] && [ "$scope" != "my-w
         echo "### Current Status"
         
         # Extract key status information
-        feature_status=$(grep "Status:" "$feature_dir/status.md" | head -1 | cut -d: -f2 | sed 's/^[[:space:]]*//')
-        feature_progress=$(grep "Progress:" "$feature_dir/status.md" | head -1 | cut -d: -f2 | sed 's/^[[:space:]]*//')
-        current_sprint=$(grep "Current Sprint:" "$feature_dir/status.md" | head -1 | cut -d: -f2 | sed 's/^[[:space:]]*//')
+        feature_status=$(grep -m 1 "Status:" "$feature_dir/status.md" | cut -d: -f2 | sed 's/^[[:space:]]*//')
+        feature_progress=$(grep -m 1 "Progress:" "$feature_dir/status.md" | cut -d: -f2 | sed 's/^[[:space:]]*//')
+        current_sprint=$(grep -m 1 "Current Sprint:" "$feature_dir/status.md" | cut -d: -f2 | sed 's/^[[:space:]]*//')
         
         echo "   Status: ${feature_status:-Unknown}"
         echo "   Progress: ${feature_progress:-Unknown}"
@@ -905,7 +905,7 @@ if [ "$scope" != "overall" ] && [ "$scope" != "members" ] && [ "$scope" != "my-w
                 # Current tasks
                 if [ $active_tasks -gt 0 ]; then
                     echo "   [ACTIVE] Active Tasks:"
-                    grep -n "^- \[~\]" "$feature_dir/tasks.md" | head -3 | while read task_line; do
+                    grep -m 3 -n "^- \[~\]" "$feature_dir/tasks.md" | while read task_line; do
                         task_num=$(echo "$task_line" | cut -d: -f1)
                         task_desc=$(echo "$task_line" | cut -d: -f2- | sed 's/^- \[~\] [0-9]*\. //')
                         echo "      $task_num. $task_desc"
@@ -916,7 +916,7 @@ if [ "$scope" != "overall" ] && [ "$scope" != "members" ] && [ "$scope" != "my-w
                 # Next tasks
                 if [ $pending_tasks -gt 0 ]; then
                     echo "   [PENDING] Next Tasks:"
-                    grep -n "^- \[ \]" "$feature_dir/tasks.md" | head -3 | while read task_line; do
+                    grep -m 3 -n "^- \[ \]" "$feature_dir/tasks.md" | while read task_line; do
                         task_num=$(echo "$task_line" | cut -d: -f1)
                         task_desc=$(echo "$task_line" | cut -d: -f2- | sed 's/^- \[ \] [0-9]*\. //')
                         echo "      $task_num. $task_desc"
@@ -934,7 +934,7 @@ if [ "$scope" != "overall" ] && [ "$scope" != "members" ] && [ "$scope" != "my-w
         # Recent activity
         echo "### Recent Activity"
         if [ -d ".vybe/sessions" ]; then
-            feature_sessions=$(grep -l "\"task_id\":.*\"$feature_name-" .vybe/sessions/*.json 2>/dev/null | head -3)
+            feature_sessions=$(grep -m 3 -l "\"task_id\":.*\"$feature_name-" .vybe/sessions/*.json 2>/dev/null)
             if [ -n "$feature_sessions" ]; then
                 echo "$feature_sessions" | while read session_file; do
                     if [ -f "$session_file" ]; then
@@ -985,8 +985,8 @@ if [ "$scope" != "overall" ] && [ "$scope" != "members" ] && [ "$scope" != "my-w
     echo ""
     echo "### Next Actions"
     if [ -f "$feature_dir/tasks.md" ]; then
-        next_task_line=$(grep "^- \[ \]" "$feature_dir/tasks.md" | head -1)
-        active_task_line=$(grep "^- \[~\]" "$feature_dir/tasks.md" | head -1)
+        next_task_line=$(grep -m 1 "^- \[ \]" "$feature_dir/tasks.md")
+        active_task_line=$(grep -m 1 "^- \[~\]" "$feature_dir/tasks.md")
         
         if [ -n "$active_task_line" ]; then
             task_num=$(echo "$active_task_line" | sed 's/.*\([0-9]*\)\..*/\1/')
@@ -1043,7 +1043,7 @@ if [ "$scope" = "blockers" ]; then
             if [ -f "$feature_dir/status.md" ]; then
                 # Check for blocked status
                 if grep -q -i "blocked\|blocker" "$feature_dir/status.md"; then
-                    blocker_info=$(grep -i "blocked\|blocker" "$feature_dir/status.md" | head -1)
+                    blocker_info=$(grep -m 1 -i "blocked\|blocker" "$feature_dir/status.md")
                     echo "   [NO] $feature_name: $blocker_info"
                     blockers_found=true
                 fi

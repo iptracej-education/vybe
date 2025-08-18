@@ -20,7 +20,7 @@ Mark current outcome stage as complete and advance to the next stage in your inc
 
 ### Current Stage Status
 - Outcome roadmap: `bash -c '[ -f ".vybe/project/outcomes.md" ] && echo "[OK] Outcome roadmap found" || echo "[NO] Run /vybe:init first"'`
-- Active stage: `bash -c '[ -f ".vybe/backlog.md" ] && grep "Active Stage:" .vybe/backlog.md | head -1 || echo "No active stage"'`
+- Active stage: `bash -c '[ -f ".vybe/backlog.md" ] && grep -m 1 "Active Stage:" .vybe/backlog.md || echo "No active stage"'`
 - Tasks remaining: `bash -c '[ -f ".vybe/backlog.md" ] && grep -A 20 "IN PROGRESS" .vybe/backlog.md | grep "^\- \[ \]" | wc -l | xargs -I {} echo "{} tasks incomplete" || echo "Unknown"'`
 - Tests passing: `bash -c 'npm test 2>/dev/null && echo "[OK] Tests passing" || echo "[WARN] Tests not verified"'`
 
@@ -233,7 +233,7 @@ echo "============================"
 echo ""
 
 # Identify next stage
-next_stage=$(grep -A 5 "⏳ NEXT" .vybe/backlog.md | head -1 | sed 's/.*Stage [0-9]: //' | sed 's/ .*//')
+next_stage=$(grep -m 1 -A 5 "⏳ NEXT" .vybe/backlog.md | sed 's/.*Stage [0-9]: //' | sed 's/ .*//')
 echo "Next Stage: $next_stage"
 echo ""
 
@@ -289,7 +289,7 @@ echo ""
 # Show stage timeline
 echo "STAGE TIMELINE:"
 echo "=============="
-grep "^### Stage" .vybe/backlog.md | head -5
+grep -m 5 "^### Stage" .vybe/backlog.md
 
 echo ""
 echo "VALUE DELIVERED:"
