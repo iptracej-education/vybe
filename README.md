@@ -230,4 +230,159 @@ build:
   build_cmd: "swift build"
 ```
 
+## 🤝 Contributing & Testing
 
+**We need your help testing this framework!** The Vybe framework is experimental and needs real-world validation, especially for multi-developer scenarios.
+
+### 🎯 **Critical Testing Areas**
+
+#### **Multi-Developer Coordination** (HIGHEST PRIORITY)
+The most complex and untested aspect of Vybe is multi-developer coordination. We need feedback on:
+
+**Potential Issues We're Concerned About:**
+- **Code Overlap**: Do developers accidentally work on the same files/functions?
+- **Missing Integration Pieces**: Are there gaps between what developers build?
+- **Merge Conflicts**: Does the AI integration handle complex merge scenarios?
+- **Feature Dependencies**: Do features that depend on each other integrate correctly?
+- **Workload Balance**: Are features distributed fairly across team members?
+- **Communication Gaps**: Do developers miss important coordination points?
+
+**Real Scenarios to Test:**
+```bash
+# Scenario 1: E-commerce Platform (3 developers)
+/vybe:init "E-commerce platform with authentication, payments, and catalog"
+/vybe:backlog member-count 3 --auto-assign
+# Test: Do auth, payment, and catalog features integrate correctly?
+
+# Scenario 2: Data Pipeline (2 developers) 
+/vybe:init "Data processing pipeline with ingestion and analytics"
+/vybe:backlog member-count 2 --auto-assign
+# Test: Do data ingestion and analytics work together?
+
+# Scenario 3: Full-Stack App (4 developers)
+/vybe:init "Social media app with backend, frontend, mobile, and admin"
+/vybe:backlog member-count 4 --auto-assign
+# Test: Does the complete system integrate across all components?
+```
+
+#### **AI Assignment Intelligence**
+- Does `/vybe:backlog member-count N --auto-assign` create sensible feature distribution?
+- Are dependencies and conflicts properly identified?
+- Do assigned features actually avoid overlap?
+
+#### **Integration & Release Process**
+- Does `/vybe:release stage-1` successfully merge all developer work?
+- Are integration tests comprehensive enough?
+- Does the combined system actually work?
+
+### 🐛 **What We're Looking For**
+
+#### **Success Cases**
+- ✅ Features assigned without conflicts
+- ✅ Developers work in parallel successfully  
+- ✅ Integration works smoothly with `/vybe:release`
+- ✅ Combined system functions correctly
+- ✅ Code quality maintained across team
+
+#### **Failure Cases** (Please Report!)
+- ❌ Overlapping code assignments
+- ❌ Missing pieces after integration
+- ❌ Merge conflicts that AI can't resolve
+- ❌ Features that don't work together
+- ❌ Broken system after `/vybe:release`
+- ❌ Coordination confusion or workflow issues
+
+### 📝 **How to Contribute**
+
+#### **1. Testing Feedback**
+Try the framework on real projects and report:
+```bash
+# Test the complete multi-developer workflow
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh && cd .. && rm -rf vybe
+
+# Test different team sizes and project types
+# Report what works and what breaks
+```
+
+**Submit feedback as GitHub Issues with:**
+- Project type and team size tested
+- Commands that worked/failed
+- Screenshots of coordination problems
+- Specific integration issues encountered
+- Suggestions for improvement
+
+#### **2. Framework Improvements**
+- **Command Enhancements**: Better AI prompts for coordination
+- **Integration Logic**: Improved merge and testing strategies  
+- **Error Handling**: Better failure detection and recovery
+- **Documentation**: Clearer workflows and troubleshooting guides
+
+#### **3. Real-World Case Studies**
+Document your experience using Vybe for actual projects:
+- What project type did you build?
+- How many developers were involved?
+- What coordination challenges arose?
+- How did the AI handle integration?
+- What would you improve?
+
+### 🚨 **Known Limitations**
+
+**Multi-Developer Scenarios:**
+- Integration logic is theoretical - needs real-world validation
+- AI assignment may miss subtle dependencies
+- Merge conflict resolution may be incomplete
+- Cross-feature testing may have gaps
+
+**General Framework:**
+- Experimental status - expect workflow changes
+- Command behavior may evolve based on testing feedback
+- Not recommended for production projects yet
+
+### 💡 **Contributing Guidelines**
+
+#### **Issue Reporting**
+```markdown
+## Multi-Developer Test Report
+
+**Project**: [Description]
+**Team Size**: [N developers]
+**Commands Tested**: 
+- /vybe:init "..."
+- /vybe:backlog member-count N --auto-assign
+- /vybe:execute stage-1 --complete
+- /vybe:release stage-1
+
+**What Worked**:
+- [Specific successes]
+
+**What Failed**:
+- [Specific failures with commands/outputs]
+
+**Integration Issues**:
+- [Overlaps, gaps, conflicts, coordination problems]
+
+**Suggestions**:
+- [How to improve the workflow]
+```
+
+#### **Pull Requests**
+- Focus on multi-developer coordination improvements
+- Include test scenarios that validate changes
+- Update documentation for workflow changes
+- Add error handling for edge cases
+
+### 🎯 **Priority Testing Requests**
+
+1. **Test multi-developer assignment intelligence** - Does auto-assign work sensibly?
+2. **Validate integration scenarios** - Does `/vybe:release` handle team coordination?  
+3. **Find coordination edge cases** - What breaks the multi-developer workflow?
+4. **Document real failure modes** - Help us fix what doesn't work
+
+**Your testing and feedback will directly shape how this framework evolves!**
+
+---
+
+**Repository**: [github.com/iptracej-education/vybe](https://github.com/iptracej-education/vybe)  
+**Issues**: [Report problems and feedback](https://github.com/iptracej-education/vybe/issues)  
+**Discussions**: [Share experiences and suggestions](https://github.com/iptracej-education/vybe/discussions)
