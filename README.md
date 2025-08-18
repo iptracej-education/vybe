@@ -25,6 +25,10 @@ Vybe brings structure to AI-assisted development through:
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
 
+## Platform support 
+
+Linux, macOS, WSL2, Git Bash (not Windows CMD)
+
 ## Quick Setup
 
 ### Solo Development Setup
@@ -216,6 +220,4 @@ build:
   build_cmd: "swift build"
 ```
 
-## Platform support 
 
-Linux, macOS, WSL2, Git Bash (not Windows CMD)
