@@ -37,13 +37,20 @@ git init
 git clone https://github.com/iptracej-education/vybe.git
 cd vybe && ./install.sh
 
+claude
+
 # 3. Initialize your project with staged outcomes
 /vybe:init "Your project description"
 # This will interactively capture your first minimal outcome and final vision
 ```
 
-### Manual Installation
-If you prefer manual setup, see `docs/HANDS_ON_TUTORIAL.md` for step-by-step instructions.
+#### Add to Existing Project
+```bash
+# Same as in Solo Development Setup
+
+# Initialize Vybe in your existing project
+/vybe:init "Your existing project description"
+```
 
 ### Multi-Member Team Setup
 ```bash
@@ -67,22 +74,10 @@ git push origin main
 # 5. Team members clone and set their roles
 git clone https://github.com/yourusername/your-project.git
 export VYBE_MEMBER=dev-1  # Each member uses dev-1, dev-2, etc.
+claude
 ```
 
-### Add to Existing Project
-```bash
-# In your existing project directory
-git clone https://github.com/iptracej-education/vybe.git vybe-framework
-cp -r vybe-framework/.claude .
-rm -rf vybe-framework
-
-# Initialize Vybe in your existing project
-/vybe:init "Your existing project description"
-```
-
-**Framework Repository**: [https://github.com/iptracej-education/vybe](https://github.com/iptracej-education/vybe)
-
-**Repository Requirements**:
+### Repository Requirements:
 - **Solo development**: Local git repo only (no GitHub needed)
 - **Multi-member teams**: **GitHub repository required** for coordination
   - Vybe uses git-based coordination between team members
@@ -102,8 +97,8 @@ rm -rf vybe-framework
 /vybe:backlog init --auto
 
 # 3. Work on current stage
-/vybe:execute fetch-api-data    # Stage 1 tasks
-/vybe:execute display-numbers
+/vybe:execute stage-1    # Stage 1 tasks
+/vybe:execute stage-2
 
 # 4. Complete stage and advance
 /vybe:release                   # Marks Stage 1 complete, advances to Stage 2
@@ -112,7 +107,7 @@ rm -rf vybe-framework
 /vybe:status outcomes          # See stage progression
 /vybe:status                   # Overall progress
 
-# 6. Code-Reality Analysis (🔥 POWERFUL NEW FEATURES)
+# 6. Discussion based project adjustment, inspection, and alignment 
 /vybe:discuss "reshape this project to fit 2 weeks, prefer MVP, keep security"
 # → Automatically runs: /vybe:audit mvp-extraction --timeline=14days + scope-drift
 # → Provides specific recommendations based on YOUR actual code
@@ -221,13 +216,6 @@ build:
   build_cmd: "swift build"
 ```
 
-### 🎯 **Language-Agnostic Features**
+## Platform support 
 
-- **Template Import**: Works with templates in any language
-- **Code Generation**: Follows language-specific patterns and conventions
-- **Testing**: Uses appropriate test frameworks automatically
-- **Dependency Management**: Uses correct package managers
-- **Build & Run**: Executes using proper language tools
-- **Multi-Language Projects**: Supports polyglot projects with multiple languages
-
-**Platform support**: Linux, macOS, WSL2, Git Bash (not Windows CMD)
+Linux, macOS, WSL2, Git Bash (not Windows CMD)
