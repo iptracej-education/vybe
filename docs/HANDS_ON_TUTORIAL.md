@@ -279,8 +279,8 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 
 ### Step 7: Execute Stage 1 Implementation with Technology Stack-Driven Code Generation
 ```bash
-# Command to test:
-/vybe:execute stage-1-task-1
+# Execute all tasks in Stage 1 with complete integration
+/vybe:execute stage-1 --complete
 
 # Enhanced execute behavior with technology coordination (✅ REGISTRY NOW AVAILABLE):
 # 1. LOADS technology stack from actual .vybe/tech/ registry (no more guessing!)
@@ -300,9 +300,10 @@ cat .vybe/features/stage-1/tasks.md          # Should include TypeScript setup t
 # 5. Fixes test failures up to 2 attempts
 # 6. Creates working, tested code
 
-# Alternative execution modes:
-# /vybe:execute stage-1-task-2    # Next specific task
-# /vybe:execute stage-1 --complete # Complete entire stage with integration tests
+# Alternative execution patterns (commented examples):
+# /vybe:execute stage-1-task-1    # Single task execution
+# /vybe:execute stage-1-task-2    # Next task in sequence
+# /vybe:execute my-feature-task-1 # Individual feature task
 ```
 
 **Enhanced Test Points:**
@@ -1046,13 +1047,13 @@ cat .vybe/project/.template
 
 ### Step 11: Template-Enforced Code Generation with Automatic Implementation
 ```bash
-# Standard stage execution with template enforcement
-/vybe:execute stage-1-task-1
+# Execute all tasks in stage-1 with template enforcement
+/vybe:execute stage-1 --complete
 
-# Alternative: Individual task execution (commented examples)
-# /vybe:execute document-processing-task-1
-# /vybe:execute user-interface-task-1
-# /vybe:execute data-pipeline-task-1
+# Alternative execution patterns (commented examples)
+# /vybe:execute stage-1-task-1          # Single task execution
+# /vybe:execute stage-1-task-2          # Next task in sequence
+# /vybe:execute document-processing-task-1  # Individual feature task
 
 # Enhanced template-driven behavior:
 # - PRIORITY 1: Load template patterns (ENFORCE STRICTLY)
