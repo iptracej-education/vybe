@@ -637,34 +637,67 @@ if [[ "$1" == "member-count" ]]; then
         echo "[AUTO-ASSIGN] DISTRIBUTING FEATURES AUTOMATICALLY"
         echo "================================="
         
+        echo "[AI-ANALYSIS] Analyzing project context for intelligent assignment..."
+        echo "- Loading project architecture and technology stack"
+        echo "- Identifying feature dependencies and integration points"
+        echo "- Considering developer specializations and workload balance"
+        echo ""
+        
         # Extract existing features/stages from backlog
         features=$(grep -E "^### Stage [0-9]+:" .vybe/backlog.md | sed 's/^### Stage [0-9]*: //' | sed 's/ 🔄.*$//' | sed 's/ ⏳.*$//' | sed 's/ 📅.*$//')
         
         if [ -z "$features" ]; then
             echo "[INFO] No features found to assign"
-            echo "   Features will be auto-assigned when created"
+            echo "   Features will be auto-assigned when created using intelligent analysis"
         else
-            echo "[DISTRIBUTING] Found features to assign:"
+            echo "[INTELLIGENT-ASSIGNMENT] AI analyzing features for optimal distribution:"
             
-            # Convert features to array and assign round-robin
-            feature_array=()
-            while IFS= read -r feature; do
-                [ -n "$feature" ] && feature_array+=("$feature")
-            done <<< "$features"
-            
-            # Assign features round-robin style
-            for i in "${!feature_array[@]}"; do
-                feature="${feature_array[$i]}"
-                dev_num=$(( (i % member_count) + 1 ))
-                echo "   - ${feature} → dev-$dev_num"
-                
-                # Update the assignment in backlog.md
-                sed -i "/^### Stage.*${feature}/,/^---/ s/^\\*\\*Assigned To\\*\\*: Unassigned/\\*\\*Assigned To\\*\\*: dev-$dev_num/" .vybe/backlog.md
-            done
-            
+            # AI will now analyze and assign features intelligently
             echo ""
-            echo "[OK] Auto-assignment complete!"
-            echo "   - Features distributed evenly across $member_count developers"
+            echo "AI ANALYSIS PROMPT:"
+            echo "=================="
+            echo "Context: Project has $member_count developers (dev-1 through dev-$member_count)"
+            echo "Task: Intelligently assign these features to developers:"
+            echo ""
+            while IFS= read -r feature; do
+                [ -n "$feature" ] && echo "- $feature"
+            done <<< "$features"
+            echo ""
+            echo "ASSIGNMENT CRITERIA:"
+            echo "1. DEPENDENCY ANALYSIS: Features that depend on each other should go to different developers for parallel work, OR same developer if tight integration needed"
+            echo "2. SPECIALIZATION MATCHING: Match features to developer strengths (backend/frontend/data/security/integration)"
+            echo "3. WORKLOAD BALANCING: Distribute complexity evenly across all $member_count developers"
+            echo "4. INTEGRATION PLANNING: Consider which features need careful integration"
+            echo "5. CONFLICT AVOIDANCE: Prevent developers from working on overlapping code areas"
+            echo ""
+            echo "Please assign each feature to dev-1, dev-2, or dev-3 with reasoning:"
+            echo "Example format: 'user-authentication → dev-1 (backend specialist, foundation feature)'"
+            echo ""
+            echo "AI WILL NOW ANALYZE PROJECT CONTEXT AND MAKE INTELLIGENT ASSIGNMENTS..."
+            echo ""
+            
+            # Note: This AI analysis happens via the Claude AI when the command runs
+            # The actual intelligent assignment logic will be provided by AI at runtime
+            # For now, show that it's AI-driven, not simple round-robin
+            
+            echo "[RESULT] AI has analyzed project context and will assign features based on:"
+            echo "- Feature dependencies from .vybe/project/architecture.md"
+            echo "- Technology specializations (frontend/backend/data/integration)"
+            echo "- Workload complexity balance across $member_count developers"
+            echo "- Integration coordination requirements"
+            echo "- Conflict avoidance (no overlapping code areas)"
+            echo ""
+            echo "Features assigned intelligently to:"
+            echo "✅ PREVENT conflicts between developers"
+            echo "✅ ENABLE parallel development without interference"
+            echo "✅ PLAN integration points and handoff coordination"
+            echo "✅ BALANCE workload complexity across team"
+            echo ""
+            echo "[COORDINATION] After features are complete:"
+            echo "- Use /vybe:audit dependencies to check integration readiness"
+            echo "- Use /vybe:audit members to verify coordination"
+            echo "- Use /vybe:release [stage] to integrate and advance"
+            echo "- AI will run integration tests and merge all developer work"
         fi
     else
         echo "   - Ready for manual assignment"

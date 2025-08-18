@@ -597,6 +597,8 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 - [ ] Are dev-1, dev-2, dev-3 slots created with balanced workloads?
 - [ ] Is backlog.md updated with both member structure AND assignments?
 - [ ] Does it eliminate the need for manual assign commands?
+- [ ] Does AI assign features to avoid conflicts and overlapping work?
+- [ ] Are integration points and coordination planned automatically?
 
 ## Phase 2: Feature Planning & Assignment
 
@@ -769,6 +771,32 @@ export VYBE_MEMBER=dev-2
 - [ ] Are workload imbalances clearly identified?
 - [ ] Is reassignment process smooth?
 - [ ] Does the system adapt to changes well?
+
+### Step 10: Multi-Member Stage Integration
+```bash
+# Test intelligent integration of all developer work:
+/vybe:release stage-1
+
+# Expected AI integration behavior:
+# 1. COMPLETION VERIFICATION: Check all dev-1, dev-2, dev-3 work is complete
+# 2. DEPENDENCY ANALYSIS: Run /vybe:audit dependencies automatically
+# 3. CONFLICT DETECTION: Run /vybe:audit members automatically  
+# 4. INTELLIGENT MERGE: Merge all developer branches with conflict resolution
+# 5. INTEGRATION TESTING: Run comprehensive tests on combined system
+# 6. QUALITY VALIDATION: Verify features work together, not just individually
+
+# Alternative: Manual integration commands
+# /vybe:audit dependencies    # Check integration readiness manually
+# /vybe:audit members         # Verify coordination manually  
+```
+
+**Test Points:**
+- [ ] Does AI automatically verify all developers completed their assignments?
+- [ ] Are dependencies and conflicts detected before integration?
+- [ ] Does AI intelligently merge all developer branches?
+- [ ] Are integration tests run on the combined system?
+- [ ] Does the integrated system work correctly with all features?
+- [ ] Is the system ready for next stage development?
 
 ---
 
@@ -1355,7 +1383,7 @@ This tutorial provides four comprehensive paths for testing the entire Vybe fram
 
 **🏗️ Template Tutorial** - 16 steps testing template import, AI analysis, and template-driven development
 **👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
-**👥 Multi-Member Tutorial** - 9 steps testing team coordination and multi-session workflows  
+**👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
 **🔄 Session Continuity Tutorial** - 4 phases testing context preservation and seamless handoff across Claude Code restarts
 
 All tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. The template tutorial adds comprehensive testing of AI-driven template analysis and architectural DNA enforcement. The session continuity tutorial validates that work is never lost and development can seamlessly resume across sessions. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
