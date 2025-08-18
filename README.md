@@ -6,6 +6,13 @@ Vybe is a spec-driven framework for Claude Code that lets you plan and develop s
 
 **Note:** *This is an experimental project under active development. Features and structure may change significantly.*
 
+[![Project](https://img.shields.io/badge/Project-vybe-blue)](https://github.com/iptracej-education/vybe)
+[![Status](https://img.shields.io/badge/Status-Experimental-orange)](https://github.com/iptracej-education/vybe)
+[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/iptracej-education/vybe/blob/main/LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Claude%20Code-purple)](https://claude.ai/code)
+[![Languages](https://img.shields.io/badge/Languages-Agnostic-lightblue)](https://github.com/iptracej-education/vybe#supported-programming-languages)
+[![Install](https://img.shields.io/badge/Install-One%20Command-brightgreen)](https://github.com/iptracej-education/vybe#quick-setup)
+
 ## Overview
 
 Vybe brings structure to AI-assisted development through:
