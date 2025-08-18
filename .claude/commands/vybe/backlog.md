@@ -20,7 +20,7 @@ Intelligent backlog management with automated analysis, grooming, and planning c
 - **release [version]**: Group features into releases
 - **dependencies**: Map cross-feature dependencies  
 - **capacity**: Estimate effort and sprint planning
-- **member-count [N]**: Configure project with N developers (1-5 max, creates dev-1, dev-2, etc.)
+- **member-count [N] [--auto-assign]**: Configure project with N developers (1-5 max, creates dev-1, dev-2, etc.)
 - **assign [feature] [dev-N]**: Assign feature to specific member (dev-1, dev-2, dev-3, dev-4, or dev-5)
 
 ## Global Options
@@ -629,11 +629,52 @@ if [[ "$1" == "member-count" ]]; then
     
     echo "[OK] Members configured with $member_count developers"
     echo "   - dev-1 through dev-$member_count created"
-    echo "   - Ready for feature assignment"
-    echo ""
-    echo "[NEXT] ASSIGN FEATURES:"
-    echo "   /vybe:backlog assign [feature-name] dev-1"
-    echo "   /vybe:backlog assign [feature-name] dev-2"
+    
+    # Check for auto-assign flag
+    if [[ "$*" == *"--auto-assign"* ]]; then
+        echo "   - Auto-assignment enabled"
+        echo ""
+        echo "[AUTO-ASSIGN] DISTRIBUTING FEATURES AUTOMATICALLY"
+        echo "================================="
+        
+        # Extract existing features/stages from backlog
+        features=$(grep -E "^### Stage [0-9]+:" .vybe/backlog.md | sed 's/^### Stage [0-9]*: //' | sed 's/ 🔄.*$//' | sed 's/ ⏳.*$//' | sed 's/ 📅.*$//')
+        
+        if [ -z "$features" ]; then
+            echo "[INFO] No features found to assign"
+            echo "   Features will be auto-assigned when created"
+        else
+            echo "[DISTRIBUTING] Found features to assign:"
+            
+            # Convert features to array and assign round-robin
+            feature_array=()
+            while IFS= read -r feature; do
+                [ -n "$feature" ] && feature_array+=("$feature")
+            done <<< "$features"
+            
+            # Assign features round-robin style
+            for i in "${!feature_array[@]}"; do
+                feature="${feature_array[$i]}"
+                dev_num=$(( (i % member_count) + 1 ))
+                echo "   - ${feature} → dev-$dev_num"
+                
+                # Update the assignment in backlog.md
+                sed -i "/^### Stage.*${feature}/,/^---/ s/^\\*\\*Assigned To\\*\\*: Unassigned/\\*\\*Assigned To\\*\\*: dev-$dev_num/" .vybe/backlog.md
+            done
+            
+            echo ""
+            echo "[OK] Auto-assignment complete!"
+            echo "   - Features distributed evenly across $member_count developers"
+        fi
+    else
+        echo "   - Ready for manual assignment"
+        echo ""
+        echo "[NEXT] ASSIGN FEATURES:"
+        echo "   /vybe:backlog assign [feature-name] dev-1"
+        echo "   /vybe:backlog assign [feature-name] dev-2"
+        echo ""
+        echo "[TIP] For automatic assignment: /vybe:backlog member-count $member_count --auto-assign"
+    fi
     echo ""
     
     exit 0

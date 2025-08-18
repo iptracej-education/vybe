@@ -578,21 +578,25 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 
 ### Step 2: Configure Team Structure
 ```bash
-# Command to test:
-/vybe:backlog member-count 3
+# Command to test - automatic feature distribution:
+/vybe:backlog member-count 3 --auto-assign
 
 # Expected behavior:
 # - Configures project for 3 developers
 # - Creates dev-1, dev-2, dev-3 placeholders
-# - Updates backlog.md with member structure
-# - Enables assignment features
+# - AUTOMATICALLY distributes existing features across all 3 developers
+# - Updates backlog.md with member structure AND assignments
+# - No manual assignment needed!
+
+# Alternative: Manual assignment mode
+# /vybe:backlog member-count 3    # Creates developers but requires manual assignment
 ```
 
 **Test Points:**
-- [ ] Does member-count command work intuitively?
-- [ ] Are member slots clearly defined (dev-1, dev-2, dev-3)?
-- [ ] Is the command name clear vs alternatives?
-- [ ] Does it enable team features properly?
+- [ ] Does auto-assign distribute features evenly across all 3 developers?
+- [ ] Are dev-1, dev-2, dev-3 slots created with balanced workloads?
+- [ ] Is backlog.md updated with both member structure AND assignments?
+- [ ] Does it eliminate the need for manual assign commands?
 
 ## Phase 2: Feature Planning & Assignment
 
@@ -617,28 +621,9 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 - [ ] Are technical patterns appropriate for each feature?
 - [ ] Are dependencies between features clear?
 
-### Step 4: Assign Features to Team Members
-```bash
-# Commands to test - distribute features across all 3 developers:
-/vybe:backlog assign user-authentication dev-1
-/vybe:backlog assign payment-processing dev-2  
-/vybe:backlog assign product-catalog dev-3
+## Phase 3: Multi-Session Development  
 
-# Expected behavior:
-# - Features split evenly across 3 developers (dev-1, dev-2, dev-3)
-# - Clear assignment tracking for each member
-# - Balanced workload distribution
-# - No assignment conflicts
-```
-
-**Test Points:**
-- [ ] Is the assign command syntax intuitive?
-- [ ] Are assignments clearly tracked?
-- [ ] Does workload balancing become visible?
-
-## Phase 3: Multi-Session Development
-
-### Step 5: Simulate Multiple Developers with Automatic Implementation
+### Step 4: Simulate Multiple Developers with Automatic Implementation
 **Note**: This requires the GitHub repository setup from [Multi-Member Tutorial Setup](#multi-member-tutorial-setup) above.
 
 ```bash
@@ -691,7 +676,7 @@ export VYBE_MEMBER=dev-3
 - [ ] Are all 3 developers generating actual runnable code?
 - [ ] Is workload evenly distributed across dev-1, dev-2, and dev-3?
 
-### Step 6: Test Assignment Conflicts
+### Step 5: Test Assignment Conflicts
 ```bash
 # Terminal 1 (dev-1):
 /vybe:execute user-authentication-task-1
@@ -713,7 +698,7 @@ export VYBE_MEMBER=dev-2
 
 ## Phase 4: Team Coordination & Quality
 
-### Step 7: Team Status Monitoring
+### Step 6: Team Status Monitoring
 ```bash
 # Commands to test:
 /vybe:status members          # Overview of all assignments
@@ -731,7 +716,7 @@ export VYBE_MEMBER=dev-2
 - [ ] Are individual progress views useful?
 - [ ] Does status help with team coordination?
 
-### Step 8: Multi-Member Quality Assurance
+### Step 7: Multi-Member Quality Assurance
 ```bash
 # Commands to test:
 /vybe:audit members          # Team coordination audit
@@ -751,7 +736,7 @@ export VYBE_MEMBER=dev-2
 
 ## Phase 5: Advanced Team Scenarios
 
-### Step 9: Dynamic Team Changes
+### Step 8: Dynamic Team Changes
 ```bash
 # Command to test:
 /vybe:backlog member-count 4    # Add new developer mid-project
@@ -767,7 +752,7 @@ export VYBE_MEMBER=dev-2
 - [ ] Are existing assignments preserved?
 - [ ] Is onboarding guidance provided for new member?
 
-### Step 10: Workload Rebalancing
+### Step 9: Workload Rebalancing
 ```bash
 # Commands to test:
 /vybe:audit members                     # Identify imbalances
@@ -1370,7 +1355,7 @@ This tutorial provides four comprehensive paths for testing the entire Vybe fram
 
 **🏗️ Template Tutorial** - 16 steps testing template import, AI analysis, and template-driven development
 **👤 Solo Tutorial** - 11 focused steps testing core functionality without team complexity
-**👥 Multi-Member Tutorial** - 10 steps testing team coordination and multi-session workflows  
+**👥 Multi-Member Tutorial** - 9 steps testing team coordination and multi-session workflows  
 **🔄 Session Continuity Tutorial** - 4 phases testing context preservation and seamless handoff across Claude Code restarts
 
 All tutorials emphasize the critical distinction between status (progress) and audit (quality) commands. The template tutorial adds comprehensive testing of AI-driven template analysis and architectural DNA enforcement. The session continuity tutorial validates that work is never lost and development can seamlessly resume across sessions. Any inconsistencies, unclear commands, or workflow issues should surface during execution.
