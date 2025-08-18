@@ -35,8 +35,25 @@ Create comprehensive specifications for individual features with mandatory proje
 ## Pre-Planning Checks
 
 ### Project Readiness
+# Source cache manager for ultra-fast lookups
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    source .claude/hooks/cache-manager.sh
+fi
+
+# MCP accelerated status checks
+echo "[MCP-ACCELERATED] Project status:"
 - Vybe initialized: `bash -c '[ -d ".vybe/project" ] && echo "[OK] Project ready" || echo "[NO] Run /vybe:init first"'`
-- Project docs loaded: `bash -c 'ls .vybe/project/*.md 2>/dev/null | wc -l | xargs -I {} echo "{} project documents available"'`
+
+# Fast document count
+DOC_COUNT=$(ls .vybe/project/*.md 2>/dev/null | wc -l)
+echo "- Project docs loaded: $DOC_COUNT project documents available"
+
+# Fast member check from cache
+if command -v vybe_cache_get >/dev/null 2>&1; then
+    CACHED_MEMBERS=$(vybe_cache_get "project.members" 2>/dev/null || echo "0")
+    echo "- Members configured: $([ "$CACHED_MEMBERS" -gt 0 ] && echo "[OK] $CACHED_MEMBERS developers" || echo "[INFO] Solo mode")"
+fi
+
 - Backlog context: `bash -c '[ -f ".vybe/backlog.md" ] && echo "[OK] Strategic context available" || echo "[WARN] No backlog - planning independently"'`
 
 ### Feature Analysis

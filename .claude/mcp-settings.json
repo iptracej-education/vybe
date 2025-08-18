@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "vybe-cache": {
+      "command": "node",
+      "args": [".vybe/mcp-cache-server.js"],
+      "env": {
+        "NODE_ENV": "production",
+        "VYBE_CACHE_LOG_LEVEL": "error"
+      },
+      "cwd": ".",
+      "scope": "project"
+    }
+  }
+}

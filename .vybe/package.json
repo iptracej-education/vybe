@@ -1,0 +1,18 @@
+{
+  "name": "vybe-mcp-cache",
+  "version": "1.0.0",
+  "description": "High-performance MCP cache server for Vybe Framework",
+  "main": "mcp-cache-server.js",
+  "scripts": {
+    "start": "node mcp-cache-server.js",
+    "test": "echo 'No tests yet' && exit 0"
+  },
+  "keywords": ["mcp", "cache", "vybe", "performance"],
+  "author": "Vybe Framework",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

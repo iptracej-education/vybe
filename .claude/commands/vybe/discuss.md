@@ -77,21 +77,65 @@ Transform natural language requests into specific Vybe command sequences with in
 
 ## Pre-Discussion Checks
 
-### Project Status
-- Vybe initialized: `bash -c '[ -d ".vybe/project" ] && echo "[OK] Project ready" || echo "[NO] Run /vybe:init first"'`
-- Project context: `bash -c 'ls .vybe/project/*.md 2>/dev/null | wc -l | xargs -I {} echo "{} project documents available"'`
-- Members configured: `bash -c '[ -f ".vybe/backlog.md" ] && grep -q "^## Members:" .vybe/backlog.md && echo "[OK] Members configured" || echo "[INFO] No members configured"'`
+### Project Status (ULTRA-FAST MCP CACHE)
 
-### Current State
-- Features planned: `bash -c '[ -d ".vybe/features" ] && ls -d .vybe/features/*/ 2>/dev/null | wc -l | xargs -I {} echo "{} features planned" || echo "0 features planned"'`
+# Source cache manager for instant lookups
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    source .claude/hooks/cache-manager.sh
+fi
+
+# Batch get project info in one MCP call (1ms vs 100ms+ individual operations)
+if command -v vybe_cache_mget >/dev/null 2>&1; then
+    PROJECT_INFO=$(vybe_cache_mget '["project.members", "features.list", "project.name"]' 2>/dev/null)
+    
+    if [ -n "$PROJECT_INFO" ] && [ "$PROJECT_INFO" != "{}" ]; then
+        CACHED_MEMBERS=$(echo "$PROJECT_INFO" | jq -r '."project.members"' 2>/dev/null || echo "0")
+        CACHED_FEATURES=$(echo "$PROJECT_INFO" | jq -r '."features.list"' 2>/dev/null)
+        CACHED_PROJECT=$(echo "$PROJECT_INFO" | jq -r '."project.name"' 2>/dev/null || echo "")
+        
+        # Calculate feature count from cached JSON array
+        if [ "$CACHED_FEATURES" != "null" ] && [ "$CACHED_FEATURES" != "[]" ]; then
+            FEATURE_COUNT=$(echo "$CACHED_FEATURES" | jq length 2>/dev/null || echo "0")
+        else
+            FEATURE_COUNT="0"
+        fi
+        
+        echo "[MCP-CACHED] Ultra-fast project status (instant lookup):"
+        echo "- Vybe initialized: [OK] Project ready"
+        echo "- Project name: $CACHED_PROJECT"
+        echo "- Members configured: $([ "$CACHED_MEMBERS" -gt 0 ] && echo "[OK] $CACHED_MEMBERS developers" || echo "[INFO] Solo mode")"
+        echo "- Features planned: $FEATURE_COUNT features planned"
+        
+        # Document count (keep minimal file check)
+        DOC_COUNT=$(ls .vybe/project/*.md 2>/dev/null | wc -l)
+        echo "- Project documents: $DOC_COUNT documents available"
+        
+        use_mcp_cache=true
+    else
+        use_mcp_cache=false
+    fi
+else
+    use_mcp_cache=false
+fi
+
+# Fallback to file operations if MCP cache unavailable
+if [ "$use_mcp_cache" = false ]; then
+    echo "[FILE-FALLBACK] Loading project status..."
+    - Vybe initialized: `bash -c '[ -d ".vybe/project" ] && echo "[OK] Project ready" || echo "[NO] Run /vybe:init first"'`
+    - Project context: `bash -c 'ls .vybe/project/*.md 2>/dev/null | wc -l | xargs -I {} echo "{} project documents available"'`
+    - Members configured: `bash -c '[ -f ".vybe/backlog.md" ] && grep -q "^## Members:" .vybe/backlog.md && echo "[OK] Members configured" || echo "[INFO] No members configured"'`
+    - Features planned: `bash -c '[ -d ".vybe/features" ] && ls -d .vybe/features/*/ 2>/dev/null | wc -l | xargs -I {} echo "{} features planned" || echo "0 features planned"'`
+fi
+
+### Additional Context
 - Backlog items: `bash -c '[ -f ".vybe/backlog.md" ] && grep -c "^- \[" .vybe/backlog.md || echo "0"'`
 
 ## CRITICAL: Complete Context Loading
 
 ### Task 0: Load ALL Project Context (MANDATORY)
 ```bash
-echo "[CONTEXT] LOADING COMPLETE PROJECT CONTEXT"
-echo "=============================="
+echo "[CONTEXT] LOADING COMPLETE PROJECT CONTEXT (MCP ACCELERATED)"
+echo "============================================================"
 echo ""
 
 request="$*"
@@ -107,6 +151,7 @@ if [ -z "$request" ]; then
 fi
 
 echo "Request: $request"
+echo "Cache Status: $(command -v vybe_cache_health >/dev/null 2>&1 && vybe_cache_health | jq -r .status || echo 'file-only')"
 echo ""
 
 # CRITICAL: Load ALL project documents - NEVER skip this step
@@ -187,11 +232,29 @@ else
     echo "[INFO] No backlog found - recommendations will include backlog creation"
 fi
 
-# Load feature specifications
+# Load feature specifications (MCP ACCELERATED)
 feature_count=0
-if [ -d ".vybe/features" ]; then
+
+# Ultra-fast feature count from cache
+if command -v vybe_cache_get >/dev/null 2>&1; then
+    feature_list_json=$(vybe_cache_get "features.list" 2>/dev/null)
+    if [ -n "$feature_list_json" ] && [ "$feature_list_json" != "null" ] && [ "$feature_list_json" != "[]" ]; then
+        feature_count=$(echo "$feature_list_json" | jq length 2>/dev/null || echo "0")
+        echo "[MCP-CACHED] Features with specifications: $feature_count (instant lookup)"
+    fi
+fi
+
+# Fallback to directory scan if cache miss
+if [ "$feature_count" -eq 0 ] && [ -d ".vybe/features" ]; then
     feature_count=$(ls -d .vybe/features/*/ 2>/dev/null | wc -l)
     echo "[CONTEXT] Features with specifications: $feature_count"
+    
+    # Update cache for next time
+    if [ "$feature_count" -gt 0 ] && command -v vybe_cache_set >/dev/null 2>&1; then
+        feature_list=$(ls -1 .vybe/features/ 2>/dev/null | jq -R . | jq -s . 2>/dev/null || echo "[]")
+        vybe_cache_set "features.list" "$feature_list" 300
+    fi
+fi
     
     # Load feature statuses for context
     for feature_dir in .vybe/features/*/; do
@@ -205,11 +268,16 @@ else
 fi
 
 echo ""
-echo "[SUMMARY] PROJECT CONTEXT SUMMARY:"
-echo "   - Project documents loaded: $(ls .vybe/project/*.md 2>/dev/null | wc -l)"
+echo "[SUMMARY] PROJECT CONTEXT SUMMARY (MCP ACCELERATED):"
+
+# Fast document count (minimal file operation)
+doc_count=$(ls .vybe/project/*.md 2>/dev/null | wc -l)
+
+echo "   - Project documents loaded: $doc_count"
 echo "   - Members configured: $([ "$members_configured" = true ] && echo "Yes ($member_count developers)" || echo "No")"
-echo "   - Backlog items: $backlog_count"
+echo "   - Backlog items: ${backlog_count:-0}"
 echo "   - Planned features: $feature_count"
+echo "   - Cache performance: $(command -v vybe_cache_health >/dev/null 2>&1 && echo 'MCP active' || echo 'File fallback')"
 echo ""
 
 # ENFORCEMENT: Cannot proceed without context

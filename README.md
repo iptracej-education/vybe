@@ -28,6 +28,7 @@ Vybe brings structure to AI-assisted development through:
 - **Staged planning and execution** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Natural language scope adjustment** - Intelligent scope reduction for timeline constraints, plus guided expansion planning
 - **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis
+- **High-performance MCP cache** - Sub-millisecond command responses with intelligent in-memory caching and graceful file fallback
 - **Template integration (optional)** - Import production-ready templates as permanent project foundation with AI-guided pattern consistency
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)

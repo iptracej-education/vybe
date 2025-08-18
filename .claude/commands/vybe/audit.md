@@ -57,10 +57,40 @@ Comprehensive project quality assurance focused on detecting gaps, duplicates, a
 
 ## Pre-Audit Checks
 
-### Project Readiness
+### Project Readiness (MCP ACCELERATED)
+
+# Source cache manager for ultra-fast operations
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    source .claude/hooks/cache-manager.sh
+fi
+
 - Vybe initialized: `bash -c '[ -d ".vybe/project" ] && echo "[OK] Project ready" || echo "[NO] Run /vybe:init first"'`
-- Features exist: `bash -c '[ -d ".vybe/features" ] && ls -d .vybe/features/*/ 2>/dev/null | wc -l | xargs -I {} echo "{} features to audit" || echo "0 features to audit"'`
-- Members configured: `bash -c '[ -f ".vybe/backlog.md" ] && grep -q "^## Members:" .vybe/backlog.md && echo "[OK] Members configured" || echo "[INFO] Solo mode"'`
+
+# Ultra-fast feature count from MCP cache
+if command -v vybe_cache_get >/dev/null 2>&1; then
+    FEATURE_LIST=$(vybe_cache_get "features.list" 2>/dev/null)
+    if [ -n "$FEATURE_LIST" ] && [ "$FEATURE_LIST" != "null" ] && [ "$FEATURE_LIST" != "[]" ]; then
+        FEATURE_COUNT=$(echo "$FEATURE_LIST" | jq length 2>/dev/null || echo "0")
+        echo "- Features exist: $FEATURE_COUNT features to audit (MCP cached)"
+    else
+        echo "- Features exist: 0 features to audit"
+    fi
+else
+    # Fallback to file scan
+    FEATURE_COUNT=$([ -d ".vybe/features" ] && ls -d .vybe/features/*/ 2>/dev/null | wc -l || echo "0")
+    echo "- Features exist: $FEATURE_COUNT features to audit"
+fi
+
+# Ultra-fast member check from MCP cache
+if command -v vybe_cache_get >/dev/null 2>&1; then
+    MEMBER_COUNT=$(vybe_cache_get "project.members" 2>/dev/null || echo "0")
+    echo "- Members configured: $([ "$MEMBER_COUNT" -gt 0 ] && echo "[OK] $MEMBER_COUNT members configured (cached)" || echo "[INFO] Solo mode")"
+else
+    # Fallback to file check
+    - Members configured: `bash -c '[ -f ".vybe/backlog.md" ] && grep -q "^## Members:" .vybe/backlog.md && echo "[OK] Members configured" || echo "[INFO] Solo mode"'`
+fi
+
+echo "- Cache performance: $(command -v vybe_cache_health >/dev/null 2>&1 && echo 'MCP active' || echo 'File fallback')"
 
 ## CRITICAL: Complete Context Loading
 

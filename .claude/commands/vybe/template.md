@@ -48,9 +48,26 @@ Check template completeness
 
 ## Pre-Command Analysis
 
-### Current State Check
-- Templates: !`[ -d ".vybe/templates" ] && ls .vybe/templates/ | wc -l | xargs echo "templates found:" || echo "No templates directory"`
-- Project: !`[ -f ".vybe/project/overview.md" ] && echo "[OK] Vybe project" || echo "[INFO] Not a Vybe project"`
+### Current State Check (MCP ACCELERATED)
+
+# Source cache manager for fast operations
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    source .claude/hooks/cache-manager.sh
+fi
+
+# Fast template count (minimal file operation)
+TEMPLATE_COUNT=$([ -d ".vybe/templates" ] && ls .vybe/templates/ | wc -l || echo "0")
+echo "- Templates: $TEMPLATE_COUNT templates found"
+
+# Fast project check with cache info
+if [ -f ".vybe/project/overview.md" ]; then
+    PROJECT_NAME=$(command -v vybe_cache_get >/dev/null 2>&1 && vybe_cache_get "project.name" 2>/dev/null || echo "")
+    echo "- Project: [OK] Vybe project $([ -n "$PROJECT_NAME" ] && echo "($PROJECT_NAME)" || echo "")"
+else
+    echo "- Project: [INFO] Not a Vybe project"
+fi
+
+echo "- Cache status: $(command -v vybe_cache_health >/dev/null 2>&1 && vybe_cache_health | jq -r .status || echo 'file-only')"
 
 ## Action: import [source] [name]
 

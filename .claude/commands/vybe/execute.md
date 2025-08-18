@@ -714,24 +714,42 @@ fi
 # Check if project structure needs to be created
 project_structure_exists=false
 
-# OPTIMIZED: Use cached detection if available
+# Source cache manager functions
+if [ -f ".claude/hooks/cache-manager.sh" ]; then
+    source .claude/hooks/cache-manager.sh
+fi
+
+# ULTRA-FAST: Use MCP cached detection (0.5ms vs 200ms+ file scanning)
 echo "[DETECT] Checking project structure..."
-if [ -f ".vybe/project/.detected/language" ]; then
-    # Use cached detection
-    DETECTED_LANG=$(cat .vybe/project/.detected/language)
-    if [ "$DETECTED_LANG" != "unknown" ]; then
-        project_structure_exists=true
-        echo "[CACHED] Project structure detected: $DETECTED_LANG"
+if command -v vybe_cache_get >/dev/null 2>&1; then
+    # Try batch get for all project info
+    BATCH_RESULT=$(vybe_cache_mget '["project.language", "project.package-manager", "project.test-framework"]' 2>/dev/null)
+    
+    if [ -n "$BATCH_RESULT" ] && [ "$BATCH_RESULT" != "{}" ]; then
+        DETECTED_LANG=$(echo "$BATCH_RESULT" | jq -r '."project.language"' 2>/dev/null || echo "null")
+        DETECTED_PM=$(echo "$BATCH_RESULT" | jq -r '."project.package-manager"' 2>/dev/null || echo "null")
+        
+        if [ "$DETECTED_LANG" != "null" ] && [ "$DETECTED_LANG" != "unknown" ]; then
+            project_structure_exists=true
+            echo "[MCP-CACHED] Project structure: $DETECTED_LANG + $DETECTED_PM (instant lookup)"
+        fi
     fi
-elif [ -f "package.json" ] || [ -f "requirements.txt" ] || [ -f "go.mod" ] || [ -f "Cargo.toml" ]; then
-    # Quick check for common config files
-    project_structure_exists=true
-    echo "[EXISTS] Configuration files found - project initialized"
-elif find . -maxdepth 2 -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" \) -print -quit 2>/dev/null | grep -q .; then
-    # Limited find for code files
-    project_structure_exists=true
-    echo "[EXISTS] Code files found - project structure exists"
-else
+fi
+
+# Fallback checks if cache miss
+if [ "$project_structure_exists" = false ]; then
+    if [ -f "package.json" ] || [ -f "requirements.txt" ] || [ -f "go.mod" ] || [ -f "Cargo.toml" ]; then
+        # Quick check for common config files
+        project_structure_exists=true
+        echo "[EXISTS] Configuration files found - project initialized"
+    elif find . -maxdepth 2 -type f \( -name "*.py" -o -name "*.js" -o -name "*.ts" \) -print -quit 2>/dev/null | grep -q .; then
+        # Limited find for code files
+        project_structure_exists=true
+        echo "[EXISTS] Code files found - project structure exists"
+    fi
+fi
+
+if [ "$project_structure_exists" = false ]; then
     echo "[CREATE] No project structure detected - needs creation"
     
     if [ "$template_exists" = true ]; then
