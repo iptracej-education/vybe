@@ -59,14 +59,14 @@ Comprehensive project quality assurance focused on detecting gaps, duplicates, a
 
 ### Project Readiness (MCP ACCELERATED)
 
-# Source cache manager for ultra-fast operations
+# Source cache manager for cached operations
 if [ -f ".claude/hooks/cache-manager.sh" ]; then
     source .claude/hooks/cache-manager.sh
 fi
 
 - Vybe initialized: `bash -c '[ -d ".vybe/project" ] && echo "[OK] Project ready" || echo "[NO] Run /vybe:init first"'`
 
-# Ultra-fast feature count from MCP cache
+# Fast feature count from MCP cache
 if command -v vybe_cache_get >/dev/null 2>&1; then
     FEATURE_LIST=$(vybe_cache_get "features.list" 2>/dev/null)
     if [ -n "$FEATURE_LIST" ] && [ "$FEATURE_LIST" != "null" ] && [ "$FEATURE_LIST" != "[]" ]; then
@@ -81,7 +81,7 @@ else
     echo "- Features exist: $FEATURE_COUNT features to audit"
 fi
 
-# Ultra-fast member check from MCP cache
+# Fast member check from MCP cache
 if command -v vybe_cache_get >/dev/null 2>&1; then
     MEMBER_COUNT=$(vybe_cache_get "project.members" 2>/dev/null || echo "0")
     echo "- Members configured: $([ "$MEMBER_COUNT" -gt 0 ] && echo "[OK] $MEMBER_COUNT members configured (cached)" || echo "[INFO] Solo mode")"

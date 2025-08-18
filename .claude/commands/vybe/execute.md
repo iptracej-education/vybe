@@ -719,7 +719,7 @@ if [ -f ".claude/hooks/cache-manager.sh" ]; then
     source .claude/hooks/cache-manager.sh
 fi
 
-# ULTRA-FAST: Use MCP cached detection (0.5ms vs 200ms+ file scanning)
+# CACHED: Use MCP cached detection (0.5ms vs 200ms+ file scanning)
 echo "[DETECT] Checking project structure..."
 if command -v vybe_cache_get >/dev/null 2>&1; then
     # Try batch get for all project info
@@ -731,7 +731,7 @@ if command -v vybe_cache_get >/dev/null 2>&1; then
         
         if [ "$DETECTED_LANG" != "null" ] && [ "$DETECTED_LANG" != "unknown" ]; then
             project_structure_exists=true
-            echo "[MCP-CACHED] Project structure: $DETECTED_LANG + $DETECTED_PM (instant lookup)"
+            echo "[MCP-CACHED] Project structure: $DETECTED_LANG + $DETECTED_PM (cached lookup)"
         fi
     fi
 fi

@@ -688,7 +688,7 @@ else
     echo ""
 fi
 
-# Initialize MCP cache system for ultra-fast future operations
+# Initialize MCP cache system for cached future operations
 echo "[OPTIMIZE] Initializing MCP performance cache..."
 if [ -f ".claude/hooks/cache-manager.sh" ]; then
     chmod +x .claude/hooks/cache-manager.sh

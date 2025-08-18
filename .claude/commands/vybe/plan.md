@@ -35,7 +35,7 @@ Create comprehensive specifications for individual features with mandatory proje
 ## Pre-Planning Checks
 
 ### Project Readiness
-# Source cache manager for ultra-fast lookups
+# Source cache manager for cached lookups
 if [ -f ".claude/hooks/cache-manager.sh" ]; then
     source .claude/hooks/cache-manager.sh
 fi

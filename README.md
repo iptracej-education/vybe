@@ -28,7 +28,7 @@ Vybe brings structure to AI-assisted development through:
 - **Staged planning and execution** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Natural language scope adjustment** - Intelligent scope reduction for timeline constraints, plus guided expansion planning
 - **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis
-- **High-performance MCP cache** - Sub-millisecond command responses with intelligent in-memory caching and graceful file fallback
+- **MCP cache** - In-memory caching with intelligent cache strategies and graceful file fallback
 - **Template integration (optional)** - Import production-ready templates as permanent project foundation with AI-guided pattern consistency
 - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
 - **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
@@ -39,6 +39,40 @@ Linux, macOS, WSL2, Git Bash (not Windows CMD)
 
 
 ## Quick Setup
+
+### MCP Cache Configuration
+
+To enable MCP cache for improved command response times, add the Vybe MCP cache to your Claude Code settings:
+
+```bash
+# Add Vybe MCP cache to your existing Claude Code MCP settings
+# This preserves any existing MCP servers you already have configured
+
+# Find your Claude Code MCP settings file:
+# ~/.config/claude/mcp-settings.json (Linux/WSL)
+# ~/Library/Application Support/Claude/mcp-settings.json (macOS)
+
+# Add the vybe-cache server to your existing mcpServers section:
+{
+  "mcpServers": {
+    // ... your existing MCP servers ...
+    "vybe-cache": {
+      "command": "node",
+      "args": [".vybe/mcp-cache-server.js"],
+      "env": {"NODE_ENV": "production"},
+      "cwd": ".",
+      "scope": "project"
+    }
+  }
+}
+
+# Restart Claude Code to activate MCP cache
+```
+
+**Cache Benefits:**
+- Reduced command response times
+- In-memory storage with file fallback
+- Automatic MCP server management
 
 ### Solo Development Setup
 ```bash

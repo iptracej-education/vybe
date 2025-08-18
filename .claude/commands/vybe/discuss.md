@@ -77,7 +77,7 @@ Transform natural language requests into specific Vybe command sequences with in
 
 ## Pre-Discussion Checks
 
-### Project Status (ULTRA-FAST MCP CACHE)
+### Project Status (CACHED MCP CACHE)
 
 # Source cache manager for instant lookups
 if [ -f ".claude/hooks/cache-manager.sh" ]; then
@@ -100,7 +100,7 @@ if command -v vybe_cache_mget >/dev/null 2>&1; then
             FEATURE_COUNT="0"
         fi
         
-        echo "[MCP-CACHED] Ultra-fast project status (instant lookup):"
+        echo "[MCP-CACHED] Fast project status (cached lookup):"
         echo "- Vybe initialized: [OK] Project ready"
         echo "- Project name: $CACHED_PROJECT"
         echo "- Members configured: $([ "$CACHED_MEMBERS" -gt 0 ] && echo "[OK] $CACHED_MEMBERS developers" || echo "[INFO] Solo mode")"
@@ -235,12 +235,12 @@ fi
 # Load feature specifications (MCP ACCELERATED)
 feature_count=0
 
-# Ultra-fast feature count from cache
+# Fast feature count from cache
 if command -v vybe_cache_get >/dev/null 2>&1; then
     feature_list_json=$(vybe_cache_get "features.list" 2>/dev/null)
     if [ -n "$feature_list_json" ] && [ "$feature_list_json" != "null" ] && [ "$feature_list_json" != "[]" ]; then
         feature_count=$(echo "$feature_list_json" | jq length 2>/dev/null || echo "0")
-        echo "[MCP-CACHED] Features with specifications: $feature_count (instant lookup)"
+        echo "[MCP-CACHED] Features with specifications: $feature_count (cached lookup)"
     fi
 fi
 

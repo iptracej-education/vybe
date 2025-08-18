@@ -150,7 +150,7 @@ if [ -f ".vybe/backlog.md" ]; then
     echo ""
     echo "[MEMBERS] MEMBER MANAGEMENT:"
     
-    # Source cache manager for ultra-fast lookups
+    # Source cache manager for cached lookups
     if [ -f ".claude/hooks/cache-manager.sh" ]; then
         source .claude/hooks/cache-manager.sh
     fi
