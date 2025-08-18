@@ -29,7 +29,7 @@ git init
 
 # 2. Install Vybe Framework automatically
 git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh && cd ..
+cd vybe && ./install.sh && cd .. && rm -rf vybe
 
 # 3. Ready to start tutorial
 claude
@@ -1175,7 +1175,7 @@ cat .vybe/project/.template
 # 1. Start new project with session tracking
 mkdir session-test && cd session-test
 git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh && cd ..
+cd vybe && ./install.sh && cd .. && rm -rf vybe
 
 # 2. Initialize project 
 /vybe:init "Simple task manager with local storage"

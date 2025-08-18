@@ -47,7 +47,7 @@ git init
 
 # 2. Install Vybe Framework (automated)
 git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh
+cd vybe && ./install.sh && cd .. && rm -rf vybe
 
 claude
 
@@ -75,7 +75,7 @@ cd your-project
 
 # 3. Install Vybe Framework (automated)
 git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh && cd ..
+cd vybe && ./install.sh && cd .. && rm -rf vybe
 
 # 4. Initialize with staged outcomes and push to shared repository
 /vybe:init "Your project description"
