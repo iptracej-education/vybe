@@ -29,6 +29,7 @@ Vybe brings structure to AI-assisted development through:
 
 Linux, macOS, WSL2, Git Bash (not Windows CMD)
 
+
 ## Quick Setup
 
 ### Solo Development Setup
@@ -137,10 +138,12 @@ export VYBE_MEMBER=dev-1
 
 ## Learn More
 
+- **Sample MVP application** : [`Vybe Example Applications`](https://github.com/iptracej-education/vybe-samples) 
 - **Complete tutorial**: [`docs/HANDS_ON_TUTORIAL.md`](https://github.com/iptracej-education/vybe/blob/main/docs/HANDS_ON_TUTORIAL.md) - 22-step walkthrough
 - **Command reference**: [`docs/COMMAND_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/COMMAND_SPEC.md) - All 9 commands with examples
 - **Framework specification**: [`docs/VYBE_SPEC.md`](https://github.com/iptracej-education/vybe/blob/main/docs/VYBE_SPEC.md) - Complete technical documentation
 - **Multi-session testing**: Simulate multiple developers working together
+
 
 ## Supported Programming Languages
 
