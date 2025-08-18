@@ -1023,7 +1023,13 @@ cat .vybe/project/.template
 
 ### Step 10: Template-Aware Feature Planning
 ```bash
-/vybe:plan document-processing "Create workflow for processing and analyzing uploaded documents"
+# Standard stage planning with template enforcement
+/vybe:plan stage-1
+
+# Alternative: Individual feature planning (commented examples)
+# /vybe:plan document-processing "Create workflow for processing and analyzing uploaded documents"
+# /vybe:plan user-interface "Template-driven UI components and layouts"
+# /vybe:plan data-pipeline "Template-compliant data processing workflow"
 
 # Expected AI behavior:
 # - Load template enforcement rules
@@ -1040,7 +1046,13 @@ cat .vybe/project/.template
 
 ### Step 11: Template-Enforced Code Generation with Automatic Implementation
 ```bash
-/vybe:execute document-processing-task-1
+# Standard stage execution with template enforcement
+/vybe:execute stage-1-task-1
+
+# Alternative: Individual task execution (commented examples)
+# /vybe:execute document-processing-task-1
+# /vybe:execute user-interface-task-1
+# /vybe:execute data-pipeline-task-1
 
 # Enhanced template-driven behavior:
 # - PRIORITY 1: Load template patterns (ENFORCE STRICTLY)
