@@ -619,14 +619,15 @@ This path tests core Vybe functionality with powerful code-reality analysis perf
 
 ### Step 4: Assign Features to Team Members
 ```bash
-# Commands to test:
+# Commands to test - distribute features across all 3 developers:
 /vybe:backlog assign user-authentication dev-1
-/vybe:backlog assign payment-processing dev-1  
-/vybe:backlog assign product-catalog dev-2
+/vybe:backlog assign payment-processing dev-2  
+/vybe:backlog assign product-catalog dev-3
 
 # Expected behavior:
-# - Clear assignment tracking
-# - Workload visibility
+# - Features split evenly across 3 developers (dev-1, dev-2, dev-3)
+# - Clear assignment tracking for each member
+# - Balanced workload distribution
 # - No assignment conflicts
 ```
 
@@ -653,29 +654,42 @@ export VYBE_MEMBER=dev-1
 # - Commits to dev-1 branch
 # - Coordinates with other team members
 
-# Terminal 2 (Frontend Developer):
+# Terminal 2 (Payment Developer):
 export VYBE_MEMBER=dev-2  
 /vybe:execute my-feature
 
 # Enhanced behavior for dev-2:
-# - Finds assigned frontend tasks from backlog
-# - Creates frontend code structure (components, pages, styles)
-# - Generates frontend-specific tests
-# - Follows template patterns for frontend (if template exists)
+# - Finds assigned payment processing tasks from backlog
+# - Creates payment integration code (Stripe, webhooks, validation)
+# - Generates payment-specific tests
+# - Follows template patterns for payment systems (if template exists)
 # - Commits to dev-2 branch
-# - Coordinates with backend dev's work
+# - Coordinates with authentication and catalog teams
 
-# Terminal 3 (Project Overview):
+# Terminal 3 (Catalog Developer):
+export VYBE_MEMBER=dev-3
+/vybe:execute my-feature
+
+# Enhanced behavior for dev-3:
+# - Finds assigned product catalog tasks from backlog
+# - Creates catalog code structure (products, search, inventory)
+# - Generates catalog-specific tests
+# - Follows template patterns for catalog features (if template exists)
+# - Commits to dev-3 branch
+# - Coordinates with authentication and payment teams
+
+# Terminal 4 (Project Overview):
 /vybe:status members
 ```
 
 **Enhanced Test Points:**
 - [ ] Does each developer get role-specific code generation?
-- [ ] Are template patterns applied consistently across team members?
+- [ ] Are template patterns applied consistently across all 3 team members?
 - [ ] Do unit tests run automatically for each developer's code?
-- [ ] Is git branch coordination working between developers?
+- [ ] Is git branch coordination working between all 3 developers?
 - [ ] Does multi-member work coordinate without conflicts?
-- [ ] Are both developers generating actual runnable code?
+- [ ] Are all 3 developers generating actual runnable code?
+- [ ] Is workload evenly distributed across dev-1, dev-2, and dev-3?
 
 ### Step 6: Test Assignment Conflicts
 ```bash
