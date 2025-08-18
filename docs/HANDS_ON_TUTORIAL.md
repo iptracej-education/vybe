@@ -32,45 +32,7 @@ git clone https://github.com/iptracej-education/vybe.git
 cd vybe && ./install.sh && cd ..
 
 # 3. Ready to start tutorial
-```
-
-**Option B: Manual Installation**
-```bash
-# 1. Create test environment
-mkdir vybe-solo-test && cd vybe-solo-test
-git init
-
-# 2. Install Vybe Framework manually
-git clone https://github.com/iptracej-education/vybe.git vybe-framework
-cp -r vybe-framework/.claude .
-
-# 3. Enable Session Continuity (CRITICAL)
-cp -r .claude/hooks/* ~/.claude/.claude/hooks/
-chmod +x ~/.claude/.claude/hooks/*.sh ~/.claude/.claude/hooks/*.py
-
-# 4. Configure Claude Code to use hooks
-# Edit ~/.claude/settings.json and add the hooks section:
-# {
-#   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-#   "feedbackSurveyState": {
-#     "lastShownTime": 1754072726044
-#   },
-#   "hooks": {
-#     "enabled": true,
-#     "preToolHook": "pre-tool.sh", 
-#     "postToolHook": "post-tool.sh",
-#     "preCompactHook": "precompact.py"
-#   }
-# }
-# 
-# IMPORTANT: Merge with existing settings, don't overwrite!
-cp vybe-framework/CLAUDE.md .
-rm -rf vybe-framework
-
-# 3. Start Claude Code
 claude
-
-# 4. Ready to start solo tutorial below
 ```
 
 ### Multi-Member Tutorial Setup
