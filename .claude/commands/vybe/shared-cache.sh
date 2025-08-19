@@ -455,4 +455,5 @@ export -f update_file_and_cache
 export -f get_cache_stats
 export -f cleanup_file_cache
 
-echo "[SHARED-CACHE] Vybe shared cache system loaded"
+# Silent loading - message will be displayed by calling script if needed
+# echo "[SHARED-CACHE] Vybe shared cache system loaded"

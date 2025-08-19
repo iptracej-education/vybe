@@ -6,6 +6,8 @@
 # =============================================================================
 
 # Source shared cache system
+source "$(dirname "$0")/shared-cache.sh"
+echo "[SHARED-CACHE] Vybe shared cache system loaded"
 
 # Parse arguments
 project_description="${1:-}"

@@ -6,6 +6,8 @@
 # =============================================================================
 
 # Source shared cache system
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$script_dir/shared-cache.sh"
 
 # Parse arguments - join all arguments into single request
 discussion_request="$*"
