@@ -1,6 +1,6 @@
 ---
 description: Import and analyze external templates with AI-driven architectural analysis
-allowed-tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, LS, WebFetch
+allowed-tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, LS, WebFetch, vybe-cache.get, vybe-cache.set, vybe-cache.mget, vybe-cache.mset
 ---
 
 # /vybe:template - AI-Driven Template Analysis System
@@ -46,497 +46,91 @@ Show all available templates
 Check template completeness
 - `name`: Template to validate
 
-## Pre-Command Analysis
+## Context
+- Content of the template script: @./.claude/commands/vybe/template-script.sh
 
-### Current State Check (MCP ACCELERATED)
+## Your task
 
-# Source cache manager for fast operations
-if [ -f ".claude/hooks/cache-manager.sh" ]; then
-    source .claude/hooks/cache-manager.sh
-fi
+**If the first argument is "help", display this help content directly:**
 
-# Fast template count (minimal file operation)
-TEMPLATE_COUNT=$([ -d ".vybe/templates" ] && ls .vybe/templates/ | wc -l || echo "0")
-echo "- Templates: $TEMPLATE_COUNT templates found"
+```
+COMMANDS:
+/vybe:template list                        Show available templates
+/vybe:template import [source] [name]      Import template from GitHub/local
+/vybe:template generate [name]             AI analyzes template patterns
+/vybe:template validate [name]             Check template completeness
 
-# Fast project check with cache info
-if [ -f ".vybe/project/overview.md" ]; then
-    PROJECT_NAME=$(command -v vybe_cache_get >/dev/null 2>&1 && vybe_cache_get "project.name" 2>/dev/null || echo "")
-    echo "- Project: [OK] Vybe project $([ -n "$PROJECT_NAME" ] && echo "($PROJECT_NAME)" || echo "")"
-else
-    echo "- Project: [INFO] Not a Vybe project"
-fi
+EXAMPLES:
+/vybe:template list
+/vybe:template import github.com/anthropics/genai-launchpad genai-stack
+/vybe:template import ./my-company-template company-stack
+/vybe:template generate genai-stack
+/vybe:template validate genai-stack
 
-echo "- Cache status: $(command -v vybe_cache_health >/dev/null 2>&1 && vybe_cache_health | jq -r .status || echo 'file-only')"
+WORKFLOWS:
+# Import and use template:
+/vybe:template import github.com/user/repo my-template
+/vybe:template generate my-template
+/vybe:init "My project" --template=my-template
 
-## Action: import [source] [name]
-
-### Task 1: Import Validation & Setup
-```bash
-echo "[IMPORT] TEMPLATE IMPORT INITIATED"
-echo "================================="
-echo ""
-
-# Validate parameters
-if [ -z "$2" ] || [ -z "$3" ]; then
-    echo "[ERROR] Usage: /vybe:template import [source] [name]"
-    echo "Examples:"
-    echo "  /vybe:template import github.com/user/repo template-name"
-    echo "  /vybe:template import ./local-dir template-name"
-    exit 1
-fi
-
-source_param="$2"
-template_name="$3"
-
-# Validate template name
-if [[ ! "$template_name" =~ ^[a-zA-Z0-9-]+$ ]]; then
-    echo "[ERROR] Template name must be alphanumeric with dashes only"
-    exit 1
-fi
-
-# Check for existing template
-if [ -d ".vybe/templates/$template_name" ]; then
-    echo "[ERROR] Template '$template_name' already exists"
-    exit 1
-fi
-
-echo "Importing: $source_param → $template_name"
-echo ""
+Use '/vybe:template [action]' for template management.
+Use '/vybe:init --template=name' to apply templates.
 ```
 
-### Task 2: Smart Source Detection & Import
-```bash
-echo "[IMPORT] INTELLIGENT SOURCE PROCESSING"
-echo "====================================="
-echo ""
+**Otherwise, review the template script above and execute it with the provided arguments. The script implements:**
 
-# Create template structure
-mkdir -p ".vybe/templates/$template_name/source"
-mkdir -p ".vybe/templates/$template_name/generated"
+- **Shared Cache Architecture**: Uses project-wide cache shared across all Vybe commands
+- **Bulk Processing**: Loads all project data at once using cache + file system fallback  
+- **Atomic Updates**: Ensures file and cache consistency during template operations
+- **AI Coordination**: Prepares context for template import, analysis, and generation
 
-# Determine source type and handle appropriately
-if [[ "$source_param" =~ ^github\.com/ ]] || [[ "$source_param" =~ ^https://github\.com/ ]]; then
-    echo "[GITHUB] Processing GitHub repository"
-    
-    # Normalize GitHub URL
-    if [[ "$source_param" =~ ^github\.com/ ]]; then
-        repo_url="https://$source_param"
-    else
-        repo_url="$source_param"
-    fi
-    
-    echo "Repository: $repo_url"
-    
-    # Clone repository
-    git clone "$repo_url" ".vybe/templates/$template_name/source" --depth 1 --quiet
-    
-    if [ $? -eq 0 ]; then
-        rm -rf ".vybe/templates/$template_name/source/.git"
-        echo "[OK] GitHub repository cloned"
-        source_type="github"
-        actual_source="$repo_url"
-    else
-        echo "[ERROR] Failed to clone repository"
-        rm -rf ".vybe/templates/$template_name"
-        exit 1
-    fi
-    
-elif [ -d "$source_param" ]; then
-    echo "[LOCAL] Processing local directory"
-    echo "Source: $source_param"
-    
-    # Copy local directory contents
-    cp -r "$source_param"/* ".vybe/templates/$template_name/source/" 2>/dev/null
-    
-    if [ $? -eq 0 ]; then
-        echo "[OK] Local directory copied"
-        source_type="local"
-        actual_source="$(cd "$source_param" && pwd)"
-    else
-        echo "[ERROR] Failed to copy local directory"
-        rm -rf ".vybe/templates/$template_name"
-        exit 1
-    fi
-    
-else
-    echo "[ERROR] Invalid source: $source_param"
-    echo "Must be GitHub URL or existing local directory"
-    rm -rf ".vybe/templates/$template_name"
-    exit 1
-fi
+Execute the script with: `bash .claude/commands/vybe/template-script.sh "$@"`
 
-echo ""
+## Expected AI Operations
+
+After the script prepares the context, Claude AI should perform the appropriate action:
+
+### For Import Action
+1. **Source Analysis**: Determine if source is GitHub URL, local path, or other
+2. **Template Download**: Clone/copy template files to `.vybe/templates/[name]/source/`
+3. **Structure Analysis**: Scan template files and identify key patterns
+4. **Metadata Generation**: Create `metadata.yml` with template characteristics
+
+### For Generate Action  
+1. **Architecture Analysis**: Analyze template code patterns, conventions, and structure
+2. **Pattern Extraction**: Extract reusable code patterns and templates
+3. **Enforcement Creation**: Generate rules in `.vybe/enforcement/` directory
+4. **Validation Rules**: Create compliance checking in `.vybe/validation/`
+5. **Project Integration**: Update project architecture and conventions
+
+### For List/Validate Actions
+Display template information and validation results using the bulk-processed data.
+
+## Template Directory Structure
+```
+.vybe/templates/[name]/
+├── source/           # Original template files
+├── metadata.yml      # Template characteristics
+├── analysis.json     # AI analysis results
+└── patterns/         # Extracted patterns
+
+.vybe/enforcement/    # Template enforcement rules
+.vybe/patterns/       # Reusable code patterns  
+.vybe/validation/     # Compliance checking rules
 ```
 
-### Task 3: Generate Basic Metadata
-```bash
-echo "[METADATA] CREATING IMPORT METADATA"
-echo "==================================="
-echo ""
+All operations use the shared cache system for optimal performance across multiple command executions.
 
-# Create initial metadata (AI will enhance during generation)
-cat > ".vybe/templates/$template_name/metadata.yml" << EOF
-name: $template_name
-source: $actual_source
-source_type: $source_type
-imported: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-status: imported
+## Success Metrics
+- ✅ **Import**: Template files successfully copied and metadata created
+- ✅ **Generate**: Enforcement rules, patterns, and validation files created
+- ✅ **List**: All templates displayed with descriptions and status
+- ✅ **Validate**: Completion score and missing components identified
 
-# Analysis status
-analyzed: false
-structures_generated: false
+## Error Handling
+- **Invalid source**: Clear error messages with examples
+- **Missing template**: Available templates listed for selection
+- **Import conflicts**: Existing template protection with override options
+- **Generation failures**: Fallback to manual template configuration
 
-# Will be populated by AI during analysis
-analysis: {}
-EOF
-
-echo "[OK] Template '$template_name' imported successfully"
-echo ""
-echo "Next step: /vybe:template generate $template_name"
-echo ""
-```
-
-## Action: generate [name]
-
-### Task 1: Generation Setup & Validation
-```bash
-echo "[GENERATE] AI TEMPLATE ANALYSIS & GENERATION"
-echo "==========================================="
-echo ""
-
-# Validate template exists
-if [ -z "$2" ]; then
-    echo "[ERROR] Usage: /vybe:template generate [name]"
-    exit 1
-fi
-
-template_name="$2"
-template_dir=".vybe/templates/$template_name"
-
-if [ ! -d "$template_dir/source" ]; then
-    echo "[ERROR] Template '$template_name' not found or corrupted"
-    exit 1
-fi
-
-echo "Template: $template_name"
-echo "Source: $template_dir/source/"
-echo ""
-```
-
-### Task 2: AI Comprehensive Template Analysis
-```bash
-echo "[AI] INTELLIGENT TEMPLATE ANALYSIS"
-echo "=================================="
-echo ""
-echo "AI MUST perform deep analysis of the template:"
-echo ""
-echo "PHASE 1: DISCOVERY & UNDERSTANDING"
-echo "- Read and analyze ALL files in template"
-echo "- Understand project structure and organization"
-echo "- Identify primary languages, frameworks, tools"
-echo "- Detect architectural patterns and design decisions"
-echo "- Analyze configuration files and dependencies"
-echo ""
-echo "PHASE 2: PATTERN EXTRACTION"
-echo "- Extract reusable code patterns and templates"
-echo "- Identify component/module organization strategies"
-echo "- Understand API design and data flow patterns"
-echo "- Detect testing, security, and deployment patterns"
-echo "- Map template concepts to development workflows"
-echo ""
-echo "PHASE 3: CONVENTION IDENTIFICATION"
-echo "- File naming and directory organization rules"
-echo "- Code style and formatting conventions"
-echo "- Import/dependency management patterns"
-echo "- Documentation and commenting standards"
-echo ""
-echo "AI WILL analyze the actual template and generate results..."
-echo ""
-
-# AI performs comprehensive analysis here
-# The AI reads all template files and understands the architecture
-```
-
-### Task 3: AI-Generated Template Mapping
-```bash
-echo "[MAPPING] AI TEMPLATE-TO-VYBE MAPPING"
-echo "===================================="
-echo ""
-echo "AI MUST create intelligent mapping from template concepts to Vybe workflow"
-echo "This mapping will be stored in: $template_dir/mapping.yml"
-echo ""
-echo "AI will analyze the template and create mappings for:"
-echo "- How template modules/components become Vybe features"
-echo "- How template work organization maps to Vybe tasks"
-echo "- How template can be built in incremental stages"
-echo "- What patterns should be enforced during development"
-echo ""
-
-# AI creates mapping.yml based on actual template analysis
-# This file connects template architecture to Vybe workflow
-```
-
-### Task 4: AI-Generated Enforcement Structures
-```bash
-echo "[ENFORCEMENT] AI STRUCTURE GENERATION"
-echo "===================================="
-echo ""
-
-# Create enforcement directories
-mkdir -p .vybe/enforcement
-mkdir -p .vybe/patterns  
-mkdir -p .vybe/validation
-
-echo "AI MUST generate enforcement structures based on template analysis:"
-echo ""
-echo "1. ENFORCEMENT RULES (.vybe/enforcement/)"
-echo "   AI analyzes template and creates rules for:"
-echo "   - Required directory structure"
-echo "   - Component organization patterns"
-echo "   - Service/module creation rules"
-echo "   - File placement requirements"
-echo ""
-echo "2. CODE PATTERNS (.vybe/patterns/)"
-echo "   AI extracts reusable patterns for:"
-echo "   - Component/class templates"
-echo "   - API endpoint patterns"
-echo "   - Test structure templates"
-echo "   - Configuration patterns"
-echo ""
-echo "3. VALIDATION RULES (.vybe/validation/)"
-echo "   AI creates validation for:"
-echo "   - Structure compliance checking"
-echo "   - Naming convention validation"
-echo "   - Import pattern verification"
-echo "   - Quality standards enforcement"
-echo ""
-echo "AI WILL generate all structures based on actual template analysis..."
-echo ""
-
-# AI generates these based on template analysis
-# No hardcoded rules - everything derived from template
-```
-
-### Task 5: AI-Generated Vybe Documents
-```bash
-echo "[DOCUMENTS] AI VYBE DOCUMENT GENERATION"
-echo "======================================"
-echo ""
-echo "AI MUST generate Vybe-compatible documents from template analysis:"
-echo ""
-echo "Generated in: $template_dir/generated/"
-echo ""
-echo "1. OVERVIEW.MD TEMPLATE"
-echo "   - Business context derived from template purpose"
-echo "   - User scenarios based on template target use cases"
-echo "   - Success metrics appropriate for template type"
-echo ""
-echo "2. ARCHITECTURE.MD TEMPLATE"
-echo "   - Technology stack detected from template"
-echo "   - System design patterns identified in template"
-echo "   - Integration points found in template"
-echo ""
-echo "3. CONVENTIONS.MD TEMPLATE"
-echo "   - Coding standards extracted from template code"
-echo "   - File organization rules from template structure"
-echo "   - Development practices inferred from template"
-echo ""
-echo "AI WILL generate these documents based on actual template analysis..."
-echo ""
-
-# AI generates Vybe documents based on template understanding
-# Documents reflect actual template architecture and patterns
-```
-
-### Task 6: Update Metadata with AI Analysis
-```bash
-echo "[METADATA] UPDATING WITH AI ANALYSIS RESULTS"
-echo "============================================"
-echo ""
-
-# Update metadata with AI analysis results
-# AI will populate this with actual discovered information
-echo "AI MUST update metadata.yml with analysis results:"
-echo "- Detected languages and frameworks"
-echo "- Identified template type and complexity"
-echo "- Number of patterns extracted"
-echo "- Generated structure summary"
-echo ""
-
-# The actual metadata update happens through AI analysis
-# No hardcoded values - everything based on template discovery
-
-echo "[OK] Template '$template_name' analysis complete"
-echo ""
-echo "Generated structures:"
-echo "  ✓ Template analysis and mapping"
-echo "  ✓ Enforcement rules for project structure"
-echo "  ✓ Reusable code patterns"
-echo "  ✓ Validation rules for compliance"
-echo "  ✓ Vybe-compatible project documents"
-echo ""
-echo "Ready for use: /vybe:init \"Project\" --template=$template_name"
-echo ""
-```
-
-## Action: list
-
-### Task 1: Display Available Templates
-```bash
-echo "[LIST] AVAILABLE TEMPLATES"
-echo "========================="
-echo ""
-
-if [ ! -d ".vybe/templates" ] || [ -z "$(ls -A .vybe/templates 2>/dev/null)" ]; then
-    echo "No templates found."
-    echo ""
-    echo "Import a template:"
-    echo "  /vybe:template import github.com/user/repo template-name"
-    echo "  /vybe:template import ./local-directory template-name"
-    exit 0
-fi
-
-# List templates with intelligent status detection
-for template_dir in .vybe/templates/*/; do
-    if [ -d "$template_dir" ]; then
-        template_name=$(basename "$template_dir")
-        metadata_file="$template_dir/metadata.yml"
-        
-        echo "📦 $template_name"
-        
-        if [ -f "$metadata_file" ]; then
-            # Extract metadata intelligently
-            source=$(grep "^source:" "$metadata_file" | sed 's/^source: *//' | tr -d '"' || echo "Unknown")
-            imported=$(grep "^imported:" "$metadata_file" | sed 's/^imported: *//' || echo "Unknown")
-            analyzed=$(grep "^analyzed:" "$metadata_file" | sed 's/^analyzed: *//' || echo "false")
-            
-            echo "   Source: $source"
-            echo "   Imported: $imported"
-            
-            if [ "$analyzed" = "true" ]; then
-                echo "   Status: ✅ Ready for use"
-                
-                # Show AI analysis results if available
-                if grep -q "^analysis:" "$metadata_file"; then
-                    echo "   AI Analysis: ✓ Complete"
-                fi
-            else
-                echo "   Status: ⏳ Needs generation"
-                echo "   Next: /vybe:template generate $template_name"
-            fi
-        else
-            echo "   Status: ❌ Corrupted (missing metadata)"
-        fi
-        
-        echo ""
-    fi
-done
-```
-
-## Action: validate [name]
-
-### Task 1: Intelligent Template Validation
-```bash
-echo "[VALIDATE] TEMPLATE VALIDATION"
-echo "============================="
-echo ""
-
-if [ -z "$2" ]; then
-    echo "[ERROR] Usage: /vybe:template validate [name]"
-    exit 1
-fi
-
-template_name="$2"
-template_dir=".vybe/templates/$template_name"
-
-echo "Validating: $template_name"
-echo ""
-
-# Comprehensive validation
-valid=true
-
-# Check template existence
-if [ ! -d "$template_dir" ]; then
-    echo "❌ Template not found"
-    valid=false
-else
-    echo "✅ Template directory exists"
-fi
-
-# Check source
-if [ ! -d "$template_dir/source" ]; then
-    echo "❌ Source directory missing"
-    valid=false
-else
-    source_files=$(find "$template_dir/source" -type f | wc -l)
-    echo "✅ Source directory exists ($source_files files)"
-fi
-
-# Check metadata
-if [ ! -f "$template_dir/metadata.yml" ]; then
-    echo "❌ Metadata file missing"
-    valid=false
-else
-    echo "✅ Metadata file exists"
-    
-    # Check if analyzed
-    analyzed=$(grep "^analyzed:" "$template_dir/metadata.yml" | sed 's/^analyzed: *//')
-    if [ "$analyzed" = "true" ]; then
-        echo "✅ Template analyzed by AI"
-        
-        # Check generated structures
-        if [ -d ".vybe/enforcement" ] && [ "$(ls -A .vybe/enforcement 2>/dev/null)" ]; then
-            echo "✅ Enforcement structures generated"
-        else
-            echo "⚠️  Enforcement structures missing"
-        fi
-        
-        if [ -d ".vybe/patterns" ] && [ "$(ls -A .vybe/patterns 2>/dev/null)" ]; then
-            echo "✅ Pattern templates generated"
-        else
-            echo "⚠️  Pattern templates missing"
-        fi
-        
-        if [ -d ".vybe/validation" ] && [ "$(ls -A .vybe/validation 2>/dev/null)" ]; then
-            echo "✅ Validation rules generated"
-        else
-            echo "⚠️  Validation rules missing"
-        fi
-        
-    else
-        echo "⚠️  Template not yet analyzed"
-        echo "   Next: /vybe:template generate $template_name"
-    fi
-fi
-
-echo ""
-if [ "$valid" = "true" ]; then
-    echo "✅ Template validation passed"
-else
-    echo "❌ Template validation failed"
-fi
-echo ""
-```
-
-## AI Behavior Guidelines
-
-### Core Principles
-- **Zero Hardcoding**: All analysis based on actual template content
-- **Intelligent Discovery**: AI reads and understands template architecture
-- **Pattern Recognition**: Identify reusable patterns and structures
-- **Vybe Integration**: Map template concepts to Vybe workflow naturally
-
-### Analysis Approach
-- **Comprehensive Reading**: Analyze all template files thoroughly
-- **Architecture Understanding**: Grasp overall design and patterns
-- **Convention Extraction**: Identify coding and organizational standards
-- **Intelligent Mapping**: Connect template structure to Vybe features
-
-### Generation Strategy
-- **Template-Specific**: Create rules specific to analyzed template
-- **Quality Focus**: Generate useful, actionable enforcement structures
-- **Vybe Compatible**: Ensure all outputs work with Vybe commands
-- **Future-Proof**: Create structures that support project evolution
-
-The template system provides AI-driven architectural analysis that creates intelligent enforcement structures based on actual template architecture, not hardcoded assumptions.
+The template system uses shared cache architecture for optimal performance across multiple command executions.

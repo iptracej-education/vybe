@@ -28,43 +28,37 @@ Vybe brings structure to AI-assisted development through:
 - **Staged planning and execution** - First minimal outcome in 1-2 days, then progressive enhancement stages
 - **Natural language scope adjustment** - Intelligent scope reduction for timeline constraints, plus guided expansion planning
 - **Code-reality analysis** - Bridge gap between docs and actual code with intelligent analysis
-- **MCP cache** - In-memory caching with intelligent cache strategies and graceful file fallback
-- **Template integration (optional)** - Import production-ready templates as permanent project foundation with AI-guided pattern consistency
-- **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection
-- **Auto session handoff** - Automate session handoff when context windows get critically low  (<10%)
+- **Template integration** - Import production-ready templates as permanent project foundation with AI-guided pattern consistency
+- **MCP Cache** - Faster execution with automatic `claude mcp add` registration during installation
+- (Experimental) - **Member coordination** - Assign stages to dev-1, dev-2, etc. with conflict detection 
+- (Experimental) - **Auto session handoff** - Automate session handoff when context windows get critically low 
 
 ## Platform support 
 
 Linux, macOS, WSL2, Git Bash (not Windows CMD)
 
-
 ## Quick Setup
 
-### MCP Cache Configuration
-
-To enable MCP cache for improved command response times, add the Vybe MCP cache to your Claude Code settings:
+**One-command installation with automatic MCP registration:**
 
 ```bash
-# Add Vybe MCP cache to your existing Claude Code MCP settings
-# This preserves any existing MCP servers you already have configured
+# 1. Clone and install (includes automatic MCP setup)
+git clone https://github.com/iptracej-education/vybe.git
+cd vybe && ./install.sh
 
-# Find your Claude Code MCP settings file:
-# ~/.config/claude/mcp-settings.json (Linux/WSL)
-# ~/Library/Application Support/Claude/mcp-settings.json (macOS)
+# 2. Register MCP cache server (automatic during installation)
+claude mcp add vybe-cache node .vybe/mcp-cache-server.js
 
-# Add the vybe-cache server to your existing mcpServers section:
-{
-  "mcpServers": {
-    // ... your existing MCP servers ...
-    "vybe-cache": {
-      "command": "node",
-      "args": [".vybe/mcp-cache-server.js"],
-      "env": {"NODE_ENV": "production"},
-      "cwd": ".",
-      "scope": "project"
-    }
-  }
-}
+# 3. Start building
+/vybe:init "Your project description"
+```
+
+The installation script automatically:
+- ✅ Copies framework files to your project
+- ✅ Configures Claude Code hooks for session continuity  
+- ✅ Registers MCP cache server using `claude mcp add`
+- ✅ Enables 20-120x performance boost
+- ✅ Sets up instant help system
 
 # Restart Claude Code to activate MCP cache
 ```
@@ -99,7 +93,7 @@ claude
 /vybe:init "Your existing project description"
 ```
 
-### Multi-Member Team Setup
+### Multi-Member Team Setup (Experimental)
 ```bash
 # 1. Create GitHub repository first (required for team coordination)
 # Go to GitHub and create: https://github.com/yourusername/your-project
@@ -177,6 +171,22 @@ claude
 export VYBE_MEMBER=dev-1
 /vybe:backlog assign stage-2 dev-2
 ```
+
+## Known Limitations
+**General Framework:**
+- Experimental status - expect workflow and functionality changes
+- Command behavior may evolve based on testing and feedback
+- Not recommended for production projects yet
+
+**Multi-Developer Scenarios:**
+- Integration logic is theoretical - needs real-world validation
+- AI assignment may miss subtle dependencies
+- Merge conflict resolution may be incomplete
+- Cross-feature testing may have gaps
+
+**Session handover Scenarios:**
+- Hook functions developed but never validated as completed as Claude Code also evolves. 
+
 
 ## Learn More
 
@@ -269,174 +279,6 @@ build:
 
 **We need your help testing this framework!** The Vybe framework is experimental and needs real-world validation, especially for multi-developer scenarios.
 
-### 🎯 **Critical Testing Areas**
-
-#### **Multi-Developer Coordination** (HIGHEST PRIORITY)
-The most complex and untested aspect of Vybe is multi-developer coordination. We need feedback on:
-
-**Potential Issues We're Concerned About:**
-
-#### **Modular Architecture Issues (3-Developer Pattern):**
-- **Service Contracts**: Do the 3 standalone services define compatible APIs?
-- **Integration Workload**: Can Developer 1 handle integrating all 3 services alone?
-- **Service Communication**: Do services work together when Developer 1 integrates them?
-- **API Compatibility**: Are the APIs designed by different developers compatible?
-- **Data Flow**: Does data flow correctly between the 3 integrated services?
-- **Deployment Complexity**: Can Developer 1 deploy and coordinate all services?
-
-#### **Traditional Multi-Developer Issues:**
-- **Code Overlap**: Do developers accidentally work on the same files/functions?
-- **Missing Integration Pieces**: Are there gaps between what developers build?
-- **Merge Conflicts**: Does the AI integration handle complex merge scenarios?
-- **Feature Dependencies**: Do features that depend on each other integrate correctly?
-- **Workload Balance**: Are features distributed fairly across team members?
-- **Communication Gaps**: Do developers miss important coordination points?
-
-**Real Scenarios to Test:**
-
-#### **Modular Architecture Approach** (RECOMMENDED)
-Each developer creates standalone modules/services that are independently deployable:
-
-```bash
-# Scenario 1: E-commerce Platform (3 developers)
-# Phase 1: Parallel Service Development
-# Developer 1: Authentication Service
-/vybe:init "Authentication microservice with JWT, user management, and OAuth"
-
-# Developer 2: Payment Service  
-/vybe:init "Payment processing service with Stripe integration and webhooks"
-
-# Developer 3: Product Catalog Service
-/vybe:init "Product catalog service with search, inventory, and recommendations"
-
-# Phase 2: Integration (Developer 1 comes back)
-# Developer 1: Integration & Orchestration
-/vybe:init "E-commerce platform integration - API gateway, service coordination, frontend"
-# Integrates: auth-service + payment-service + catalog-service
-```
-
-```bash
-# Scenario 2: Data Platform (3 developers)
-# Phase 1: Parallel Service Development
-# Developer 1: Data Ingestion Service
-/vybe:init "Data ingestion service with streaming, batch processing, and validation"
-
-# Developer 2: Analytics Engine
-/vybe:init "Analytics engine with real-time processing, ML pipelines, and reporting"
-
-# Developer 3: Dashboard Service
-/vybe:init "Analytics dashboard with visualizations, reports, and user management"
-
-# Phase 2: Integration (Developer 1 comes back)
-# Developer 1: Platform Integration
-/vybe:init "Data platform integration - unified API, service coordination, deployment"
-# Integrates: ingestion-service + analytics-engine + dashboard-service
-```
-
-#### **Traditional Multi-Developer (EXPERIMENTAL)**
-Multiple developers working on same codebase - needs extensive testing:
-
-```bash
-# Scenario 3: Monolithic App (3 developers) - NEEDS VALIDATION
-/vybe:init "E-commerce platform with authentication, payments, and catalog"
-/vybe:backlog member-count 3 --auto-assign
-# Test: Do auth, payment, and catalog features integrate correctly?
-```
-
-#### **AI Assignment Intelligence**
-- Does `/vybe:backlog member-count N --auto-assign` create sensible feature distribution?
-- Are dependencies and conflicts properly identified?
-- Do assigned features actually avoid overlap?
-
-#### **Integration & Release Process**
-- Does `/vybe:release stage-1` successfully merge all developer work?
-- Are integration tests comprehensive enough?
-- Does the combined system actually work?
-
-### 🐛 **What We're Looking For**
-
-#### **Success Cases**
-
-**Modular Architecture (3-Developer Pattern):**
-- ✅ Phase 1: All 3 developers create working standalone services in parallel
-- ✅ Each service is independently testable and deployable
-- ✅ Services define clear, compatible APIs for integration
-- ✅ Phase 2: Developer 1 successfully integrates all services
-- ✅ Final integrated system works end-to-end
-- ✅ Developer 1 can effectively coordinate and deploy all services
-
-**Traditional Multi-Developer:**
-- ✅ Features assigned without conflicts
-- ✅ Developers work in parallel successfully  
-- ✅ Integration works smoothly with `/vybe:release`
-- ✅ Combined system functions correctly
-- ✅ Code quality maintained across team
-
-#### **Failure Cases** (Please Report!)
-
-**Modular Architecture (3-Developer Pattern):**
-- ❌ Services with incompatible APIs or data formats
-- ❌ Developer 1 unable to integrate the 3 services effectively
-- ❌ Services that don't communicate correctly when integrated
-- ❌ Data consistency issues across the integrated services
-- ❌ Deployment or coordination problems during integration
-- ❌ Integration complexity beyond what one developer can handle
-
-**Traditional Multi-Developer:**
-- ❌ Overlapping code assignments
-- ❌ Missing pieces after integration
-- ❌ Merge conflicts that AI can't resolve
-- ❌ Features that don't work together
-- ❌ Broken system after `/vybe:release`
-- ❌ Coordination confusion or workflow issues
-
-### 📝 **How to Contribute**
-
-#### **1. Testing Feedback**
-Try the framework on real projects and report:
-```bash
-# Test the complete multi-developer workflow
-git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh && cd .. && rm -rf vybe
-
-# Test different team sizes and project types
-# Report what works and what breaks
-```
-
-**Submit feedback as GitHub Issues with:**
-- Project type and team size tested
-- Commands that worked/failed
-- Screenshots of coordination problems
-- Specific integration issues encountered
-- Suggestions for improvement
-
-#### **2. Framework Improvements**
-- **Command Enhancements**: Better AI prompts for coordination
-- **Integration Logic**: Improved merge and testing strategies  
-- **Error Handling**: Better failure detection and recovery
-- **Documentation**: Clearer workflows and troubleshooting guides
-
-#### **3. Real-World Case Studies**
-Document your experience using Vybe for actual projects:
-- What project type did you build?
-- How many developers were involved?
-- What coordination challenges arose?
-- How did the AI handle integration?
-- What would you improve?
-
-### 🚨 **Known Limitations**
-
-**Multi-Developer Scenarios:**
-- Integration logic is theoretical - needs real-world validation
-- AI assignment may miss subtle dependencies
-- Merge conflict resolution may be incomplete
-- Cross-feature testing may have gaps
-
-**General Framework:**
-- Experimental status - expect workflow changes
-- Command behavior may evolve based on testing feedback
-- Not recommended for production projects yet
-
 ### 💡 **Contributing Guidelines**
 
 #### **Issue Reporting**
@@ -469,13 +311,6 @@ Document your experience using Vybe for actual projects:
 - Include test scenarios that validate changes
 - Update documentation for workflow changes
 - Add error handling for edge cases
-
-### 🎯 **Priority Testing Requests**
-
-1. **Test multi-developer assignment intelligence** - Does auto-assign work sensibly?
-2. **Validate integration scenarios** - Does `/vybe:release` handle team coordination?  
-3. **Find coordination edge cases** - What breaks the multi-developer workflow?
-4. **Document real failure modes** - Help us fix what doesn't work
 
 **Your testing and feedback will directly shape how this framework evolves!**
 

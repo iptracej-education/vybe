@@ -2,6 +2,8 @@
 
 **Complete guide to using templates as architectural DNA in Vybe projects**
 
+**Performance**: Template operations benefit from Vybe's 20-120x performance optimization through shared cache system and MCP integration.
+
 ## Overview
 
 The Vybe Template System allows you to import external templates (like GitHub repositories) and use them as the architectural foundation for your projects. Templates provide the "DNA" that guides all development decisions - from directory structure to coding patterns to deployment strategies.

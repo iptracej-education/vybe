@@ -1,6 +1,6 @@
 ---
 description: Mark outcome stage complete and advance to next stage
-allowed-tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, LS, vybe-cache.get, vybe-cache.set, vybe-cache.mget, vybe-cache.mset
 ---
 
 # /vybe:release - Outcome Stage Progression
@@ -16,340 +16,108 @@ Mark current outcome stage as complete and advance to the next stage in your inc
 - `stage-name`: Optional. Specific stage to mark complete (defaults to current active stage)
 - `--force`: Skip validation checks and force stage completion
 
-## Pre-Release Validation
+## Platform Compatibility
+- [OK] Linux, macOS, WSL2, Git Bash
+- [NO] Native Windows CMD/PowerShell
 
-### Current Stage Status
-- Outcome roadmap: `bash -c '[ -f ".vybe/project/outcomes.md" ] && echo "[OK] Outcome roadmap found" || echo "[NO] Run /vybe:init first"'`
-- Active stage: `bash -c '[ -f ".vybe/backlog.md" ] && grep -m 1 "Active Stage:" .vybe/backlog.md || echo "No active stage"'`
-- Tasks remaining: `bash -c '[ -f ".vybe/backlog.md" ] && grep -A 20 "IN PROGRESS" .vybe/backlog.md | grep "^\- \[ \]" | wc -l | xargs -I {} echo "{} tasks incomplete" || echo "Unknown"'`
-- Tests passing: `bash -c 'npm test 2>/dev/null && echo "[OK] Tests passing" || echo "[WARN] Tests not verified"'`
+## Context
+- Content of the release script: @./.claude/commands/vybe/release-script.sh
 
-## CRITICAL: Mandatory Context Loading
+## Your task
 
-### Task 0: Load Complete Project Context
-```bash
-echo "[CONTEXT] LOADING PROJECT AND OUTCOME CONTEXT"
-echo "=========================================="
-echo ""
+**If the first argument is "help", display this help content directly:**
 
-# Validate project exists
-if [ ! -d ".vybe/project" ]; then
-    echo "[NO] CRITICAL ERROR: Project not initialized"
-    echo "   Cannot release stages without project context."
-    echo "   Run /vybe:init first to establish project foundation."
-    exit 1
-fi
+```
+COMMANDS:
+/vybe:release [stage-name]                 Mark outcome stage complete and advance
+/vybe:release [stage-name] --force         Force stage completion (skip validation)
 
-# Load outcome roadmap (MANDATORY)
-if [ -f ".vybe/project/outcomes.md" ]; then
-    echo "[OK] Loading outcome roadmap..."
-    echo "=== OUTCOME ROADMAP ==="
-    cat .vybe/project/outcomes.md
-    echo ""
-else
-    echo "[NO] CRITICAL ERROR: outcomes.md missing"
-    echo "   Outcome-driven development requires staged roadmap"
-    echo "   Run /vybe:init to create outcome stages"
-    exit 1
-fi
+OPTIONS:
+--force                Skip validation checks and force completion
+--validate             Run validation only (don't mark complete)
 
-# Load current backlog state
-if [ -f ".vybe/backlog.md" ]; then
-    echo "[OK] Loading current backlog state..."
-    echo "=== CURRENT BACKLOG ==="
-    cat .vybe/backlog.md
-    echo ""
-else
-    echo "[NO] WARNING: backlog.md missing"
-    echo "   Run /vybe:backlog init to create backlog"
-fi
+EXAMPLES:
+/vybe:release
+/vybe:release stage-1
+/vybe:release stage-2 --force
 
-echo "[CONTEXT] Project context loaded - ready for stage progression"
-echo ""
+FEATURES:
+- Stage completion validation (tasks done, deliverable working)
+- Learning capture (what worked, what to improve)
+- Automatic progression to next stage
+- Multi-member integration coordination
+- Atomic status updates across project files
+
+Use '/vybe:release [stage]' to advance through outcomes.
+Use '/vybe:status outcomes' to check stage progression.
 ```
 
-## Task 1: Validate Stage Completion
+**Otherwise, review the release script above and execute it with the provided arguments. The script implements:**
 
-### Check Completion Criteria
-```bash
-echo "[VALIDATION] STAGE COMPLETION CHECK"
-echo "================================="
-echo ""
+- **Shared Cache Architecture**: Uses project-wide cache shared across all Vybe commands
+- **Bulk Processing**: Loads all project data at once using cache + file system fallback  
+- **Atomic Updates**: Ensures file and cache consistency during stage transitions
+- **AI Coordination**: Prepares context for stage learning capture and deliverable verification
 
-# Extract current stage info
-current_stage=$(grep "Active Stage:" .vybe/backlog.md | sed 's/.*Stage [0-9]: //' | sed 's/ .*//')
-echo "Current Stage: $current_stage"
-echo ""
+Execute the script with: `bash .claude/commands/vybe/release-script.sh "$@"`
 
-# Check task completion
-incomplete_tasks=$(grep -A 20 "IN PROGRESS" .vybe/backlog.md | grep "^\- \[ \]" | wc -l)
-if [ "$incomplete_tasks" -gt 0 ]; then
-    echo "[WARN] $incomplete_tasks tasks still incomplete"
-    if [[ "$*" != *"--force"* ]]; then
-        echo "[STOP] Cannot release with incomplete tasks"
-        echo "   Complete all tasks or use --force to override"
-        exit 1
-    else
-        echo "[FORCE] Overriding incomplete tasks check"
-    fi
-else
-    echo "[OK] All tasks completed"
-fi
+## Expected AI Analysis
+After the script prepares the context, Claude AI should analyze the cached project data and perform:
 
-# Check deliverable exists
-echo ""
-echo "[CHECK] Verifying stage deliverable..."
-echo "AI MUST verify that the stage deliverable is actually implemented:"
-echo "- Code exists for the promised functionality"
-echo "- Feature is working (not just planned)"
-echo "- User value is demonstrable"
-echo ""
+### 1. Stage Learnings Capture
+- **Technical Learnings**: What worked well? What was harder than expected?
+- **Process Learnings**: Timeline accuracy, task completeness, effort estimation
+- **Business Learnings**: Value delivered, user feedback, requirement changes
 
-# Run tests if available
-echo "[TEST] Running verification tests..."
-if npm test 2>/dev/null; then
-    echo "[OK] Tests passing"
-elif python -m pytest 2>/dev/null; then
-    echo "[OK] Tests passing"
-elif go test ./... 2>/dev/null; then
-    echo "[OK] Tests passing"
-else
-    echo "[INFO] No automated tests found"
-fi
+### 2. Deliverable Verification  
+- Confirm stage deliverable is actually implemented (not just planned)
+- Verify code exists for promised functionality
+- Validate user value is demonstrable
 
-echo ""
-echo "[VALIDATION] Stage ready for release"
-```
+### 3. Multi-Member Integration (if applicable)
+- Verify all developer assignments complete  
+- Coordinate intelligent feature integration
+- Resolve merge conflicts and test combined system
+- Ensure features work together, not just individually
 
-## Task 2: Capture Stage Learnings
+### 4. Atomic Status Updates
+- Update backlog.md: current stage → COMPLETED ✅
+- Update outcomes.md: add completion date and learnings  
+- Advance next stage: NEXT → IN PROGRESS 🔄
+- Archive completed tasks to history section
 
-### Document What We Learned
-```bash
-echo "[LEARNINGS] CAPTURING STAGE INSIGHTS"
-echo "=================================="
-echo ""
-echo "AI MUST capture learnings from this stage:"
-echo ""
-echo "1. TECHNICAL LEARNINGS:"
-echo "   - What worked well?"
-echo "   - What was harder than expected?"
-echo "   - What patterns emerged?"
-echo "   - What technical debt was created?"
-echo ""
-echo "2. PROCESS LEARNINGS:"
-echo "   - Was timeline accurate?"
-echo "   - Were all tasks necessary?"
-echo "   - What tasks were missing?"
-echo "   - How accurate was effort estimate?"
-echo ""
-echo "3. BUSINESS LEARNINGS:"
-echo "   - Did we deliver expected value?"
-echo "   - What user feedback was received?"
-echo "   - How does this change next stages?"
-echo "   - What new requirements emerged?"
-echo ""
+### 5. Next Stage Preparation
+- Refine next stage tasks based on learnings
+- Update effort estimates from actual experience
+- Check if UI examples are needed for visual stages
+- Plan integration points and dependencies
 
-# AI documents learnings in outcomes.md Learning Log section
-echo "[AI] Updating Learning Log in outcomes.md..."
-```
+## Atomic Update Functions Available
+- `update_file_and_cache(file_path, new_content, cache_key)` - Updates file and cache together
+- `cache_set(key, value, ttl)` - Store data in shared cache
+- `cache_get(key)` - Retrieve data from shared cache
 
-## Task 3: Mark Stage Complete
+## Cached Project Data Access  
+- `PROJECT_OVERVIEW` - Project overview content
+- `PROJECT_ARCHITECTURE` - Architecture decisions and tech stack
+- `PROJECT_CONVENTIONS` - Coding standards and practices
+- `PROJECT_OUTCOMES` - Staged outcome roadmap
+- `PROJECT_BACKLOG` - Current backlog and assignments  
+- `PROJECT_FEATURES` - All feature specifications
+- `PROJECT_MEMBERS` - Member configuration and assignments
 
-### Update Status in Documents
-```bash
-echo "[RELEASE] MARKING STAGE COMPLETE"
-echo "=============================="
-echo ""
-
-# Check for multi-member coordination
-echo "[COORDINATION] Checking multi-member development status..."
-if grep -q "## Members:" .vybe/backlog.md; then
-    echo ""
-    echo "[MULTI-MEMBER] INTEGRATION COORDINATION"
-    echo "======================================"
-    echo ""
-    echo "AI MUST verify all developers have completed their assigned features:"
-    echo ""
-    echo "1. COMPLETION VERIFICATION:"
-    echo "   - Check all dev-1, dev-2, dev-3 assignments are complete"
-    echo "   - Verify all required features are implemented"
-    echo "   - Confirm no blocking dependencies remain"
-    echo ""
-    echo "2. INTEGRATION TESTING:"
-    echo "   - Run /vybe:audit dependencies (check for conflicts)"
-    echo "   - Run /vybe:audit members (verify coordination)"
-    echo "   - Execute comprehensive integration tests"
-    echo ""
-    echo "3. MERGE COORDINATION:"
-    echo "   - Merge all developer branches intelligently"
-    echo "   - Resolve any integration conflicts"
-    echo "   - Run final integration test suite"
-    echo "   - Verify combined system works as expected"
-    echo ""
-    echo "4. QUALITY VALIDATION:"
-    echo "   - All individual features work correctly"
-    echo "   - Features integrate without conflicts"
-    echo "   - Performance meets requirements under full load"
-    echo "   - Security considerations addressed across features"
-    echo ""
-    echo "[AI] MUST perform intelligent integration of all developer work"
-    echo "   - No manual merge conflicts left unresolved"
-    echo "   - All features tested together, not just individually"
-    echo "   - System ready for next stage development"
-    echo ""
-else
-    echo "[SOLO] Single developer - standard stage completion"
-fi
-
-# Update backlog.md
-echo "[UPDATE] Updating backlog status..."
-# AI changes:
-# - Current stage from "IN PROGRESS" to "COMPLETED ✅"
-# - Next stage from "NEXT" to "IN PROGRESS 🔄"
-# - Updates "Active Stage" header
-
-# Update outcomes.md
-echo "[UPDATE] Updating outcome roadmap..."
-# AI changes:
-# - Current stage status to completed
-# - Documents completion date
-# - Updates current stage pointer
-# - Adds learnings to log
-
-# Archive completed tasks
-echo "[ARCHIVE] Moving completed tasks to archive..."
-# AI moves completed stage tasks to "Completed" section
-
-echo ""
-echo "[RELEASE] Stage successfully marked complete"
-```
-
-## Task 4: Advance to Next Stage
-
-### Prepare Next Stage
-```bash
-echo "[ADVANCE] PREPARING NEXT STAGE"
-echo "============================"
-echo ""
-
-# Identify next stage
-next_stage=$(grep -m 1 -A 5 "⏳ NEXT" .vybe/backlog.md | sed 's/.*Stage [0-9]: //' | sed 's/ .*//')
-echo "Next Stage: $next_stage"
-echo ""
-
-# Check if UI examples needed
-if grep -A 10 "$next_stage" .vybe/backlog.md | grep -q "UI Examples Needed: YES"; then
-    echo "[UI] This stage requires UI examples!"
-    echo ""
-    echo "Please provide UI examples by:"
-    echo "1. Creating .vybe/ui-examples/ directory"
-    echo "2. Adding mockups, wireframes, or reference images"
-    echo "3. Or describing the UI requirements in detail"
-    echo ""
-    echo "AI will analyze these to understand component requirements."
-fi
-
-# Update stage readiness
-echo "[PREP] Checking next stage prerequisites..."
-echo "AI MUST verify:"
-echo "- Previous stage deliverables are complete"
-echo "- Dependencies are satisfied"
-echo "- Technical foundation is ready"
-echo "- Team capacity is available"
-echo ""
-
-# Generate refined task list
-echo "[TASKS] Refining next stage tasks based on learnings..."
-echo "AI MUST:"
-echo "- Review initial task list for next stage"
-echo "- Apply learnings from completed stage"
-echo "- Adjust tasks based on actual implementation"
-echo "- Add any newly discovered requirements"
-echo "- Update effort estimates"
-```
-
-## Task 5: Update Progress Metrics
-
-### Calculate and Display Progress
-```bash
-echo "[METRICS] OUTCOME PROGRESS UPDATE"
-echo "==============================="
-echo ""
-
-# Calculate metrics
-total_stages=$(grep "^### Stage" .vybe/project/outcomes.md | wc -l)
-completed_stages=$(grep "COMPLETED" .vybe/backlog.md | grep "^### Stage" | wc -l)
-progress_percent=$((completed_stages * 100 / total_stages))
-
-echo "OUTCOME PROGRESS:"
-echo "================"
-echo "Completed: $completed_stages of $total_stages stages ($progress_percent%)"
-echo ""
-
-# Show stage timeline
-echo "STAGE TIMELINE:"
-echo "=============="
-grep -m 5 "^### Stage" .vybe/backlog.md
-
-echo ""
-echo "VALUE DELIVERED:"
-echo "=============="
-echo "Stage 1: [First outcome value delivered]"
-if [ "$completed_stages" -ge 2 ]; then
-    echo "Stage 2: [Second outcome value delivered]"
-fi
-if [ "$completed_stages" -ge 3 ]; then
-    echo "Stage 3: [Third outcome value delivered]"
-fi
-
-echo ""
-echo "NEXT MILESTONE:"
-echo "============="
-echo "Stage: $next_stage"
-echo "Deliverable: [Next stage deliverable]"
-echo "Timeline: [Estimated days]"
-echo "Value: [Business value to deliver]"
-```
-
-## Final Summary
-
-### Release Summary
-```bash
-echo ""
-echo "[RELEASE] STAGE RELEASE COMPLETE"
-echo "=============================="
-echo ""
-echo "[COMPLETED] $current_stage has been released!"
-echo ""
-echo "Summary:"
-echo "- Deliverable shipped: [Stage deliverable]"
-echo "- Value delivered: [Business value]"
-echo "- Tasks completed: [Number of tasks]"
-echo "- Learnings captured: YES"
-echo ""
-echo "[NEXT] Now working on: $next_stage"
-echo "- Target: [Next deliverable]"
-echo "- Timeline: [Days estimate]"
-echo "- First task: [First task to tackle]"
-echo ""
-echo "[ACTIONS] Recommended next steps:"
-echo "1. /vybe:plan $next_stage - Refine next stage plan"
-echo "2. /vybe:execute [first-task] - Start implementation"
-echo "3. /vybe:status - Check overall progress"
-echo ""
-echo "Remember: Ship working units early and often!"
-```
+## Success Output
+The release process should result in:
+- Stage marked as COMPLETED with learnings documented
+- Next stage advanced to IN PROGRESS
+- Refined task list for upcoming stage
+- Multi-member integration complete (if applicable)  
+- Project ready for continued development
 
 ## Error Handling
-
-### Common Issues
 - **Incomplete tasks**: Use --force to override or complete remaining tasks
-- **No tests**: Proceed with manual verification
-- **Missing outcomes.md**: Run /vybe:init to set up staged outcomes
-- **No next stage**: Define additional stages in outcomes.md
+- **No tests**: Manual verification proceeds without automated testing
+- **Missing files**: Clear error messages with recovery instructions
+- **Multi-member conflicts**: Intelligent merge conflict resolution
 
-### Recovery Actions
-- **Rollback**: Revert status changes if release fails
-- **Manual override**: Use --force flag when appropriate
-- **Stage adjustment**: Modify outcomes.md to add/remove stages
-- **Task migration**: Move incomplete tasks to next stage if needed
+The release uses shared cache architecture to speed up subsequent command runs while maintaining full stage progression functionality.
