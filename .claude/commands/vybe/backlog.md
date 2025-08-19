@@ -60,6 +60,9 @@ EXAMPLES:
 
 Use '/vybe:backlog [command]' for strategic feature management.
 Use '/vybe:status members' to check team progress.
+
+NEXT IN WORKFLOW:
+/vybe:plan stage-1              Plan detailed implementation for Stage 1
 ```
 
 **Otherwise, review the backlog script above and execute it with the provided arguments. The script implements:**

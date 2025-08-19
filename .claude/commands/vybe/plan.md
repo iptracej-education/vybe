@@ -62,6 +62,9 @@ FEATURES:
 
 Use '/vybe:plan [feature-name]' to create specifications.
 Use '/vybe:execute [feature]' to implement planned features.
+
+NEXT IN WORKFLOW:
+/vybe:execute stage-1           Execute all tasks in Stage 1
 ```
 
 **Otherwise, review the plan script above and execute it with the provided arguments. The script implements:**

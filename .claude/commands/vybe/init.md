@@ -173,3 +173,13 @@ After the script prepares the context, Claude AI should perform intelligent proj
 - **Content conflicts**: Backup and recovery for existing documents
 
 The initialization system uses shared cache architecture for optimal performance and creates the complete foundation for spec-driven agile development with Claude Code.
+
+## Next in Workflow
+
+**After initialization is complete, the next mandatory step is:**
+
+```bash
+/vybe:backlog init
+```
+
+This creates the strategic backlog structure based on your project's staged outcomes. **Do not skip to execute** - the backlog establishes the proper development workflow and task organization required for all subsequent commands.
