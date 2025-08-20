@@ -39,17 +39,21 @@ Linux, macOS, WSL2, Git Bash (not Windows CMD)
 
 ## Quick Setup
 
-**One-command installation with automatic MCP registration:**
+**Quick installation with automatic MCP registration:**
 
 ```bash
-# 1. Clone and install (includes automatic MCP setup)
+# 1. Create project directory
+mkdir my-project && cd my-project
+git init
+
+# 2. Install Vybe Framework with automatic MCP registration
 git clone https://github.com/iptracej-education/vybe.git
-cd vybe && ./install.sh
+cd vybe && ./install.sh && cd .. && rm -rf vybe
 
-# 2. Register MCP cache server (automatic during installation)
-claude mcp add vybe-cache node .vybe/mcp-cache-server.js
+# 3. Restart Claude Code to activate MCP cache (20-120x faster)
+claude
 
-# 3. Start building
+# 4. Start building
 /vybe:init "Your project description"
 ```
 
@@ -59,9 +63,6 @@ The installation script automatically:
 - ✅ Registers MCP cache server using `claude mcp add`
 - ✅ Enables 20-120x performance boost
 - ✅ Sets up instant help system
-
-# Restart Claude Code to activate MCP cache
-```
 
 **Cache Benefits:**
 - Reduced command response times
