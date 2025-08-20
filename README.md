@@ -65,7 +65,7 @@ The installation script automatically:
 - ✅ Sets up instant help system
 
 **Global Configuration Notice:**
-- Installation adds hooks configuration to your global Claude Code settings (`~/.claude/settings.json`)
+- Installation modifies your global Claude Code settings (`~/.claude/settings.json`)
 - Automatic backup created before any changes (`settings.json.backup.TIMESTAMP`)
 - Only adds Vybe hooks - preserves all your existing settings
 - Asks permission before updating if hooks section already exists
