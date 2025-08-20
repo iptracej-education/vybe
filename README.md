@@ -70,7 +70,6 @@ The installation script automatically:
 - Only adds Vybe hooks - preserves all your existing settings
 - Asks permission before updating if hooks section already exists
 
-
 ### Solo Development Setup
 ```bash
 # 1. Create new project directory
