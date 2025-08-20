@@ -130,14 +130,26 @@ Use '/vybe:status [scope]' to check progress.
 Use '/vybe:audit' for quality issues (different from progress).
 ```
 
-**Otherwise, review the status script above and execute it with the provided arguments. The script implements:**
-
-- **Bulk Processing**: Single script execution instead of multiple operations
-- **Caching**: Cache status operations with invalidation based on modification times
-- **Cache Modes**: Cached results vs fresh scan + caching
-- **Scope Support**: Overall, members, individual dev-N, feature-specific, and blockers views
+**Otherwise, execute the status script and provide a summary that ALWAYS includes suggested next actions.**
 
 Execute the script with: `bash .claude/commands/vybe/status-script.sh "$@"`
+
+**IMPORTANT: After running the script, always include suggested next actions based on project state:**
+
+**If project has 0 total features or no backlog:**
+- /vybe:backlog init
+- /vybe:plan [feature-name] 
+- /vybe:audit
+
+**If project has planned features (24+ features):**
+- /vybe:execute stage-1
+- /vybe:audit
+- /vybe:status blockers
+
+**If project not initialized:**
+- /vybe:init "project description"
+- /vybe:backlog init
+- /vybe:plan [feature-name]
 
 ## Expected Output
 The script will provide:

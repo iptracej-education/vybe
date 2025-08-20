@@ -5,6 +5,9 @@
 # Uses shared project cache + file system fallback for optimal performance
 # =============================================================================
 
+# Force immediate output display and flushing
+set -u
+
 # Parse arguments FIRST
 status_scope="${1:-overall}"
 status_options="$*"
@@ -64,23 +67,15 @@ source "$script_dir/shared-cache.sh"
 
 # Performance timing
 status_start_time=$(date +%s.%N)
-echo "=== VYBE PROJECT STATUS ==="
-echo "Scope: $status_scope | Started: $(date)"
-echo ""
 
 # =============================================================================
 # INITIALIZE SHARED CACHE SYSTEM
 # =============================================================================
 
-init_vybe_cache
+init_vybe_cache >/dev/null 2>&1
 
-# =============================================================================
-# LOAD PROJECT DATA (SHARED CACHE + FALLBACK)
-# =============================================================================
-
-# Load all project data using shared cache
-load_project_data
-echo "[CONTEXT] Project data loaded (mode: $PROJECT_CACHE_MODE)"
+# Load all project data using shared cache  
+load_project_data >/dev/null 2>&1
 
 # =============================================================================
 # SMART CACHE CHECK - STATUS-SPECIFIC CACHE
@@ -90,16 +85,60 @@ cache_hit=false
 cached_status_data=""
 status_cache_key=$(get_cache_key "status.$status_scope")
 
-echo "[CACHE] Checking for cached status data..."
+# Check for cached status data
 
 # Try to get cached status results
 cached_status_data=$(cache_get "$status_cache_key")
 
 if [ $? -eq 0 ] && [ -n "$cached_status_data" ]; then
-    cache_hit=true
-    echo "[CACHE] Valid cached status found - using cached results"
+    # Check if input files have been modified since cache was created
+    # Check cache dependencies
+    
+    # Get cache modification time (use simple timestamp file)
+    cache_timestamp_file=".vybe/.cache/status_${status_scope}_timestamp"
+    
+    # Create timestamp file if it doesn't exist (for this cache entry)
+    if [ ! -f "$cache_timestamp_file" ]; then
+        date +%s > "$cache_timestamp_file"
+    fi
+    
+    # Check if any input files are newer than cache
+    input_files_modified=false
+    
+    # Check project files
+    if [ -d ".vybe/project" ]; then
+        if find .vybe/project -name "*.md" -newer "$cache_timestamp_file" 2>/dev/null | grep -q .; then
+            input_files_modified=true
+            #echo "[CACHE] Project files modified since cache creation"
+        fi
+    fi
+    
+    # Check backlog file
+    if [ -f ".vybe/backlog.md" ] && [ ".vybe/backlog.md" -nt "$cache_timestamp_file" ]; then
+        input_files_modified=true
+        #echo "[CACHE] Backlog modified since cache creation"
+    fi
+    
+    # Check features directory
+    if [ -d ".vybe/features" ]; then
+        if find .vybe/features -name "*.md" -newer "$cache_timestamp_file" 2>/dev/null | grep -q .; then
+            input_files_modified=true
+            #echo "[CACHE] Features modified since cache creation"
+        fi
+    fi
+    
+    if [ "$input_files_modified" = true ]; then
+        #echo "[CACHE] Input dependencies changed - invalidating status cache"
+        cache_hit=false
+        cached_status_data=""
+        # Update timestamp for new cache entry
+        date +%s > "$cache_timestamp_file"
+    else
+        cache_hit=true
+        #echo "[CACHE] Valid cached status found - using cached results"
+    fi
 else
-    echo "[CACHE] No cached status found - performing fresh scan"
+    cache_hit=false
 fi
 
 # =============================================================================
@@ -108,11 +147,11 @@ fi
 
 if [ "$cache_hit" = false ]; then
     echo ""
-    echo "[SCAN] Performing bulk status analysis..."
+    #echo "[SCAN] Performing bulk status analysis..."
     
     # Validate project exists
     if [ ! -d ".vybe/project" ]; then
-        echo "[ERROR] Project not initialized"
+        #echo "[ERROR] Project not initialized"
         echo "Run /vybe:init first to set up project structure"
         exit 1
     fi
@@ -129,40 +168,63 @@ if [ "$cache_hit" = false ]; then
         project_name=$(grep "^# " .vybe/project/overview.md 2>/dev/null | head -1 | sed 's/^# //' || echo "Unknown Project")
     fi
     
-    echo "[CONTEXT] Loading project status for: $project_name"
+    #echo "[CONTEXT] Loading project status for: $project_name"
     
-    # BULK FEATURE ANALYSIS
-    if [ -d ".vybe/features" ]; then
-        # Count features efficiently
-        total_features=$(find .vybe/features -maxdepth 1 -type d 2>/dev/null | grep -c "/.vybe/features/" || echo "0")
-        total_features=$(echo "$total_features" | tr -d '\n')
+    # BULK FEATURE ANALYSIS - READ FROM BACKLOG FORMAT
+    # First try to read total features from backlog.md (authoritative source)
+    if [ -f ".vybe/backlog.md" ]; then
+        total_features=$(grep "Total Features.*:" .vybe/backlog.md 2>/dev/null | sed 's/.*Total Features[^:]*: *\([0-9]\+\).*/\1/' | head -1)
+        if [ -z "$total_features" ] || [ "$total_features" = "" ]; then
+            total_features="0"
+        fi
+        #echo "[BACKLOG] Found $total_features total features in backlog"
+    fi
+    
+    # Fallback to directory counting if backlog doesn't have the count
+    if [ "$total_features" = "0" ] && [ -d ".vybe/features" ]; then
+        # Count feature subdirectories (exclude the features directory itself)
+        total_features=$(find .vybe/features -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)
+        total_features=$(echo "$total_features" | tr -d ' \n')
         # Ensure it's a proper number
         total_features=$(echo "$total_features" | grep -E '^[0-9]+$' || echo "0")
-        
-        echo "[FOUND] $total_features features detected"
-        
-        if [ "$total_features" -gt 0 ]; then
-            # Bulk analyze all features
-            for feature_dir in .vybe/features/*/; do
-                if [ -d "$feature_dir" ]; then
-                    feature_name=$(basename "$feature_dir")
-                    
-                    # Check completion status
-                    if [ -f ".vybe/backlog.md" ] && grep -q "^- \[x\] $feature_name" .vybe/backlog.md; then
+        #echo "[DIRECTORY] Found $total_features feature directories"
+    fi
+    
+    # Analyze feature status - handle both directory-based and backlog-based counting
+    if [ "$total_features" -gt 0 ] && [ -d ".vybe/features" ]; then
+        # Count actual feature directories and their status
+        for feature_dir in .vybe/features/*/; do
+            if [ -d "$feature_dir" ]; then
+                feature_name=$(basename "$feature_dir")
+                
+                # Check completion status
+                if [ -f ".vybe/backlog.md" ] && grep -q "^- \[x\] $feature_name" .vybe/backlog.md; then
+                    completed_features=$((completed_features + 1))
+                elif [ -f "$feature_dir/status.md" ]; then
+                    if grep -q "Status.*[Cc]omplete" "$feature_dir/status.md"; then
                         completed_features=$((completed_features + 1))
-                    elif [ -f "$feature_dir/status.md" ]; then
-                        if grep -q "Status.*[Cc]omplete" "$feature_dir/status.md"; then
-                            completed_features=$((completed_features + 1))
-                        elif grep -q "Status.*[Bb]locked" "$feature_dir/status.md"; then
-                            blocked_features=$((blocked_features + 1))
-                        else
-                            active_features=$((active_features + 1))
-                        fi
+                    elif grep -q "Status.*[Bb]locked" "$feature_dir/status.md"; then
+                        blocked_features=$((blocked_features + 1))
                     else
                         active_features=$((active_features + 1))
                     fi
+                else
+                    active_features=$((active_features + 1))
                 fi
-            done
+            fi
+        done
+        
+        # Count actual feature directories
+        actual_feature_dirs=$(find .vybe/features -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l)
+        actual_feature_dirs=$(echo "$actual_feature_dirs" | tr -d ' \n')
+        
+        #echo "[ANALYSIS] $actual_feature_dirs feature directories found, $total_features total planned"
+        
+        # If total features comes from backlog but we have fewer directories, 
+        # the remainder are planned/not-yet-created features
+        if [ "$actual_feature_dirs" -lt "$total_features" ]; then
+            planned_features=$((total_features - actual_feature_dirs))
+            #echo "[PLANNING] $planned_features features planned but not yet created"
         fi
     fi
     
@@ -185,16 +247,39 @@ if [ "$cache_hit" = false ]; then
     current_stage=""
     total_stages=0
     completed_stages=0
+    
+    # Updated to work with actual backlog format
     if [ -f ".vybe/project/outcomes.md" ] && [ -f ".vybe/backlog.md" ]; then
-        current_stage=$(grep "Active Stage:" .vybe/backlog.md 2>/dev/null | sed 's/.*Stage \([0-9]*\).*/\1/')
-        total_stages=$(grep "^### Stage" .vybe/project/outcomes.md 2>/dev/null | wc -l)
-        completed_stages=$(grep "COMPLETED" .vybe/backlog.md 2>/dev/null | grep "^### Stage" | wc -l)
+        # Try to get data from Portfolio Status section
+        total_from_backlog=$(grep -i "total.*features" .vybe/backlog.md 2>/dev/null | sed 's/.*: \([0-9]*\).*/\1/')
+        completed_from_backlog=$(grep -i "completed.*features" .vybe/backlog.md 2>/dev/null | sed 's/.*: \([0-9]*\).*/\1/')
+        
+        if [ -n "$total_from_backlog" ] && [ -n "$completed_from_backlog" ]; then
+            # Use backlog data for more accurate counts
+            # Using backlog data for accurate feature counts
+            total_features="$total_from_backlog"
+            completed_features="$completed_from_backlog"
+            
+            # Count phases instead of stages
+            total_stages=$(grep -c "Phase [0-9]" .vybe/backlog.md 2>/dev/null)
+            current_stage="1"  # Assume Phase 1 is current for now
+        else
+            # Fall back to old stage detection
+            current_stage=$(grep "Active Stage:" .vybe/backlog.md 2>/dev/null | sed 's/.*Stage \([0-9]*\).*/\1/')
+            total_stages=$(grep "^### Stage" .vybe/project/outcomes.md 2>/dev/null | wc -l)
+            completed_stages=$(grep "COMPLETED" .vybe/backlog.md 2>/dev/null | grep "^### Stage" | wc -l)
+        fi
     fi
     
     # Create status summary based on scope
     case "$status_scope" in
         "overall"|"")
-            status_output="PROJECT STATUS DASHBOARD
+            status_output="SUGGESTED NEXT ACTIONS:
+- /vybe:execute stage-1
+- /vybe:audit  
+- /vybe:status blockers
+
+PROJECT STATUS DASHBOARD
 ============================
 
 PROJECT: $project_name
@@ -206,11 +291,27 @@ PROGRESS: $progress_percent% ($completed_features/$total_features features compl
 
 OUTCOME PROGRESSION:"
             
+            # Check if project is properly configured (either stages OR phases)
             if [ -n "$current_stage" ] && [ "$total_stages" -gt 0 ]; then
-                status_output="$status_output
+                if [ "$total_stages" -gt 1 ] && grep -q "Phase [0-9]" .vybe/backlog.md 2>/dev/null; then
+                    # Phase-based format
+                    status_output="$status_output
+- Current: Phase $current_stage (IN PROGRESS)  
+- Total Phases: $total_stages development phases
+- Backlog: Outcome-driven with RICE/WSJF scoring"
+                else
+                    # Stage-based format
+                    status_output="$status_output
 - Current: Stage $current_stage (IN PROGRESS)
 - Completed: $completed_stages of $total_stages stages
 - Timeline: Each stage targets 1-3 days delivery"
+                fi
+            elif [ "$total_features" -gt 0 ] && [ -f ".vybe/backlog.md" ]; then
+                # Project has features and backlog - consider it configured
+                status_output="$status_output
+- Features: $total_features planned features in backlog
+- Backlog: Strategic outcome-driven development  
+- Progress: Development ready to begin"
             else
                 status_output="$status_output
 - No staged outcomes configured
@@ -229,6 +330,7 @@ TEAM COORDINATION:
 
 MODE: Solo development (no team members configured)"
             fi
+            
             ;;
             
         "members")
@@ -330,12 +432,12 @@ Run /vybe:plan $feature_name \"description\" to create it"
     
     # CACHE STATUS RESULTS using shared cache system
     echo ""
-    echo "[CACHE] Saving status results..."
+    #echo "[CACHE] Saving status results..."
     
     # Cache the status results for future use
     cache_set "$status_cache_key" "$status_output" 1800
     
-    echo "[CACHE] Results cached"
+    #echo "[CACHE] Results cached"
     
     cached_status_data="$status_output"
 fi
@@ -351,22 +453,9 @@ echo ""
 echo "$cached_status_data"
 echo ""
 
-# =============================================================================
-# CACHE STATUS METRICS
-# =============================================================================
-
-echo "CACHE STATUS:"
-echo "- Mode: $([ "$cache_hit" = true ] && echo "cached results" || echo "fresh scan + caching")"
-echo "- Cache type: $PROJECT_CACHE_MODE" 
-echo "- Execution time: $status_duration seconds"
-echo ""
-get_cache_stats
-
-echo ""
-echo "=== STATUS EXECUTION COMPLETE ==="
-echo "Mode: $([ "$cache_hit" = true ] && echo "cached" || echo "bulk processing")"
-echo "Duration: $status_duration seconds"
-echo ""
+# Cache info (minimal)
+# Mode: $([ "$cache_hit" = true ] && echo "cached" || echo "fresh")
+# Duration: $status_duration seconds
 
 # Related commands
 if [ -n "$cached_status_data" ]; then
