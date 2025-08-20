@@ -59,15 +59,17 @@ claude
 
 The installation script automatically:
 - ✅ Copies framework files to your project
-- ✅ Configures Claude Code hooks for session continuity  
+- ✅ **Adds hooks configuration to your global ~/.claude/settings.json** (creates backup)
 - ✅ Registers MCP cache server using `claude mcp add`
 - ✅ Enables 20-120x performance boost
 - ✅ Sets up instant help system
 
-**Cache Benefits:**
-- Reduced command response times
-- In-memory storage with file fallback
-- Automatic MCP server management
+**Global Configuration Notice:**
+- Installation adds hooks configuration to your global Claude Code settings (`~/.claude/settings.json`)
+- Automatic backup created before any changes (`settings.json.backup.TIMESTAMP`)
+- Only adds Vybe hooks - preserves all your existing settings
+- Asks permission before updating if hooks section already exists
+
 
 ### Solo Development Setup
 ```bash
