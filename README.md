@@ -1,10 +1,12 @@
 # Vybe Framework
 
-**Spec-driven agile-like development for Claude Code**
+If you are looking for a ultra-slim CLAUDE.md to enables architectural pattern replication for Claude Code, check out [vybe-template](https://github.com/iptracej-education/vybe-template) project.
+
+**Spec-driven agile-like development for Claude Code** 
 
 Vybe is a spec-driven framework for Claude Code that lets you plan and develop software in clear stages. It blends natural-language commands with a structured spec (backlog, features, tasks, releases) so AI remains flexible without causing drift between docs and code. Each stage produces a concrete outcome that strengthens the next plan—keeping scope, priorities, and artifacts aligned.
 
-**Note:** *This is an experimental project under active development. Features and structure may change significantly.*
+**Note:** *This is an experimental project and context heavy process. You will consume a lots of context and slow down development time easily*
 
 [![Project](https://img.shields.io/badge/Project-vybe-blue)](https://github.com/iptracej-education/vybe)
 [![Status](https://img.shields.io/badge/Status-Experimental-orange)](https://github.com/iptracej-education/vybe)
