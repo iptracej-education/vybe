@@ -6,7 +6,7 @@
 
 Vybe is a spec-driven framework for Claude Code that lets you plan and develop software in clear stages. It blends natural-language commands with a structured spec (backlog, features, tasks, releases) so AI remains flexible without causing drift between docs and code. Each stage produces a concrete outcome that strengthens the next plan—keeping scope, priorities, and artifacts aligned.
 
-**Note:** This is an experimental project and still context-heavy dev process. You will consume a lots of context and slow down development time. Be aware. 
+**Note:** This is an experimental project and still context-heavy dev process. You may get more likely what you want from vibe coding, but you will consume a lots of context and slow down dev process, as compared with a typical vibe coding. Be aware. 
 
 [![Project](https://img.shields.io/badge/Project-vybe-blue)](https://github.com/iptracej-education/vybe)
 [![Status](https://img.shields.io/badge/Status-Experimental-orange)](https://github.com/iptracej-education/vybe)
